@@ -62,14 +62,15 @@ This CLI is **specifically designed** to be used by AI coding agents:
 
 ### Comprehensive Resource Management
 
-| Resource | Create | Update | Delete | Restore | List | View |
-|----------|--------|--------|--------|---------|------|------|
-| **Issues** | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
-| **Projects** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Initiatives** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ |
-| **Documents** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Labels** | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
-| **Teams** | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ |
+| Resource | Create | Update | Delete | Restore | List | View | Search |
+|----------|--------|--------|--------|---------|------|------|--------|
+| **Issues** | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ❌ |
+| **Projects** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| **Initiatives** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ |
+| **Documents** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| **Labels** | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ |
+| **Teams** | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **Users** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
 
 ### Special Capabilities
 
@@ -79,9 +80,11 @@ This CLI is **specifically designed** to be used by AI coding agents:
 - 🤖 **AI-First Design**: JSON output and error codes everywhere
 - 🎨 **Dual Mode**: Interactive prompts or flag-based for automation
 - 🔍 **Smart Resource Resolution**: Accept URLs, IDs, or titles for issues/projects
-- 💾 **Intelligent Caching**: Automatic 24h caching for workflows and statuses
+- 💾 **Intelligent Caching**: Automatic 24h caching for workflows, statuses, labels, and users
 - ⚡ **Workflow Management**: List and cache issue workflow states
 - 📊 **Status Management**: List and cache project statuses
+- 👤 **User Management**: List and search users for assignments and mentions (cached)
+- 🆔 **Whoami Command**: View current user and configuration status
 
 ## 📦 Installation
 
@@ -214,6 +217,18 @@ linear document create \
 # Chain operations
 PROJECT_ID=$(linear project create --name "API" --json | jq -r '.project.id')
 linear document create --project "$PROJECT_ID" --title "API Design" --json
+
+# Check current configuration
+linear whoami --json | jq '.configuration'
+
+# List users for assignment (cached)
+linear user list --json | jq '.users[].displayName'
+
+# Search for user by name
+linear user search "john" --json | jq '.users[0].id'
+
+# Find active admins
+linear user list --active-only --admins-only --json
 ```
 
 See [Usage Guide](./docs/USAGE.md) for comprehensive examples.

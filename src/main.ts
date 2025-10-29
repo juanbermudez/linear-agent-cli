@@ -10,6 +10,8 @@ import { labelCommand } from "./commands/label/label.ts"
 import { workflowCommand } from "./commands/workflow/workflow.ts"
 import { statusCommand } from "./commands/status/status.ts"
 import { configCommand } from "./commands/config.ts"
+import { whoamiCommand } from "./commands/whoami.ts"
+import { userCommand } from "./commands/user/user.ts"
 
 // Import config setup
 import "./config.ts"
@@ -34,6 +36,9 @@ await new Command()
   .command("workflow", workflowCommand)
   .alias("w")
   .command("status", statusCommand)
+  .command("user", userCommand)
+  .alias("u")
+  .command("whoami", whoamiCommand)
   .command("completions", new CompletionsCommand())
   .command("config", configCommand)
   .parse(Deno.args)
