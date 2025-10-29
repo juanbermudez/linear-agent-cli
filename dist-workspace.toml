@@ -1,0 +1,54 @@
+[workspace]
+members = ["dist:."]
+
+
+[package]
+name = "linear"
+description = "CLI tool for linear.app that uses git branch names and directory names to open issues and team pages"
+version = "1.2.0"
+license = "MIT"
+repository = "https://github.com/schpet/linear-cli"
+homepage = "https://github.com/schpet/linear-cli"
+binaries = ["linear"]
+build-command = [
+    "deno",
+    "compile",
+    "-o",
+    "linear",
+    '--allow-env="GITHUB_*,GH_*,LINEAR_*,NODE_ENV,EDITOR"',
+    "--allow-read",
+    "--allow-write",
+    "--allow-run",
+    "--allow-net=api.linear.app",
+    "--quiet",
+    "src/main.ts",
+]
+
+# Config for 'dist'
+[dist]
+# The preferred dist version to use in CI (Cargo.toml SemVer syntax)
+cargo-dist-version = "0.28.3"
+# CI backends to support
+ci = "github"
+# The installers to generate for each app
+installers = ["shell", "homebrew"]
+# A GitHub repo to push Homebrew formulas to
+tap = "schpet/homebrew-tap"
+# Target platforms to build apps for (Rust target-triple syntax)
+targets = [
+    "aarch64-apple-darwin",
+    "aarch64-unknown-linux-gnu",
+    "x86_64-apple-darwin",
+    "x86_64-unknown-linux-gnu",
+    "x86_64-pc-windows-msvc",
+]
+# Publish jobs to run in CI
+publish-jobs = ["homebrew"]
+# Which actions to run on pull requests
+# pr-run-mode = "upload"
+# https://opensource.axo.dev/cargo-dist/book/ci/customizing.html#customizing-build-setup
+github-build-setup = "build-setup.yml"
+# Path that installers should place binaries in
+install-path = "CARGO_HOME"
+# Whether to install an updater program
+install-updater = true

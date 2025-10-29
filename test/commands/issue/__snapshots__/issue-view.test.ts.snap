@@ -1,0 +1,156 @@
+export const snapshot = {};
+
+snapshot[`Issue View Command - Help Text 1`] = `
+stdout:
+"
+Usage: view [issueId]
+
+Description:
+
+  View issue details (default) or open in browser/app
+
+Options:
+
+  -h, --help     - Show this help.                           
+  -w, --web      - Open in web browser                       
+  -a, --app      - Open in Linear.app                        
+  --no-comments  - Exclude comments from the output          
+  --no-pager     - Disable automatic paging for long output  
+  -j, --json     - Output issue data as JSON                 
+
+"
+stderr:
+""
+`;
+
+snapshot[`Issue View Command - With Issue ID 1`] = `
+stdout:
+"Error: error sending request for url (http://127.0.0.1:3000/graphql): client error (Connect): tcp connect error: Connection refused
+"
+stderr:
+"✗ Failed to fetch issue details
+"
+`;
+
+snapshot[`Issue View Command - With Mock Server Terminal No Comments 1`] = `
+stdout:
+"# Fix authentication bug in login flow
+
+Users are experiencing issues logging in when their session expires. This affects the main authentication flow and needs to be resolved quickly.
+
+## Steps to reproduce
+1. Log in to the application
+2. Wait for session to expire
+3. Try to perform an authenticated action
+4. Observe the error
+
+## Expected behavior
+User should be redirected to login page with clear messaging.
+
+## Actual behavior
+User sees cryptic error message and gets stuck.
+"
+stderr:
+""
+`;
+
+snapshot[`Issue View Command - With No Comments Flag 1`] = `
+stdout:
+"# Fix authentication bug in login flow
+
+Users are experiencing issues logging in when their session expires.
+"
+stderr:
+""
+`;
+
+snapshot[`Issue View Command - With Comments Default 1`] = `
+stdout:
+"# Fix authentication bug in login flow
+
+Users are experiencing issues logging in when their session expires.
+
+## Comments
+
+- **@Bob Senior** - *1/15/2024*
+
+  Should we also consider implementing automatic session refresh?
+
+- **@John Doe** - *1/15/2024*
+
+  I've reproduced this issue on staging. The session timeout seems to be too aggressive.
+
+  - **@Jane Smith** - *1/15/2024*
+
+    Working on a fix. Will increase the session timeout and add proper error handling.
+
+  - **@Alice Developer** - *1/15/2024*
+
+    Sounds good! Also, we should add better error messaging for expired sessions.
+
+
+"
+stderr:
+""
+`;
+
+snapshot[`Issue View Command - Issue Not Found 1`] = `
+stdout:
+'Error: Issue not found: TEST-999: {"response":{"errors":[{"message":"Issue not found: TEST-999","extensions":{"code":"NOT_FOUND"}}],"status":200,"headers":{}},"request":{"query":"query GetIssueDetailsWithComments(\$id: String!) {\\\\n  issue(id: \$id) {\\\\n    title\\\\n    description\\\\n    url\\\\n    branchName\\\\n    comments(first: 50, orderBy: createdAt) {\\\\n      nodes {\\\\n        id\\\\n        body\\\\n        createdAt\\\\n        user {\\\\n          name\\\\n          displayName\\\\n        }\\\\n        externalUser {\\\\n          name\\\\n          displayName\\\\n        }\\\\n        parent {\\\\n          id\\\\n        }\\\\n      }\\\\n    }\\\\n  }\\\\n}","variables":{"id":"TEST-999"}}}
+'
+stderr:
+"✗ Failed to fetch issue details
+"
+`;
+
+snapshot[`Issue View Command - JSON Output No Comments 1`] = `
+stdout:
+'{
+  "title": "Fix authentication bug in login flow",
+  "description": "Users are experiencing issues logging in when their session expires.",
+  "url": "https://linear.app/test-team/issue/TEST-123/fix-authentication-bug-in-login-flow",
+  "branchName": "fix/test-123-auth-bug"
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Issue View Command - JSON Output With Comments 1`] = `
+stdout:
+\`{
+  "title": "Fix authentication bug in login flow",
+  "description": "Users are experiencing issues logging in when their session expires.",
+  "url": "https://linear.app/test-team/issue/TEST-123/fix-authentication-bug-in-login-flow",
+  "branchName": "fix/test-123-auth-bug",
+  "comments": [
+    {
+      "id": "comment-1",
+      "body": "I've reproduced this issue on staging. The session timeout seems to be too aggressive.",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "user": {
+        "name": "john.doe",
+        "displayName": "John Doe"
+      },
+      "externalUser": null,
+      "parent": null
+    },
+    {
+      "id": "comment-2",
+      "body": "Working on a fix. Will increase the session timeout and add proper error handling.",
+      "createdAt": "2024-01-15T14:22:00Z",
+      "user": {
+        "name": "jane.smith",
+        "displayName": "Jane Smith"
+      },
+      "externalUser": null,
+      "parent": {
+        "id": "comment-1"
+      }
+    }
+  ]
+}
+\`
+stderr:
+""
+`;

@@ -1,0 +1,257 @@
+import { snapshotTest } from "@cliffy/testing"
+import { listCommand } from "../../../src/commands/label/label-list.ts"
+import {
+  commonDenoArgs,
+  setupMockLinearServer,
+} from "../../utils/test-helpers.ts"
+
+// Test help output
+await snapshotTest({
+  name: "Label List Command - Help Text",
+  meta: import.meta,
+  colors: false,
+  args: ["--help"],
+  denoArgs: commonDenoArgs,
+  async fn() {
+    await listCommand.parse()
+  },
+})
+
+// Test listing all labels
+await snapshotTest({
+  name: "Label List Command - All Labels",
+  meta: import.meta,
+  colors: false,
+  args: ["--no-color"],
+  denoArgs: commonDenoArgs,
+  async fn() {
+    const { cleanup } = await setupMockLinearServer([
+      {
+        queryName: "GetLabels",
+        response: {
+          data: {
+            issueLabels: {
+              nodes: [
+                {
+                  id: "label-1",
+                  name: "bug",
+                  description: "Bug reports and fixes",
+                  color: "#FF0000",
+                  team: {
+                    id: "team-eng",
+                    key: "ENG",
+                    name: "Engineering",
+                  },
+                  createdAt: "2024-01-10T10:00:00Z",
+                  updatedAt: "2024-01-15T14:30:00Z",
+                },
+                {
+                  id: "label-2",
+                  name: "feature",
+                  description: "New features",
+                  color: "#00FF00",
+                  team: {
+                    id: "team-product",
+                    key: "PROD",
+                    name: "Product",
+                  },
+                  createdAt: "2024-01-12T09:00:00Z",
+                  updatedAt: "2024-01-12T09:00:00Z",
+                },
+                {
+                  id: "label-3",
+                  name: "documentation",
+                  description: null,
+                  color: "#0000FF",
+                  team: null,
+                  createdAt: "2024-01-14T15:00:00Z",
+                  updatedAt: "2024-01-14T15:00:00Z",
+                },
+              ],
+            },
+          },
+        },
+      },
+    ])
+
+    try {
+      await listCommand.parse()
+    } finally {
+      await cleanup()
+    }
+  },
+})
+
+// Test listing with JSON output
+await snapshotTest({
+  name: "Label List Command - JSON Output",
+  meta: import.meta,
+  colors: false,
+  args: ["--json", "--no-color"],
+  denoArgs: commonDenoArgs,
+  async fn() {
+    const { cleanup } = await setupMockLinearServer([
+      {
+        queryName: "GetLabels",
+        response: {
+          data: {
+            issueLabels: {
+              nodes: [
+                {
+                  id: "label-1",
+                  name: "bug",
+                  description: "Bug reports",
+                  color: "#FF0000",
+                  team: {
+                    id: "team-eng",
+                    key: "ENG",
+                    name: "Engineering",
+                  },
+                  createdAt: "2024-01-10T10:00:00Z",
+                  updatedAt: "2024-01-15T14:30:00Z",
+                },
+              ],
+            },
+          },
+        },
+      },
+    ])
+
+    try {
+      await listCommand.parse()
+    } finally {
+      await cleanup()
+    }
+  },
+})
+
+// Test filtering by team
+await snapshotTest({
+  name: "Label List Command - Filter By Team",
+  meta: import.meta,
+  colors: false,
+  args: ["--team", "ENG", "--json", "--no-color"],
+  denoArgs: commonDenoArgs,
+  async fn() {
+    const { cleanup } = await setupMockLinearServer([
+      // Mock getTeamIdByKey
+      {
+        queryName: "GetTeamIdByKey",
+        variables: { team: "ENG" },
+        response: {
+          data: {
+            teams: {
+              nodes: [{ id: "team-eng-id" }],
+            },
+          },
+        },
+      },
+      // Mock getLabels filtered by team
+      {
+        queryName: "GetLabels",
+        variables: { filter: { team: { id: { eq: "team-eng-id" } } } },
+        response: {
+          data: {
+            issueLabels: {
+              nodes: [
+                {
+                  id: "label-1",
+                  name: "bug",
+                  description: "Bug reports",
+                  color: "#FF0000",
+                  team: {
+                    id: "team-eng-id",
+                    key: "ENG",
+                    name: "Engineering",
+                  },
+                  createdAt: "2024-01-10T10:00:00Z",
+                  updatedAt: "2024-01-15T14:30:00Z",
+                },
+                {
+                  id: "label-2",
+                  name: "security",
+                  description: "Security issues",
+                  color: "#FF6B00",
+                  team: {
+                    id: "team-eng-id",
+                    key: "ENG",
+                    name: "Engineering",
+                  },
+                  createdAt: "2024-01-11T11:00:00Z",
+                  updatedAt: "2024-01-11T11:00:00Z",
+                },
+              ],
+            },
+          },
+        },
+      },
+    ])
+
+    try {
+      await listCommand.parse()
+    } finally {
+      await cleanup()
+    }
+  },
+})
+
+// Test empty label list
+await snapshotTest({
+  name: "Label List Command - No Labels Found",
+  meta: import.meta,
+  colors: false,
+  args: ["--no-color"],
+  denoArgs: commonDenoArgs,
+  async fn() {
+    const { cleanup } = await setupMockLinearServer([
+      {
+        queryName: "GetLabels",
+        response: {
+          data: {
+            issueLabels: {
+              nodes: [],
+            },
+          },
+        },
+      },
+    ])
+
+    try {
+      await listCommand.parse()
+    } finally {
+      await cleanup()
+    }
+  },
+})
+
+// Test error when team not found
+await snapshotTest({
+  name: "Label List Command - Team Not Found",
+  meta: import.meta,
+  colors: false,
+  args: ["--team", "NONEXISTENT", "--json", "--no-color"],
+  denoArgs: commonDenoArgs,
+  async fn() {
+    const { cleanup } = await setupMockLinearServer([
+      {
+        queryName: "GetTeamIdByKey",
+        variables: { team: "NONEXISTENT" },
+        response: {
+          data: {
+            teams: {
+              nodes: [],
+            },
+          },
+        },
+      },
+    ])
+
+    try {
+      await listCommand.parse()
+    } catch (_error) {
+      // Expected to fail - team not found
+    } finally {
+      await cleanup()
+    }
+  },
+})

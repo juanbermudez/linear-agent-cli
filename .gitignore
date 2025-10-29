@@ -1,0 +1,41 @@
+# Deno
+.deno/
+deno.lock
+
+# Linear config (contains API keys)
+.linear.toml
+linear.toml
+.env
+.env.test
+
+# Build artifacts
+dist/
+build/
+*.js.map
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+.snapshots/
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/

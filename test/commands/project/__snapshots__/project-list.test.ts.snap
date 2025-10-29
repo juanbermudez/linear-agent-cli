@@ -1,0 +1,32 @@
+export const snapshot = {};
+
+snapshot[`Project List Command - Help Text 1`] = `
+stdout:
+"
+Usage: list
+
+Description:
+
+  List projects
+
+Options:
+
+  -h, --help             - Show this help.               
+  --team       <team>    - Filter by team key            
+  --all-teams            - Show projects from all teams  
+  --status     <status>  - Filter by status name         
+  -w, --web              - Open in web browser           
+  -a, --app              - Open in Linear.app            
+
+"
+stderr:
+""
+`;
+
+snapshot[`Project List Command - No Projects Found 1`] = `
+stdout:
+"No projects found.
+"
+stderr:
+""
+`;
