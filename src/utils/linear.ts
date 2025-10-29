@@ -10,6 +10,12 @@ import { Select } from "@cliffy/prompt"
 import { getOption } from "../config.ts"
 import { getGraphQLClient } from "./graphql.ts"
 import { getCurrentIssueFromVcs } from "./vcs.ts"
+import {
+  getTeamCacheKey,
+  getWorkspaceCacheKey,
+  readCache,
+  writeCache,
+} from "./cache.ts"
 
 function isValidLinearIdentifier(id: string): boolean {
   return /^[a-zA-Z0-9]+-[1-9][0-9]*$/i.test(id)
@@ -79,7 +85,19 @@ export async function getIssueId(
 
 export async function getWorkflowStates(
   teamKey: string,
+  options: { refresh?: boolean } = {},
 ) {
+  // Try cache first unless refresh is requested
+  if (!options.refresh) {
+    const cacheKey = getTeamCacheKey("workflows", teamKey)
+    const cached = await readCache<
+      Array<{ id: string; name: string; type: string; position: number }>
+    >(cacheKey)
+    if (cached) {
+      return cached
+    }
+  }
+
   const query = gql(/* GraphQL */ `
     query GetWorkflowStates($teamKey: String!) {
       team(id: $teamKey) {
@@ -89,6 +107,8 @@ export async function getWorkflowStates(
             name
             type
             position
+            color
+            description
           }
         }
       }
@@ -97,10 +117,16 @@ export async function getWorkflowStates(
 
   const client = getGraphQLClient()
   const result = await client.request(query, { teamKey })
-  return result.team.states.nodes.sort(
+  const sorted = result.team.states.nodes.sort(
     (a: { position: number }, b: { position: number }) =>
       a.position - b.position,
   )
+
+  // Cache the result
+  const cacheKey = getTeamCacheKey("workflows", teamKey)
+  await writeCache(cacheKey, sorted)
+
+  return sorted
 }
 export type WorkflowState = Awaited<
   ReturnType<typeof getWorkflowStates>
@@ -1854,3 +1880,61 @@ export async function getProjectIdFromContext(): Promise<string | null> {
 
   return null
 }
+
+/**
+ * Get all project statuses (workspace-wide)
+ * Supports caching with 24h TTL
+ */
+export async function getProjectStatuses(
+  options: { refresh?: boolean } = {},
+) {
+  // Try cache first unless refresh is requested
+  if (!options.refresh) {
+    const cacheKey = "project-statuses"
+    const cached = await readCache<
+      Array<{
+        id: string
+        name: string
+        type: string
+        position: number
+        color: string
+        description: string | null
+      }>
+    >(cacheKey)
+    if (cached) {
+      return cached
+    }
+  }
+
+  const query = gql(/* GraphQL */ `
+    query GetProjectStatuses {
+      projectStatuses {
+        nodes {
+          id
+          name
+          type
+          position
+          color
+          description
+        }
+      }
+    }
+  `)
+
+  const client = getGraphQLClient()
+  const result = await client.request(query)
+  const sorted = result.projectStatuses.nodes.sort(
+    (a: { position: number }, b: { position: number }) =>
+      a.position - b.position,
+  )
+
+  // Cache the result
+  const cacheKey = "project-statuses"
+  await writeCache(cacheKey, sorted)
+
+  return sorted
+}
+
+export type ProjectStatus = Awaited<
+  ReturnType<typeof getProjectStatuses>
+>[number]

@@ -73,26 +73,85 @@ async function loadEnvFiles() {
 await loadEnvFiles()
 await loadConfig()
 
+// Helper to get nested config values using dot notation
+function getNestedConfig(path: string): unknown {
+  const parts = path.split(".")
+  let current: unknown = config
+
+  for (const part of parts) {
+    if (current && typeof current === "object" && part in current) {
+      current = (current as Record<string, unknown>)[part]
+    } else {
+      return undefined
+    }
+  }
+
+  return current
+}
+
 export type OptionValueMapping = {
   team_id: string
   api_key: string
   workspace: string
   issue_sort: "manual" | "priority"
   vcs: "git" | "jj"
+  auto_branch: boolean
+  cache_enabled: boolean
 }
 
 export type OptionName = keyof OptionValueMapping
 
+// Map option names to their config paths (supports nested paths)
+const OPTION_CONFIG_PATHS: Record<OptionName, string> = {
+  team_id: "team_id",
+  api_key: "api_key",
+  workspace: "workspace",
+  issue_sort: "issue_sort",
+  vcs: "vcs",
+  auto_branch: "vcs.autoBranch",
+  cache_enabled: "cache.enabled",
+}
+
+// Default values for options
+const OPTION_DEFAULTS: Partial<OptionValueMapping> = {
+  vcs: "git",
+  auto_branch: true,
+  cache_enabled: true,
+}
+
+function parseBooleanEnv(value: string): boolean {
+  return value.toLowerCase() === "true" || value === "1"
+}
+
 export function getOption<T extends OptionName>(
   optionName: T,
-  cliValue?: string,
+  cliValue?: string | boolean,
 ): OptionValueMapping[T] | undefined {
+  // Precedence: CLI arg > Env variable > Config file > Default
   if (cliValue !== undefined) return cliValue as OptionValueMapping[T]
-  const fromConfig = config[optionName]
-  if (typeof fromConfig === "string") {
+
+  // Check environment variable first
+  const envKey = "LINEAR_" + optionName.toUpperCase()
+  const envValue = Deno.env.get(envKey)
+  if (envValue !== undefined) {
+    // Handle boolean types from env vars
+    if (optionName === "auto_branch" || optionName === "cache_enabled") {
+      return parseBooleanEnv(envValue) as OptionValueMapping[T]
+    }
+    return envValue as OptionValueMapping[T]
+  }
+
+  // Fall back to config file (with nested path support)
+  const configPath = OPTION_CONFIG_PATHS[optionName]
+  const fromConfig = getNestedConfig(configPath)
+  if (fromConfig !== undefined) {
     return fromConfig as OptionValueMapping[T]
   }
-  return Deno.env.get("LINEAR_" + optionName.toUpperCase()) as
-    | OptionValueMapping[T]
-    | undefined
+
+  // Return default if available
+  if (optionName in OPTION_DEFAULTS) {
+    return OPTION_DEFAULTS[optionName] as OptionValueMapping[T]
+  }
+
+  return undefined
 }

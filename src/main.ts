@@ -7,6 +7,8 @@ import { projectCommand } from "./commands/project/project.ts"
 import { documentCommand } from "./commands/document/document.ts"
 import { initiativeCommand } from "./commands/initiative/initiative.ts"
 import { labelCommand } from "./commands/label/label.ts"
+import { workflowCommand } from "./commands/workflow/workflow.ts"
+import { statusCommand } from "./commands/status/status.ts"
 import { configCommand } from "./commands/config.ts"
 
 // Import config setup
@@ -30,6 +32,9 @@ await new Command()
   .alias("init")
   .command("label", labelCommand)
   .alias("l")
+  .command("workflow", workflowCommand)
+  .alias("w")
+  .command("status", statusCommand)
   .command("completions", new CompletionsCommand())
   .command("config", configCommand)
   .parse(Deno.args)

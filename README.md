@@ -69,9 +69,13 @@ This CLI is **specifically designed** to be used by AI coding agents:
 
 - 🔗 **VCS Integration**: Automatic context from git/jj branches
 - 🎯 **Cross-Entity Operations**: Create related resources in one command
-- ⚙️ **Flexible Configuration**: Dot notation for nested config
+- ⚙️ **Flexible Configuration**: Dot notation for nested config, env variable priority
 - 🤖 **AI-First Design**: JSON output and error codes everywhere
 - 🎨 **Dual Mode**: Interactive prompts or flag-based for automation
+- 🔍 **Smart Resource Resolution**: Accept URLs, IDs, or titles for issues/projects
+- 💾 **Intelligent Caching**: Automatic 24h caching for workflows and statuses
+- ⚡ **Workflow Management**: List and cache issue workflow states
+- 📊 **Status Management**: List and cache project statuses
 
 ## 📦 Installation
 
@@ -168,6 +172,14 @@ linear initiative list --status active
 linear label create --name "bug" --color "#FF0000"
 linear label list --team ENG
 
+# Workflows (Issue States)
+linear workflow list --team ENG         # List workflow states with caching
+linear workflow cache --team ENG        # Force refresh cache
+
+# Project Statuses
+linear status list                      # List project statuses with caching
+linear status cache                     # Force refresh cache
+
 # Configuration
 linear config set defaults.project.status "In Progress"
 linear config get defaults.project
@@ -247,27 +259,57 @@ linear issue view  # Shows ENG-123
 
 Configuration is stored in `.linear.toml` files with support for:
 
+- **Environment variable priority**: CLI args > Env vars > Config file > Defaults
 - Nested values with dot notation
-- Environment variable overrides
 - Multiple search paths (local, git root, ~/.config)
+- Directory/repo-specific configuration
 - Type-aware value parsing
+
+### Configuration Precedence
+
+The CLI follows this precedence order (highest to lowest):
+1. CLI flags (e.g., `--team ENG`)
+2. Environment variables (e.g., `LINEAR_TEAM_ID=ENG`)
+3. Config file (`.linear.toml`)
+4. Built-in defaults
+
+### Example Configuration
 
 ```toml
 [auth]
 token = "lin_api_..."
 
 [defaults]
-team = "ENG"
+team_id = "ENG"                # Default team for all commands
+workspace = "my-workspace"     # Linear workspace slug
 
 [defaults.project]
 status = "In Progress"
 color = "#4A90E2"
 
+[vcs]
+autoBranch = true             # Auto-create git branches (default: true)
+
+[cache]
+enabled = true                # Enable caching (default: true)
+
 [interactive]
 enabled = true
 
 [output]
-format = "json"  # Default to JSON for AI agents
+format = "json"              # Default to JSON for AI agents
+```
+
+### Environment Variables
+
+For AI agents and automation, use environment variables:
+
+```bash
+export LINEAR_API_KEY="lin_api_..."
+export LINEAR_TEAM_ID="ENG"
+export LINEAR_WORKSPACE="my-workspace"
+export LINEAR_AUTO_BRANCH="false"    # Disable auto git branching
+export LINEAR_CACHE_ENABLED="true"   # Enable caching (default)
 ```
 
 ## 📚 Documentation

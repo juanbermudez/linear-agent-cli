@@ -83,10 +83,15 @@ export async function startWorkOnIssue(
   teamId: string,
   gitSourceRef?: string,
 ) {
+  const autoBranch = getOption("auto_branch")
   const { branchName } = await fetchIssueDetails(issueId, true)
 
-  // Start VCS work (git or jj)
-  await startVcsWork(issueId, branchName, gitSourceRef)
+  // Start VCS work (git or jj) if auto branching is enabled
+  if (autoBranch !== false) {
+    await startVcsWork(issueId, branchName, gitSourceRef)
+  } else {
+    console.log(`✓ Auto-branching disabled (issue: ${issueId})`)
+  }
 
   // Update issue state
   try {

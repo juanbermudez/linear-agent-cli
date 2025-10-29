@@ -28,7 +28,7 @@ type Documents = {
     "\n          mutation CreateTeam($input: TeamCreateInput!) {\n            teamCreate(input: $input) {\n              success\n              team { id, name, key }\n            }\n          }\n        ": typeof types.CreateTeamDocument,
     "\n  query GetTeams($filter: TeamFilter) {\n    teams(filter: $filter) {\n      nodes {\n        id\n        name\n        key\n        description\n        icon\n        color\n        cyclesEnabled\n        createdAt\n        updatedAt\n        archivedAt\n        organization {\n          id\n          name\n        }\n      }\n    }\n  }\n": typeof types.GetTeamsDocument,
     "\n    query GetIssueId($id: String!) {\n      issue(id: $id) {\n        id\n      }\n    }\n  ": typeof types.GetIssueIdDocument,
-    "\n    query GetWorkflowStates($teamKey: String!) {\n      team(id: $teamKey) {\n        states {\n          nodes {\n            id\n            name\n            type\n            position\n          }\n        }\n      }\n    }\n  ": typeof types.GetWorkflowStatesDocument,
+    "\n    query GetWorkflowStates($teamKey: String!) {\n      team(id: $teamKey) {\n        states {\n          nodes {\n            id\n            name\n            type\n            position\n            color\n            description\n          }\n        }\n      }\n    }\n  ": typeof types.GetWorkflowStatesDocument,
     "\n    mutation UpdateIssueState($issueId: String!, $stateId: String!) {\n      issueUpdate(id: $issueId, input: { stateId: $stateId }) {\n        success\n      }\n    }\n  ": typeof types.UpdateIssueStateDocument,
     "\n      query GetIssueDetailsWithComments($id: String!) {\n        issue(id: $id) {\n          title\n          description\n          url\n          branchName\n          comments(first: 50, orderBy: createdAt) {\n            nodes {\n              id\n              body\n              createdAt\n              user {\n                name\n                displayName\n              }\n              externalUser {\n                name\n                displayName\n              }\n              parent {\n                id\n              }\n            }\n          }\n        }\n      }\n    ": typeof types.GetIssueDetailsWithCommentsDocument,
     "\n      query GetIssueDetails($id: String!) {\n        issue(id: $id) {\n          title\n          description\n          url\n          branchName\n        }\n      }\n    ": typeof types.GetIssueDetailsDocument,
@@ -79,6 +79,10 @@ type Documents = {
     "\n    query ListLabels($teamId: ID, $first: Int) {\n      issueLabels(\n        filter: { team: { id: { eq: $teamId } } }\n        first: $first\n      ) {\n        nodes {\n          id\n          name\n          description\n          color\n          team { id key name }\n        }\n      }\n    }\n  ": typeof types.ListLabelsDocument,
     "\n    mutation DeleteLabel($id: String!) {\n      issueLabelDelete(id: $id) {\n        success\n      }\n    }\n  ": typeof types.DeleteLabelDocument,
     "\n    query GetIssueProject($issueId: String!) {\n      issue(id: $issueId) {\n        id\n        project {\n          id\n          name\n        }\n      }\n    }\n  ": typeof types.GetIssueProjectDocument,
+    "\n    query GetProjectStatuses {\n      projectStatuses {\n        nodes {\n          id\n          name\n          type\n          position\n          color\n          description\n        }\n      }\n    }\n  ": typeof types.GetProjectStatusesDocument,
+    "\n    query SearchIssues($term: String!, $teamId: String, $first: Int) {\n      searchIssues(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          identifier\n          title\n        }\n      }\n    }\n  ": typeof types.SearchIssuesDocument,
+    "\n    query SearchProjects($term: String!, $teamId: String, $first: Int) {\n      searchProjects(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          name\n        }\n      }\n    }\n  ": typeof types.SearchProjectsDocument,
+    "\n    query SearchDocuments($term: String!, $teamId: String, $first: Int) {\n      searchDocuments(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          title\n        }\n      }\n    }\n  ": typeof types.SearchDocumentsDocument,
 };
 const documents: Documents = {
     "\n  query Config {\n    viewer {\n      organization {\n        urlKey\n      }\n    }\n    teams {\n      nodes {\n        id\n        key\n        name\n      }\n    }\n  }\n": types.ConfigDocument,
@@ -95,7 +99,7 @@ const documents: Documents = {
     "\n          mutation CreateTeam($input: TeamCreateInput!) {\n            teamCreate(input: $input) {\n              success\n              team { id, name, key }\n            }\n          }\n        ": types.CreateTeamDocument,
     "\n  query GetTeams($filter: TeamFilter) {\n    teams(filter: $filter) {\n      nodes {\n        id\n        name\n        key\n        description\n        icon\n        color\n        cyclesEnabled\n        createdAt\n        updatedAt\n        archivedAt\n        organization {\n          id\n          name\n        }\n      }\n    }\n  }\n": types.GetTeamsDocument,
     "\n    query GetIssueId($id: String!) {\n      issue(id: $id) {\n        id\n      }\n    }\n  ": types.GetIssueIdDocument,
-    "\n    query GetWorkflowStates($teamKey: String!) {\n      team(id: $teamKey) {\n        states {\n          nodes {\n            id\n            name\n            type\n            position\n          }\n        }\n      }\n    }\n  ": types.GetWorkflowStatesDocument,
+    "\n    query GetWorkflowStates($teamKey: String!) {\n      team(id: $teamKey) {\n        states {\n          nodes {\n            id\n            name\n            type\n            position\n            color\n            description\n          }\n        }\n      }\n    }\n  ": types.GetWorkflowStatesDocument,
     "\n    mutation UpdateIssueState($issueId: String!, $stateId: String!) {\n      issueUpdate(id: $issueId, input: { stateId: $stateId }) {\n        success\n      }\n    }\n  ": types.UpdateIssueStateDocument,
     "\n      query GetIssueDetailsWithComments($id: String!) {\n        issue(id: $id) {\n          title\n          description\n          url\n          branchName\n          comments(first: 50, orderBy: createdAt) {\n            nodes {\n              id\n              body\n              createdAt\n              user {\n                name\n                displayName\n              }\n              externalUser {\n                name\n                displayName\n              }\n              parent {\n                id\n              }\n            }\n          }\n        }\n      }\n    ": types.GetIssueDetailsWithCommentsDocument,
     "\n      query GetIssueDetails($id: String!) {\n        issue(id: $id) {\n          title\n          description\n          url\n          branchName\n        }\n      }\n    ": types.GetIssueDetailsDocument,
@@ -146,6 +150,10 @@ const documents: Documents = {
     "\n    query ListLabels($teamId: ID, $first: Int) {\n      issueLabels(\n        filter: { team: { id: { eq: $teamId } } }\n        first: $first\n      ) {\n        nodes {\n          id\n          name\n          description\n          color\n          team { id key name }\n        }\n      }\n    }\n  ": types.ListLabelsDocument,
     "\n    mutation DeleteLabel($id: String!) {\n      issueLabelDelete(id: $id) {\n        success\n      }\n    }\n  ": types.DeleteLabelDocument,
     "\n    query GetIssueProject($issueId: String!) {\n      issue(id: $issueId) {\n        id\n        project {\n          id\n          name\n        }\n      }\n    }\n  ": types.GetIssueProjectDocument,
+    "\n    query GetProjectStatuses {\n      projectStatuses {\n        nodes {\n          id\n          name\n          type\n          position\n          color\n          description\n        }\n      }\n    }\n  ": types.GetProjectStatusesDocument,
+    "\n    query SearchIssues($term: String!, $teamId: String, $first: Int) {\n      searchIssues(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          identifier\n          title\n        }\n      }\n    }\n  ": types.SearchIssuesDocument,
+    "\n    query SearchProjects($term: String!, $teamId: String, $first: Int) {\n      searchProjects(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          name\n        }\n      }\n    }\n  ": types.SearchProjectsDocument,
+    "\n    query SearchDocuments($term: String!, $teamId: String, $first: Int) {\n      searchDocuments(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          title\n        }\n      }\n    }\n  ": types.SearchDocumentsDocument,
 };
 
 /**
@@ -221,7 +229,7 @@ export function gql(source: "\n    query GetIssueId($id: String!) {\n      issue
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n    query GetWorkflowStates($teamKey: String!) {\n      team(id: $teamKey) {\n        states {\n          nodes {\n            id\n            name\n            type\n            position\n          }\n        }\n      }\n    }\n  "): (typeof documents)["\n    query GetWorkflowStates($teamKey: String!) {\n      team(id: $teamKey) {\n        states {\n          nodes {\n            id\n            name\n            type\n            position\n          }\n        }\n      }\n    }\n  "];
+export function gql(source: "\n    query GetWorkflowStates($teamKey: String!) {\n      team(id: $teamKey) {\n        states {\n          nodes {\n            id\n            name\n            type\n            position\n            color\n            description\n          }\n        }\n      }\n    }\n  "): (typeof documents)["\n    query GetWorkflowStates($teamKey: String!) {\n      team(id: $teamKey) {\n        states {\n          nodes {\n            id\n            name\n            type\n            position\n            color\n            description\n          }\n        }\n      }\n    }\n  "];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -422,6 +430,22 @@ export function gql(source: "\n    mutation DeleteLabel($id: String!) {\n      i
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n    query GetIssueProject($issueId: String!) {\n      issue(id: $issueId) {\n        id\n        project {\n          id\n          name\n        }\n      }\n    }\n  "): (typeof documents)["\n    query GetIssueProject($issueId: String!) {\n      issue(id: $issueId) {\n        id\n        project {\n          id\n          name\n        }\n      }\n    }\n  "];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query GetProjectStatuses {\n      projectStatuses {\n        nodes {\n          id\n          name\n          type\n          position\n          color\n          description\n        }\n      }\n    }\n  "): (typeof documents)["\n    query GetProjectStatuses {\n      projectStatuses {\n        nodes {\n          id\n          name\n          type\n          position\n          color\n          description\n        }\n      }\n    }\n  "];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query SearchIssues($term: String!, $teamId: String, $first: Int) {\n      searchIssues(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          identifier\n          title\n        }\n      }\n    }\n  "): (typeof documents)["\n    query SearchIssues($term: String!, $teamId: String, $first: Int) {\n      searchIssues(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          identifier\n          title\n        }\n      }\n    }\n  "];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query SearchProjects($term: String!, $teamId: String, $first: Int) {\n      searchProjects(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          name\n        }\n      }\n    }\n  "): (typeof documents)["\n    query SearchProjects($term: String!, $teamId: String, $first: Int) {\n      searchProjects(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          name\n        }\n      }\n    }\n  "];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query SearchDocuments($term: String!, $teamId: String, $first: Int) {\n      searchDocuments(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          title\n        }\n      }\n    }\n  "): (typeof documents)["\n    query SearchDocuments($term: String!, $teamId: String, $first: Int) {\n      searchDocuments(term: $term, teamId: $teamId, first: $first) {\n        nodes {\n          id\n          title\n        }\n      }\n    }\n  "];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
