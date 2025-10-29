@@ -13,10 +13,10 @@ This guide shows how to use the Linear CLI with any workspace and team. Configur
 curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/install.sh | bash
 ```
 
-2. **Get Your Linear API Key**:
-   - Go to https://linear.app/settings/api
-   - Click "Create key"
-   - Copy the key (starts with `lin_api_`)
+2. **Reload Your Shell**:
+```bash
+source ~/.zshrc  # or ~/.bashrc for bash
+```
 
 3. **Verify Installation**:
 ```bash
@@ -25,25 +25,55 @@ linear --version
 
 ---
 
-## Part 1: Configuration Setup
+## Part 1: Interactive Setup
 
-### Option A: Environment Variables (Recommended for AI Agents)
+### Run the Setup Wizard
+
+The CLI includes an interactive setup wizard with great DX:
 
 ```bash
-# Set up your environment (add to ~/.zshrc or ~/.bashrc)
+linear config setup  # or: linear config init
+```
+
+The wizard will guide you through:
+
+**Step 1: API Key**
+- If you don't have an API key, get one at: https://linear.app/settings/api
+- The wizard prompts for your key (masked input)
+- Optionally saves to your shell profile automatically
+
+**Step 2: Workspace & Teams**
+- Automatically fetches your Linear workspace
+- Lists all available teams with search
+- Choose single team, multiple teams, or all teams
+
+**Step 3: Preferences**
+- Enable 24-hour caching (improves performance)
+- Auto-create git branches when starting issues
+- Set default issue sort order
+
+**Step 4: Complete**
+- Generates `.linear.toml` configuration file
+- Saves to git root (if in a repo) or current directory
+- Ready to use immediately!
+
+### Manual Configuration (Alternative)
+
+If you prefer manual setup or are configuring for AI agents:
+
+#### Option A: Environment Variables
+
+```bash
 export LINEAR_API_KEY="lin_api_YOUR_KEY_HERE"
 export LINEAR_WORKSPACE="your-workspace"
 export LINEAR_TEAM_ID="YOUR-TEAM"
 export LINEAR_CACHE_ENABLED="true"
 export LINEAR_AUTO_BRANCH="true"
-
-# Reload shell
-source ~/.zshrc  # or ~/.bashrc
 ```
 
-### Option B: Configuration File (Per-Project)
+#### Option B: Configuration File
 
-Create `.linear.toml` in your project directory:
+Create `.linear.toml`:
 
 ```toml
 [auth]
@@ -54,16 +84,13 @@ workspace = "your-workspace"
 team_id = "YOUR-TEAM"
 
 [vcs]
-autoBranch = true  # Auto-create git branches
+autoBranch = true
 
 [cache]
-enabled = true     # Enable 24h caching
-
-[interactive]
 enabled = true
 
 [output]
-format = "text"    # or "json" for AI agents
+format = "text"  # or "json" for AI agents
 ```
 
 ### Verify Configuration
@@ -72,7 +99,8 @@ format = "text"    # or "json" for AI agents
 # Test connection
 linear team list
 
-# Should show your configured team
+# Should list your team(s)
+linear workflow list
 ```
 
 ---

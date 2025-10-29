@@ -14,14 +14,20 @@ A comprehensive, AI-agent-optimized CLI for Linear that goes beyond issues. Desi
 curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/install.sh | bash
 ```
 
-Then reload your shell and setup:
+Then reload your shell and run the interactive setup:
 
 ```bash
 # Reload shell (or restart terminal)
 source ~/.zshrc  # or ~/.bashrc for bash
 
-# Setup Linear API key
-linear config setup
+# Run interactive setup wizard 🚀
+linear config setup  # or: linear config init
+
+# The wizard will guide you through:
+# • API key (with optional save to shell profile)
+# • Workspace and team selection
+# • Cache and auto-branch preferences
+# • Configuration file generation
 
 # Start using!
 linear issue list
@@ -264,6 +270,39 @@ Configuration is stored in `.linear.toml` files with support for:
 - Multiple search paths (local, git root, ~/.config)
 - Directory/repo-specific configuration
 - Type-aware value parsing
+
+### Interactive Setup Wizard
+
+The easiest way to configure the CLI is using the interactive setup wizard:
+
+```bash
+linear config setup  # or: linear config init
+```
+
+The wizard will guide you through:
+
+1. **API Key Setup**
+   - Prompts for your Linear API key (masked input)
+   - Validates the key format
+   - Optionally saves to your shell profile (~/.zshrc or ~/.bashrc)
+
+2. **Workspace & Team Selection**
+   - Automatically fetches your workspace
+   - Lists all available teams
+   - Choose between:
+     - Single team (default)
+     - Multiple teams
+     - All teams
+
+3. **Preferences Configuration**
+   - Enable 24-hour caching (recommended)
+   - Auto-create git branches when starting issues
+   - Default issue sort order
+
+4. **Configuration File**
+   - Generates `.linear.toml` in your project root
+   - Detects git repository for proper placement
+   - Includes helpful comments
 
 ### Configuration Precedence
 

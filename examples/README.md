@@ -4,6 +4,23 @@ Practical examples and demo scripts for using the Linear CLI with any workspace.
 
 ## Quick Start
 
+### Option A: Interactive Setup (Recommended)
+
+The easiest way to get started:
+
+```bash
+# Run the interactive setup wizard
+linear config setup  # or: linear config init
+
+# The wizard will guide you through:
+# • API key setup (with masked input)
+# • Workspace and team selection
+# • Cache and auto-branch preferences
+# • Configuration file generation
+```
+
+### Option B: Manual Setup
+
 1. **Set your workspace and team**:
 ```bash
 export LINEAR_API_KEY="lin_api_YOUR_KEY"
@@ -11,7 +28,7 @@ export LINEAR_WORKSPACE="your-workspace"
 export LINEAR_TEAM_ID="YOUR-TEAM"
 ```
 
-2. **Run Setup**:
+2. **Run Setup Script**:
 ```bash
 cd examples/scripts
 chmod +x *.sh
