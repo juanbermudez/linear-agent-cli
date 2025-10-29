@@ -8,16 +8,22 @@ A comprehensive, AI-agent-optimized CLI for Linear that goes beyond issues. Desi
 
 ## ⚡ Quick Start
 
-```bash
-# Install
-git clone https://github.com/juanbermudez/linear-cli-agent.git
-cd linear-cli-agent
-deno task install
+**One-command installation** (automatically installs Deno if needed):
 
-# Setup
+```bash
+curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-cli-agent/main/install.sh | bash
+```
+
+Then reload your shell and setup:
+
+```bash
+# Reload shell (or restart terminal)
+source ~/.zshrc  # or ~/.bashrc for bash
+
+# Setup Linear API key
 linear config setup
 
-# Start using
+# Start using!
 linear issue list
 linear project create --name "My Project" --with-doc
 linear document create --current-project --title "Notes"
@@ -69,29 +75,60 @@ This CLI is **specifically designed** to be used by AI coding agents:
 
 ## 📦 Installation
 
-### Prerequisites
+### Automatic Installation (Recommended)
 
-- [Deno](https://deno.land/) (v2.0+)
-- Linear API key ([create one](https://linear.app/settings/api))
-
-### Install
+One command installs everything (Deno + Linear CLI):
 
 ```bash
-# Clone repository
+curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-cli-agent/main/install.sh | bash
+```
+
+This script will:
+- ✅ Detect your OS and shell (bash/zsh/fish)
+- ✅ Install Deno if not present
+- ✅ Configure PATH automatically
+- ✅ Install Linear CLI
+- ✅ Work on macOS, Linux, and Windows (WSL)
+
+After installation, reload your shell:
+
+```bash
+source ~/.zshrc  # or ~/.bashrc, or restart terminal
+linear --version
+```
+
+### Manual Installation
+
+If you prefer to install manually:
+
+```bash
+# 1. Install Deno (if not installed)
+curl -fsSL https://deno.land/install.sh | sh
+
+# 2. Add Deno to PATH
+export PATH="$HOME/.deno/bin:$PATH"
+
+# 3. Clone and install Linear CLI
 git clone https://github.com/juanbermudez/linear-cli-agent.git
 cd linear-cli-agent
-
-# Install globally
 deno task install
 
-# Verify
+# 4. Verify
 linear --version
+```
+
+### Uninstalling
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-cli-agent/main/uninstall.sh | bash
 ```
 
 ### Setup
 
+After installation, configure your Linear API key:
+
 ```bash
-# Run setup wizard
+# Interactive setup wizard
 linear config setup
 
 # Or set manually
@@ -99,7 +136,9 @@ linear config set auth.token "lin_api_..."
 linear config set defaults.team "ENG"
 ```
 
-See [Installation Guide](./docs/INSTALLATION.md) for detailed instructions.
+Get your API key at: https://linear.app/settings/api
+
+See [Installation Guide](./docs/INSTALLATION.md) for detailed instructions and troubleshooting.
 
 ## 🚀 Usage
 
