@@ -1,5 +1,8 @@
 import { unicodeWidth } from "@std/cli"
 
+// Re-export unicodeWidth for use in other modules
+export { unicodeWidth }
+
 export function padDisplay(s: string, width: number): string {
   const w = unicodeWidth(s)
   return s + " ".repeat(Math.max(0, width - w))
@@ -55,6 +58,9 @@ export function truncateText(text: string, maxWidth: number): string {
 
   return truncated + "..."
 }
+
+// Export truncate as an alias for truncateText
+export { truncateText as truncate }
 
 export function getPriorityDisplay(priority: number): string {
   if (priority === 0) {

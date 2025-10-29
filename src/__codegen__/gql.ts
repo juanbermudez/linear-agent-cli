@@ -39,6 +39,7 @@ type Documents = {
     "\n    query GetProjectIdOptionsByName($name: String!) {\n      projects(filter: { name: { containsIgnoreCase: $name } }) {\n        nodes {\n          id\n          name\n        }\n      }\n    }\n  ": typeof types.GetProjectIdOptionsByNameDocument,
     "\n    query GetTeamIdByKey($team: String!) {\n      teams(filter: { key: { eq: $team } }) {\n        nodes {\n          id\n        }\n      }\n    }\n  ": typeof types.GetTeamIdByKeyDocument,
     "\n    query GetTeamIdOptionsByKey($team: String!) {\n      teams(filter: { key: { containsIgnoreCase: $team } }) {\n        nodes {\n          id\n          key\n          name\n        }\n      }\n    }\n  ": typeof types.GetTeamIdOptionsByKeyDocument,
+    "\n    query ListUsers {\n      users {\n        nodes {\n          id\n          displayName\n          email\n        }\n      }\n    }\n  ": typeof types.ListUsersDocument,
     "\n      query GetViewerId {\n        viewer {\n          id\n        }\n      }\n    ": typeof types.GetViewerIdDocument,
     "\n      query LookupUser($input: String!) {\n        users(\n          filter: {\n            or: [\n              { email: { eqIgnoreCase: $input } }\n              { displayName: { eqIgnoreCase: $input } }\n              { name: { containsIgnoreCaseAndAccent: $input } }\n            ]\n          }\n        ) {\n          nodes {\n            id\n            email\n            displayName\n            name\n          }\n        }\n      }\n    ": typeof types.LookupUserDocument,
     "\n    query GetIssueLabelIdByNameForTeam($name: String!, $teamKey: String!) {\n      issueLabels(\n        filter: {\n          name: { eqIgnoreCase: $name }\n          or: [{ team: { key: { eq: $teamKey } } }, { team: { null: true } }]\n        }\n      ) {\n        nodes {\n          id\n          name\n        }\n      }\n    }\n  ": typeof types.GetIssueLabelIdByNameForTeamDocument,
@@ -105,6 +106,7 @@ const documents: Documents = {
     "\n    query GetProjectIdOptionsByName($name: String!) {\n      projects(filter: { name: { containsIgnoreCase: $name } }) {\n        nodes {\n          id\n          name\n        }\n      }\n    }\n  ": types.GetProjectIdOptionsByNameDocument,
     "\n    query GetTeamIdByKey($team: String!) {\n      teams(filter: { key: { eq: $team } }) {\n        nodes {\n          id\n        }\n      }\n    }\n  ": types.GetTeamIdByKeyDocument,
     "\n    query GetTeamIdOptionsByKey($team: String!) {\n      teams(filter: { key: { containsIgnoreCase: $team } }) {\n        nodes {\n          id\n          key\n          name\n        }\n      }\n    }\n  ": types.GetTeamIdOptionsByKeyDocument,
+    "\n    query ListUsers {\n      users {\n        nodes {\n          id\n          displayName\n          email\n        }\n      }\n    }\n  ": types.ListUsersDocument,
     "\n      query GetViewerId {\n        viewer {\n          id\n        }\n      }\n    ": types.GetViewerIdDocument,
     "\n      query LookupUser($input: String!) {\n        users(\n          filter: {\n            or: [\n              { email: { eqIgnoreCase: $input } }\n              { displayName: { eqIgnoreCase: $input } }\n              { name: { containsIgnoreCaseAndAccent: $input } }\n            ]\n          }\n        ) {\n          nodes {\n            id\n            email\n            displayName\n            name\n          }\n        }\n      }\n    ": types.LookupUserDocument,
     "\n    query GetIssueLabelIdByNameForTeam($name: String!, $teamKey: String!) {\n      issueLabels(\n        filter: {\n          name: { eqIgnoreCase: $name }\n          or: [{ team: { key: { eq: $teamKey } } }, { team: { null: true } }]\n        }\n      ) {\n        nodes {\n          id\n          name\n        }\n      }\n    }\n  ": types.GetIssueLabelIdByNameForTeamDocument,
@@ -260,6 +262,10 @@ export function gql(source: "\n    query GetTeamIdByKey($team: String!) {\n     
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n    query GetTeamIdOptionsByKey($team: String!) {\n      teams(filter: { key: { containsIgnoreCase: $team } }) {\n        nodes {\n          id\n          key\n          name\n        }\n      }\n    }\n  "): (typeof documents)["\n    query GetTeamIdOptionsByKey($team: String!) {\n      teams(filter: { key: { containsIgnoreCase: $team } }) {\n        nodes {\n          id\n          key\n          name\n        }\n      }\n    }\n  "];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query ListUsers {\n      users {\n        nodes {\n          id\n          displayName\n          email\n        }\n      }\n    }\n  "): (typeof documents)["\n    query ListUsers {\n      users {\n        nodes {\n          id\n          displayName\n          email\n        }\n      }\n    }\n  "];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

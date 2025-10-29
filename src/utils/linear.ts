@@ -473,6 +473,23 @@ export async function searchTeamsByKeySubstring(
   )
 }
 
+export async function listUsers(): Promise<Array<{ id: string; displayName: string; email: string }>> {
+  const client = getGraphQLClient()
+  const query = gql(/* GraphQL */ `
+    query ListUsers {
+      users {
+        nodes {
+          id
+          displayName
+          email
+        }
+      }
+    }
+  `)
+  const data = await client.request(query)
+  return data.users.nodes
+}
+
 export async function lookupUserId(
   /**
    * email, username, display name, or '@me' for viewer
