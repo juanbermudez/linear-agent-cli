@@ -10,7 +10,7 @@ A comprehensive, AI-agent-optimized CLI for Linear that goes beyond issues. Desi
 
 ```bash
 # Install
-git clone https://github.com/YOUR_USERNAME/linear-cli-agent.git
+git clone https://github.com/juanbermudez/linear-cli-agent.git
 cd linear-cli-agent
 deno task install
 
@@ -78,7 +78,7 @@ This CLI is **specifically designed** to be used by AI coding agents:
 
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/linear-cli-agent.git
+git clone https://github.com/juanbermudez/linear-cli-agent.git
 cd linear-cli-agent
 
 # Install globally
@@ -246,7 +246,7 @@ Contributions are welcome! This project extends the excellent foundation laid by
 
 ```bash
 # Clone
-git clone https://github.com/YOUR_USERNAME/linear-cli-agent.git
+git clone https://github.com/juanbermudez/linear-cli-agent.git
 cd linear-cli-agent
 
 # Install dependencies
@@ -289,8 +289,8 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 - [Linear API Documentation](https://developers.linear.app/docs)
 - [Original CLI Repository](https://github.com/schpet/linear-cli)
-- [Report Issues](https://github.com/YOUR_USERNAME/linear-cli-agent/issues)
-- [Discussions](https://github.com/YOUR_USERNAME/linear-cli-agent/discussions)
+- [Report Issues](https://github.com/juanbermudez/linear-cli-agent/issues)
+- [Discussions](https://github.com/juanbermudez/linear-cli-agent/discussions)
 
 ---
 
