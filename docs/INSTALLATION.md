@@ -28,8 +28,8 @@ brew install deno
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/linear-cli-agent.git
-cd linear-cli-agent
+git clone https://github.com/juanbermudez/linear-agent-cli.git
+cd linear-agent-cli
 
 # Install globally
 deno task install
@@ -123,7 +123,7 @@ Environment variables take precedence over config file values.
 To update to the latest version:
 
 ```bash
-cd linear-cli-agent
+cd linear-agent-cli
 git pull
 deno task install
 ```

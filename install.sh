@@ -1,6 +1,6 @@
 #!/bin/bash
 # Linear CLI for AI Agents - One-Command Installer
-# Usage: curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-cli-agent/main/install.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/install.sh | bash
 
 set -e
 
@@ -152,7 +152,7 @@ install_linear_cli() {
         git pull origin main
     else
         info "Cloning repository..."
-        git clone https://github.com/juanbermudez/linear-cli-agent.git "$CLI_DIR"
+        git clone https://github.com/juanbermudez/linear-agent-cli.git "$CLI_DIR"
         cd "$CLI_DIR"
     fi
 
@@ -196,8 +196,8 @@ print_next_steps() {
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
-    echo "📚 Documentation: https://github.com/juanbermudez/linear-cli-agent"
-    echo "🐛 Issues: https://github.com/juanbermudez/linear-cli-agent/issues"
+    echo "📚 Documentation: https://github.com/juanbermudez/linear-agent-cli"
+    echo "🐛 Issues: https://github.com/juanbermudez/linear-agent-cli/issues"
     echo ""
 }
 

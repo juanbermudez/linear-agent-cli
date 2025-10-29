@@ -11,7 +11,7 @@ A comprehensive, AI-agent-optimized CLI for Linear that goes beyond issues. Desi
 **One-command installation** (automatically installs Deno if needed):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-cli-agent/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/install.sh | bash
 ```
 
 Then reload your shell and setup:
@@ -80,7 +80,7 @@ This CLI is **specifically designed** to be used by AI coding agents:
 One command installs everything (Deno + Linear CLI):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-cli-agent/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/install.sh | bash
 ```
 
 This script will:
@@ -109,8 +109,8 @@ curl -fsSL https://deno.land/install.sh | sh
 export PATH="$HOME/.deno/bin:$PATH"
 
 # 3. Clone and install Linear CLI
-git clone https://github.com/juanbermudez/linear-cli-agent.git
-cd linear-cli-agent
+git clone https://github.com/juanbermudez/linear-agent-cli.git
+cd linear-agent-cli
 deno task install
 
 # 4. Verify
@@ -120,7 +120,7 @@ linear --version
 ### Uninstalling
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-cli-agent/main/uninstall.sh | bash
+curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/uninstall.sh | bash
 ```
 
 ### Setup
@@ -285,8 +285,8 @@ Contributions are welcome! This project extends the excellent foundation laid by
 
 ```bash
 # Clone
-git clone https://github.com/juanbermudez/linear-cli-agent.git
-cd linear-cli-agent
+git clone https://github.com/juanbermudez/linear-agent-cli.git
+cd linear-agent-cli
 
 # Install dependencies
 deno task install
@@ -328,8 +328,8 @@ MIT License - see [LICENSE](./LICENSE) for details.
 
 - [Linear API Documentation](https://developers.linear.app/docs)
 - [Original CLI Repository](https://github.com/schpet/linear-cli)
-- [Report Issues](https://github.com/juanbermudez/linear-cli-agent/issues)
-- [Discussions](https://github.com/juanbermudez/linear-cli-agent/discussions)
+- [Report Issues](https://github.com/juanbermudez/linear-agent-cli/issues)
+- [Discussions](https://github.com/juanbermudez/linear-agent-cli/discussions)
 
 ---
 
