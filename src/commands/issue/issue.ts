@@ -14,7 +14,8 @@ import { updateCommand } from "./issue-update.ts"
 import { urlCommand } from "./issue-url.ts"
 import { viewCommand } from "./issue-view.ts"
 
-export const issueCommand = new Command()
+// deno-lint-ignore no-explicit-any
+export const issueCommand: any = new Command()
   .description("Manage Linear issues")
   .action(function () {
     this.showHelp()
