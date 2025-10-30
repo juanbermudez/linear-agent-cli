@@ -183,7 +183,7 @@ export async function fetchIssueDetails(
   issueId: string,
   showSpinner = false,
   includeComments = false,
-): Promise<unknown> {
+) {
   const { Spinner } = await import("@std/cli/unstable-spinner")
   const spinner = showSpinner ? new Spinner() : null
   spinner?.start()
@@ -1615,7 +1615,7 @@ export async function deleteMilestone(id: string): Promise<boolean> {
 export async function createProjectUpdate(input: {
   projectId: string
   body: string
-  health: string
+  health: "atRisk" | "offTrack" | "onTrack"
 }) {
   const mutation = gql(/* GraphQL */ `
     mutation CreateProjectUpdate($input: ProjectUpdateCreateInput!) {
@@ -1778,6 +1778,12 @@ export async function updateInitiative(
           slugId
           url
           status
+          owner {
+            id
+            name
+            displayName
+          }
+          targetDate
         }
       }
     }
@@ -1863,6 +1869,7 @@ export async function viewInitiative(id: string) {
             id
             name
             slugId
+            url
             status {
               name
               type
@@ -1879,18 +1886,29 @@ export async function viewInitiative(id: string) {
   return data.initiative
 }
 
-export async function archiveInitiative(id: string): Promise<boolean> {
+export async function archiveInitiative(id: string) {
   const mutation = gql(/* GraphQL */ `
     mutation ArchiveInitiative($id: String!) {
       initiativeArchive(id: $id) {
         success
+        entity {
+          id
+          name
+          slugId
+          url
+        }
       }
     }
   `)
 
   const client = getGraphQLClient()
   const data = await client.request(mutation, { id })
-  return data.initiativeArchive.success
+
+  if (!data.initiativeArchive.success || !data.initiativeArchive.entity) {
+    throw new Error("Failed to archive initiative")
+  }
+
+  return data.initiativeArchive.entity
 }
 
 export async function unarchiveInitiative(id: string) {
@@ -1992,7 +2010,7 @@ export async function removeProjectFromInitiative(
 export async function createInitiativeUpdate(input: {
   initiativeId: string
   body: string
-  health: string
+  health: "atRisk" | "offTrack" | "onTrack"
 }) {
   const mutation = gql(/* GraphQL */ `
     mutation CreateInitiativeUpdate($input: InitiativeUpdateCreateInput!) {
@@ -2208,7 +2226,7 @@ export async function getCurrentProjectFromIssue(): Promise<
     name: string
   } | null
 > {
-  const issueId = await getCurrentIssueIdFromVcs()
+  const issueId = await getCurrentIssueFromVcs()
   if (!issueId) {
     return null
   }

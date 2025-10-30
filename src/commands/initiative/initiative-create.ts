@@ -1,9 +1,6 @@
 import { Command } from "@cliffy/command"
 import { Input, Select } from "@cliffy/prompt"
-import {
-  createInitiative,
-  listUsers,
-} from "../../utils/linear.ts"
+import { createInitiative, listUsers } from "../../utils/linear.ts"
 import {
   error as errorColor,
   success as successColor,
@@ -49,6 +46,8 @@ export const createCommand = new Command()
     let targetDate: string | undefined
 
     if (interactive) {
+      const { Spinner } = await import("@std/cli/unstable-spinner")
+
       name = await Input.prompt({
         message: "Initiative name",
         validate: (value) => value.trim() !== "" || "Name is required",
@@ -61,26 +60,19 @@ export const createCommand = new Command()
       if (description === "") description = undefined
 
       // Status selection
-      const { Spinner } = await import("@std/cli/unstable-spinner")
-      const statusSpinner = new Spinner({ message: "Loading statuses..." })
-      statusSpinner.start()
-      const statuses = await listInitiativeStatuses()
-      statusSpinner.stop()
+      const validStatuses = ["Planned", "Active", "Completed"]
+      const statusOptions = validStatuses.map((s) => ({
+        name: s,
+        value: s,
+      }))
+      statusOptions.unshift({ name: "None", value: "" })
 
-      if (statuses.length > 0) {
-        const statusOptions = statuses.map((s) => ({
-          name: `${s.name} (${s.type})`,
-          value: s.id,
-        }))
-        statusOptions.unshift({ name: "None", value: "" })
-
-        const selectedStatus = await Select.prompt({
-          message: "Initiative status (optional)",
-          options: statusOptions,
-          search: true,
-        })
-        statusId = selectedStatus || undefined
-      }
+      const selectedStatus = await Select.prompt({
+        message: "Initiative status (optional)",
+        options: statusOptions,
+        search: true,
+      })
+      statusId = selectedStatus || undefined
 
       // Owner selection
       const ownerSpinner = new Spinner({ message: "Loading users..." })

@@ -553,8 +553,9 @@ async function flagBasedCreate(options: CreateOptions) {
                 success: false,
                 error: {
                   code: "API_ERROR",
-                  message:
-                    `Project created but document creation failed: ${(err as Error).message}`,
+                  message: `Project created but document creation failed: ${
+                    (err as Error).message
+                  }`,
                 },
                 project: {
                   id: project.id,
@@ -568,7 +569,9 @@ async function flagBasedCreate(options: CreateOptions) {
           )
         } else {
           console.error(
-            errorColor(`Warning: Document creation failed: ${(err as Error).message}`),
+            errorColor(
+              `Warning: Document creation failed: ${(err as Error).message}`,
+            ),
           )
         }
         Deno.exit(1)
@@ -576,7 +579,28 @@ async function flagBasedCreate(options: CreateOptions) {
     }
 
     if (useJson) {
-      const response = {
+      const response: {
+        success: boolean
+        operation: string
+        project: {
+          id: string
+          name: string
+          slugId: string
+          url: string
+          status: { id: string; name: string; type: string }
+          lead: { id: string; name: string } | null
+          teams: Array<{ id: string; key: string; name: string }>
+        }
+        document?: {
+          id: string
+          title: string
+          slugId: string
+          url: string
+        }
+        relationships?: {
+          documentLinkedToProject: boolean
+        }
+      } = {
         success: true,
         operation: "create",
         project: {
@@ -640,7 +664,9 @@ async function flagBasedCreate(options: CreateOptions) {
       )
     } else {
       console.error(
-        errorColor(`Error: Failed to create project: ${(err as Error).message}`),
+        errorColor(
+          `Error: Failed to create project: ${(err as Error).message}`,
+        ),
       )
     }
     Deno.exit(1)

@@ -45,8 +45,8 @@ export const viewCommand = new Command()
       return
     }
 
-    const { title, description, comments: issueComments, ...metadata } =
-      issueData
+    const { title, description, ...metadata } = issueData
+    const issueComments = "comments" in issueData ? issueData.comments : []
 
     // Format priority display
     const getPriorityDisplay = (priority: number) => {

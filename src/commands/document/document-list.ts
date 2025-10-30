@@ -298,7 +298,9 @@ export const listCommand = new Command()
           ),
         )
       } else {
-        console.error(`Error: Failed to fetch documents: ${(err as Error).message}`)
+        console.error(
+          `Error: Failed to fetch documents: ${(err as Error).message}`,
+        )
       }
       Deno.exit(1)
     }

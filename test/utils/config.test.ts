@@ -83,8 +83,6 @@ describe("Config System", () => {
   describe("Config Path Mapping", () => {
     it("should map auto_branch to vcs.autoBranch path", async () => {
       // This test verifies the config path mapping exists
-      const { OPTION_CONFIG_PATHS } = await import("../../src/config.ts")
-
       // We can't directly access OPTION_CONFIG_PATHS as it's not exported
       // But we can verify the behavior
       const { getOption } = await import("../../src/config.ts")

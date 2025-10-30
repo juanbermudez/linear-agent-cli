@@ -16,7 +16,11 @@ function maskToken(value: unknown): unknown {
   return value
 }
 
-function formatConfig(obj: unknown, prefix = "", masked = true): string[] {
+function formatConfig(
+  obj: Record<string, unknown>,
+  prefix = "",
+  masked = true,
+): string[] {
   const lines: string[] = []
 
   for (const [key, value] of Object.entries(obj)) {
@@ -24,7 +28,9 @@ function formatConfig(obj: unknown, prefix = "", masked = true): string[] {
 
     if (value != null && typeof value === "object" && !Array.isArray(value)) {
       lines.push(bold(`\n[${fullKey}]`))
-      lines.push(...formatConfig(value, fullKey, masked))
+      lines.push(
+        ...formatConfig(value as Record<string, unknown>, fullKey, masked),
+      )
     } else {
       const displayValue = masked ? maskToken(value) : value
       lines.push(`${key} = ${JSON.stringify(displayValue)}`)
@@ -89,7 +95,11 @@ export const listCommand = new Command()
         } else {
           console.log(bold(`[${options.section}]`))
           if (typeof sectionValue === "object" && sectionValue != null) {
-            const lines = formatConfig(sectionValue, "", true)
+            const lines = formatConfig(
+              sectionValue as Record<string, unknown>,
+              "",
+              true,
+            )
             console.log(lines.join("\n"))
           } else {
             console.log(JSON.stringify(maskToken(sectionValue)))
@@ -120,7 +130,11 @@ export const listCommand = new Command()
           )
         } else {
           console.log(bold("Configuration:\n"))
-          const lines = formatConfig(allConfig, "", true)
+          const lines = formatConfig(
+            allConfig as Record<string, unknown>,
+            "",
+            true,
+          )
           console.log(lines.join("\n"))
         }
       }

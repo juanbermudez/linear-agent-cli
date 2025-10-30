@@ -1,8 +1,5 @@
 import { Command } from "@cliffy/command"
-import {
-  listUsers,
-  updateInitiative,
-} from "../../utils/linear.ts"
+import { listUsers, updateInitiative } from "../../utils/linear.ts"
 import {
   error as errorColor,
   success as successColor,
@@ -90,10 +87,9 @@ export const updateCommand = new Command()
       if (matchedStatus) {
         statusId = matchedStatus
       } else {
-        const errorMsg =
-          `Status '${options.status}' not found. Valid values: ${
-            validStatuses.join(", ")
-          }`
+        const errorMsg = `Status '${options.status}' not found. Valid values: ${
+          validStatuses.join(", ")
+        }`
         if (useJson) {
           console.error(
             JSON.stringify(
@@ -177,9 +173,7 @@ export const updateCommand = new Command()
                 name: initiative.name,
                 slugId: initiative.slugId,
                 url: initiative.url,
-                status: initiative.status
-                  ? initiative.status
-                  : null,
+                status: initiative.status ? initiative.status : null,
                 owner: initiative.owner
                   ? {
                     id: initiative.owner.id,

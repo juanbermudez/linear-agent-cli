@@ -33,7 +33,7 @@ export const updateCreateCommand = new Command()
       Deno.stdout.isTerminal()
 
     let body: string
-    let health: string
+    let health: "atRisk" | "offTrack" | "onTrack"
 
     if (interactive) {
       const healthOptions = [
@@ -41,10 +41,10 @@ export const updateCreateCommand = new Command()
         { name: "⚠️  At Risk", value: "atRisk" },
         { name: "🔴 Off Track", value: "offTrack" },
       ]
-      health = await Select.prompt({
+      health = (await Select.prompt({
         message: "Health status",
         options: healthOptions,
-      })
+      })) as "atRisk" | "offTrack" | "onTrack"
 
       const editorName = await getEditor()
       const promptMessage = editorName
@@ -84,7 +84,7 @@ export const updateCreateCommand = new Command()
         Deno.exit(1)
       }
       body = options.body
-      health = options.health
+      health = options.health as "atRisk" | "offTrack" | "onTrack"
 
       if (!["onTrack", "atRisk", "offTrack"].includes(health)) {
         const errorMsg = "Health must be onTrack, atRisk, or offTrack"

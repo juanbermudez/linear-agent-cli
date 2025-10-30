@@ -337,7 +337,9 @@ async function flagBasedCreate(options: CreateOptions) {
       )
     } else {
       console.error(
-        errorColor(`Error: Failed to create document: ${(err as Error).message}`),
+        errorColor(
+          `Error: Failed to create document: ${(err as Error).message}`,
+        ),
       )
     }
     Deno.exit(1)

@@ -40,24 +40,17 @@ export const viewCommand = new Command()
                 slugId: initiative.slugId,
                 url: initiative.url,
                 description: initiative.description,
-                status: initiative.status
-                  ? {
-                    id: initiative.status.id,
-                    name: initiative.status.name,
-                    type: initiative.status.type,
-                  }
-                  : null,
+                status: initiative.status,
                 owner: initiative.owner
                   ? {
                     id: initiative.owner.id,
                     name: initiative.owner.displayName,
-                    email: initiative.owner.email,
                   }
                   : null,
                 targetDate: initiative.targetDate,
                 createdAt: initiative.createdAt,
                 updatedAt: initiative.updatedAt,
-                projects: initiative.projects.map((p) => ({
+                projects: initiative.projects.nodes.map((p) => ({
                   id: p.id,
                   name: p.name,
                   slugId: p.slugId,
@@ -88,7 +81,7 @@ export const viewCommand = new Command()
       console.log()
       console.log(
         bold("Status: ") +
-          (initiative.status ? initiative.status.name : "None"),
+          (initiative.status || "None"),
       )
       console.log(
         bold("Owner: ") +
@@ -109,10 +102,10 @@ export const viewCommand = new Command()
         bold("Updated: ") + formatRelativeTime(initiative.updatedAt),
       )
 
-      if (initiative.projects.length > 0) {
+      if (initiative.projects.nodes.length > 0) {
         console.log()
-        console.log(bold(`Projects (${initiative.projects.length})`))
-        for (const project of initiative.projects) {
+        console.log(bold(`Projects (${initiative.projects.nodes.length})`))
+        for (const project of initiative.projects.nodes) {
           console.log(`  • ${project.name} (${project.slugId})`)
           console.log(`    ${muted(project.url)}`)
         }
