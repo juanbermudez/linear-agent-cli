@@ -29,13 +29,17 @@ export const updateCommand = new Command()
       const errorMsg = "At least one field must be specified to update"
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "MISSING_REQUIRED_FIELD",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "MISSING_REQUIRED_FIELD",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -48,10 +52,14 @@ export const updateCommand = new Command()
       const errorMsg = "Invalid hex color. Use format: #rrggbb"
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: { code: "INVALID_VALUE", message: errorMsg },
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: false,
+              error: { code: "INVALID_VALUE", message: errorMsg },
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -77,19 +85,27 @@ export const updateCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "update",
-            label: {
-              id: label.id,
-              name: label.name,
-              description: label.description,
-              color: label.color,
-              team: label.team
-                ? { id: label.team.id, key: label.team.key, name: label.team.name }
-                : null,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "update",
+              label: {
+                id: label.id,
+                name: label.name,
+                description: label.description,
+                color: label.color,
+                team: label.team
+                  ? {
+                    id: label.team.id,
+                    key: label.team.key,
+                    name: label.team.name,
+                  }
+                  : null,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Updated label '${label.name}'`))
@@ -101,13 +117,19 @@ export const updateCommand = new Command()
         : `Failed to update label: ${err.message}`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

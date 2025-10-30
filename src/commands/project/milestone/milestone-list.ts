@@ -20,7 +20,9 @@ export const listCommand = new Command()
 
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
-    const spinner = showSpinner ? new Spinner({ message: "Fetching milestones..." }) : null
+    const spinner = showSpinner
+      ? new Spinner({ message: "Fetching milestones..." })
+      : null
 
     spinner?.start()
 
@@ -31,18 +33,22 @@ export const listCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            milestones: milestones.map((m) => ({
-              id: m.id,
-              name: m.name,
-              description: m.description,
-              targetDate: m.targetDate,
-              status: m.status,
-              progress: m.progress,
-              sortOrder: m.sortOrder,
-            })),
-            count: milestones.length,
-          }, null, 2),
+          JSON.stringify(
+            {
+              milestones: milestones.map((m) => ({
+                id: m.id,
+                name: m.name,
+                description: m.description,
+                targetDate: m.targetDate,
+                status: m.status,
+                progress: m.progress,
+                sortOrder: m.sortOrder,
+              })),
+              count: milestones.length,
+            },
+            null,
+            2,
+          ),
         )
         return
       }
@@ -91,17 +97,23 @@ export const listCommand = new Command()
 
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
-              ...(err.message.includes("not found") && {
-                resource: "project",
-                id: projectId,
-              }),
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+                ...(err.message.includes("not found") && {
+                  resource: "project",
+                  id: projectId,
+                }),
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

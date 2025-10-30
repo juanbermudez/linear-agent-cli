@@ -1,11 +1,14 @@
 import { Command } from "@cliffy/command"
 import {
-  updateProject,
   getTeamIdByKey,
-  lookupUserId,
   listProjectStatuses,
+  lookupUserId,
+  updateProject,
 } from "../../utils/linear.ts"
-import { error as errorColor, success as successColor } from "../../utils/styling.ts"
+import {
+  error as errorColor,
+  success as successColor,
+} from "../../utils/styling.ts"
 
 interface UpdateOptions {
   name?: string
@@ -29,8 +32,13 @@ export const updateCommand = new Command()
   .arguments("<projectId:string>")
   .option("-n, --name <name:string>", "New project name")
   .option("-d, --description <description:string>", "New description")
-  .option("-c, --content <content:string>", "New project content/body (markdown)")
-  .option("-t, --team <team:string>", "New team key(s) (can be repeated)", { collect: true })
+  .option(
+    "-c, --content <content:string>",
+    "New project content/body (markdown)",
+  )
+  .option("-t, --team <team:string>", "New team key(s) (can be repeated)", {
+    collect: true,
+  })
   .option("-s, --status <status:string>", "New project status name or ID")
   .option("-l, --lead <lead:string>", "New project lead (username or email)")
   .option("-i, --icon <icon:string>", "New icon emoji")
@@ -57,16 +65,21 @@ export const updateCommand = new Command()
       !options.targetDate &&
       options.priority == null
     ) {
-      const errorMsg = "No fields provided to update. Use --name, --description, --content, --status, --lead, etc."
+      const errorMsg =
+        "No fields provided to update. Use --name, --description, --content, --status, --lead, etc."
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "MISSING_REQUIRED_FIELD",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "MISSING_REQUIRED_FIELD",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -76,18 +89,23 @@ export const updateCommand = new Command()
 
     // Validate color format if provided
     if (options.color && !/^#?[0-9A-Fa-f]{6}$/.test(options.color)) {
-      const errorMsg = `Invalid color '${options.color}'. Use hex format: #RRGGBB`
+      const errorMsg =
+        `Invalid color '${options.color}'. Use hex format: #RRGGBB`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "INVALID_VALUE",
-              message: errorMsg,
-              field: "color",
-              value: options.color,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "INVALID_VALUE",
+                message: errorMsg,
+                field: "color",
+                value: options.color,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -102,18 +120,23 @@ export const updateCommand = new Command()
 
     // Validate date formats
     if (options.startDate && !/^\d{4}-\d{2}-\d{2}$/.test(options.startDate)) {
-      const errorMsg = `Invalid start date '${options.startDate}'. Use YYYY-MM-DD format`
+      const errorMsg =
+        `Invalid start date '${options.startDate}'. Use YYYY-MM-DD format`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "INVALID_VALUE",
-              message: errorMsg,
-              field: "startDate",
-              value: options.startDate,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "INVALID_VALUE",
+                message: errorMsg,
+                field: "startDate",
+                value: options.startDate,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -122,18 +145,23 @@ export const updateCommand = new Command()
     }
 
     if (options.targetDate && !/^\d{4}-\d{2}-\d{2}$/.test(options.targetDate)) {
-      const errorMsg = `Invalid target date '${options.targetDate}'. Use YYYY-MM-DD format`
+      const errorMsg =
+        `Invalid target date '${options.targetDate}'. Use YYYY-MM-DD format`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "INVALID_VALUE",
-              message: errorMsg,
-              field: "targetDate",
-              value: options.targetDate,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "INVALID_VALUE",
+                message: errorMsg,
+                field: "targetDate",
+                value: options.targetDate,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -155,15 +183,19 @@ export const updateCommand = new Command()
           const errorMsg = `Team '${teamKey}' not found`
           if (useJson) {
             console.error(
-              JSON.stringify({
-                success: false,
-                error: {
-                  code: "NOT_FOUND",
-                  message: errorMsg,
-                  resource: "team",
-                  id: teamKey,
+              JSON.stringify(
+                {
+                  success: false,
+                  error: {
+                    code: "NOT_FOUND",
+                    message: errorMsg,
+                    resource: "team",
+                    id: teamKey,
+                  },
                 },
-              }, null, 2),
+                null,
+                2,
+              ),
             )
           } else {
             console.error(errorColor(`Error: ${errorMsg}`))
@@ -177,10 +209,16 @@ export const updateCommand = new Command()
     let statusId = options.status
     if (statusId) {
       // If not a UUID, try to resolve as status name
-      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(statusId)) {
+      if (
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+          statusId,
+        )
+      ) {
         const statuses = await listProjectStatuses()
         const status = statuses.find(
-          (s) => s.name.toLowerCase() === statusId!.toLowerCase() || s.type === statusId!.toLowerCase(),
+          (s) =>
+            s.name.toLowerCase() === statusId!.toLowerCase() ||
+            s.type === statusId!.toLowerCase(),
         )
         if (status) {
           statusId = status.id
@@ -188,15 +226,19 @@ export const updateCommand = new Command()
           const errorMsg = `Status '${statusId}' not found`
           if (useJson) {
             console.error(
-              JSON.stringify({
-                success: false,
-                error: {
-                  code: "NOT_FOUND",
-                  message: errorMsg,
-                  resource: "status",
-                  id: statusId,
+              JSON.stringify(
+                {
+                  success: false,
+                  error: {
+                    code: "NOT_FOUND",
+                    message: errorMsg,
+                    resource: "status",
+                    id: statusId,
+                  },
                 },
-              }, null, 2),
+                null,
+                2,
+              ),
             )
           } else {
             console.error(errorColor(`Error: ${errorMsg}`))
@@ -215,15 +257,19 @@ export const updateCommand = new Command()
         const errorMsg = `User '${options.lead}' not found`
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "NOT_FOUND",
-                message: errorMsg,
-                resource: "user",
-                id: options.lead,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "NOT_FOUND",
+                  message: errorMsg,
+                  resource: "user",
+                  id: options.lead,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -262,7 +308,9 @@ export const updateCommand = new Command()
     // Show spinner only in non-JSON mode
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
-    const spinner = showSpinner ? new Spinner({ message: `Updating project ${projectId}...` }) : null
+    const spinner = showSpinner
+      ? new Spinner({ message: `Updating project ${projectId}...` })
+      : null
 
     spinner?.start()
 
@@ -273,20 +321,24 @@ export const updateCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "update",
-            project: {
-              id: project.id,
-              name: project.name,
-              slugId: project.slugId,
-              url: project.url,
-              status: {
-                id: project.status.id,
-                name: project.status.name,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "update",
+              project: {
+                id: project.id,
+                name: project.name,
+                slugId: project.slugId,
+                url: project.url,
+                status: {
+                  id: project.status.id,
+                  name: project.status.name,
+                },
               },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Updated project: ${project.name}`))
@@ -301,17 +353,23 @@ export const updateCommand = new Command()
 
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
-              ...(err.message.includes("not found") && {
-                resource: "project",
-                id: projectId,
-              }),
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+                ...(err.message.includes("not found") && {
+                  resource: "project",
+                  id: projectId,
+                }),
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

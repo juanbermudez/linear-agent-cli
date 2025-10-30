@@ -32,38 +32,42 @@ export const viewCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            initiative: {
-              id: initiative.id,
-              name: initiative.name,
-              slugId: initiative.slugId,
-              url: initiative.url,
-              description: initiative.description,
-              status: initiative.status
-                ? {
-                  id: initiative.status.id,
-                  name: initiative.status.name,
-                  type: initiative.status.type,
-                }
-                : null,
-              owner: initiative.owner
-                ? {
-                  id: initiative.owner.id,
-                  name: initiative.owner.displayName,
-                  email: initiative.owner.email,
-                }
-                : null,
-              targetDate: initiative.targetDate,
-              createdAt: initiative.createdAt,
-              updatedAt: initiative.updatedAt,
-              projects: initiative.projects.map((p) => ({
-                id: p.id,
-                name: p.name,
-                slugId: p.slugId,
-                url: p.url,
-              })),
+          JSON.stringify(
+            {
+              initiative: {
+                id: initiative.id,
+                name: initiative.name,
+                slugId: initiative.slugId,
+                url: initiative.url,
+                description: initiative.description,
+                status: initiative.status
+                  ? {
+                    id: initiative.status.id,
+                    name: initiative.status.name,
+                    type: initiative.status.type,
+                  }
+                  : null,
+                owner: initiative.owner
+                  ? {
+                    id: initiative.owner.id,
+                    name: initiative.owner.displayName,
+                    email: initiative.owner.email,
+                  }
+                  : null,
+                targetDate: initiative.targetDate,
+                createdAt: initiative.createdAt,
+                updatedAt: initiative.updatedAt,
+                projects: initiative.projects.map((p) => ({
+                  id: p.id,
+                  name: p.name,
+                  slugId: p.slugId,
+                  url: p.url,
+                })),
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
         return
       }
@@ -120,13 +124,19 @@ export const viewCommand = new Command()
         : `Failed to fetch initiative: ${err.message}`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

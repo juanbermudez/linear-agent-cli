@@ -207,7 +207,9 @@ export const updateCommand = new Command()
             )
             Deno.exit(1)
           }
-          const { getProjectMilestoneId } = await import("../../utils/linear.ts")
+          const { getProjectMilestoneId } = await import(
+            "../../utils/linear.ts"
+          )
           projectMilestoneId = await getProjectMilestoneId(projectId, milestone)
           if (projectMilestoneId === undefined) {
             console.error(
@@ -248,7 +250,9 @@ export const updateCommand = new Command()
         if (projectId !== undefined) input.projectId = projectId
         if (stateId !== undefined) input.stateId = stateId
         if (cycleId !== undefined) input.cycleId = cycleId
-        if (projectMilestoneId !== undefined) input.projectMilestoneId = projectMilestoneId
+        if (projectMilestoneId !== undefined) {
+          input.projectMilestoneId = projectMilestoneId
+        }
 
         spinner?.stop()
         console.log(`Updating issue ${issueId}`)
@@ -284,51 +288,79 @@ export const updateCommand = new Command()
         console.log(issue.url)
 
         // Create relationships if provided
-        const relationshipsToCreate: Array<{ relatedIssueId: string; type: "blocks" | "related" | "duplicate" | "similar" }> = []
+        const relationshipsToCreate: Array<
+          {
+            relatedIssueId: string
+            type: "blocks" | "related" | "duplicate" | "similar"
+          }
+        > = []
 
-        if (blocksIssues && Array.isArray(blocksIssues) && blocksIssues.length > 0) {
+        if (
+          blocksIssues && Array.isArray(blocksIssues) && blocksIssues.length > 0
+        ) {
           for (const relatedIssue of blocksIssues) {
             const relatedIdentifier = await getIssueIdentifier(relatedIssue)
             if (relatedIdentifier) {
               const relatedId = await getIssueId(relatedIdentifier)
               if (relatedId) {
-                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "blocks" })
+                relationshipsToCreate.push({
+                  relatedIssueId: relatedId,
+                  type: "blocks",
+                })
               }
             }
           }
         }
 
-        if (relatedToIssues && Array.isArray(relatedToIssues) && relatedToIssues.length > 0) {
+        if (
+          relatedToIssues && Array.isArray(relatedToIssues) &&
+          relatedToIssues.length > 0
+        ) {
           for (const relatedIssue of relatedToIssues) {
             const relatedIdentifier = await getIssueIdentifier(relatedIssue)
             if (relatedIdentifier) {
               const relatedId = await getIssueId(relatedIdentifier)
               if (relatedId) {
-                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "related" })
+                relationshipsToCreate.push({
+                  relatedIssueId: relatedId,
+                  type: "related",
+                })
               }
             }
           }
         }
 
-        if (duplicateOfIssues && Array.isArray(duplicateOfIssues) && duplicateOfIssues.length > 0) {
+        if (
+          duplicateOfIssues && Array.isArray(duplicateOfIssues) &&
+          duplicateOfIssues.length > 0
+        ) {
           for (const relatedIssue of duplicateOfIssues) {
             const relatedIdentifier = await getIssueIdentifier(relatedIssue)
             if (relatedIdentifier) {
               const relatedId = await getIssueId(relatedIdentifier)
               if (relatedId) {
-                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "duplicate" })
+                relationshipsToCreate.push({
+                  relatedIssueId: relatedId,
+                  type: "duplicate",
+                })
               }
             }
           }
         }
 
-        if (similarToIssues && Array.isArray(similarToIssues) && similarToIssues.length > 0) {
+        if (
+          similarToIssues && Array.isArray(similarToIssues) &&
+          similarToIssues.length > 0
+        ) {
           for (const relatedIssue of similarToIssues) {
             const relatedIdentifier = await getIssueIdentifier(relatedIssue)
             if (relatedIdentifier) {
               const relatedId = await getIssueId(relatedIdentifier)
               if (relatedId) {
-                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "similar" })
+                relationshipsToCreate.push({
+                  relatedIssueId: relatedId,
+                  type: "similar",
+                })
               }
             }
           }
@@ -354,7 +386,9 @@ export const updateCommand = new Command()
                 },
               })
             } catch (_err) {
-              console.error(`Warning: Failed to create ${relation.type} relationship`)
+              console.error(
+                `Warning: Failed to create ${relation.type} relationship`,
+              )
             }
           }
         }

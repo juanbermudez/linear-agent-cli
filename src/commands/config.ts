@@ -82,7 +82,10 @@ const setupCommand = new Command()
         } else if (shell.includes("bash")) {
           shellConfig = join(Deno.env.get("HOME") || "~", ".bashrc")
         } else if (shell.includes("fish")) {
-          shellConfig = join(Deno.env.get("HOME") || "~", ".config/fish/config.fish")
+          shellConfig = join(
+            Deno.env.get("HOME") || "~",
+            ".config/fish/config.fish",
+          )
         }
 
         if (shellConfig) {
@@ -93,10 +96,14 @@ const setupCommand = new Command()
 
             await Deno.writeTextFile(shellConfig, exportLine, { append: true })
             console.log(`✓ Added API key to ${shellConfig}`)
-            console.log("  Run 'source ${shellConfig}' or restart your terminal\n")
+            console.log(
+              "  Run 'source ${shellConfig}' or restart your terminal\n",
+            )
           } catch (error) {
             console.log(`⚠ Could not write to ${shellConfig}: ${error}`)
-            console.log(`  You can manually add: export LINEAR_API_KEY="${apiKey}"\n`)
+            console.log(
+              `  You can manually add: export LINEAR_API_KEY="${apiKey}"\n`,
+            )
           }
         }
       }
@@ -259,12 +266,18 @@ token = "${apiKey}"
 # Your Linear workspace identifier
 workspace = "${workspace}"
 
-# Default team (${selectedTeamKeys.length > 1 ? `primary of ${selectedTeamKeys.length} teams` : "single team"})
+# Default team (${
+      selectedTeamKeys.length > 1
+        ? `primary of ${selectedTeamKeys.length} teams`
+        : "single team"
+    })
 team_id = "${primaryTeam}"
 `
 
     if (selectedTeamKeys.length > 1) {
-      tomlContent += `\n# All configured teams\nteams = [${selectedTeamKeys.map(k => `"${k}"`).join(", ")}]\n`
+      tomlContent += `\n# All configured teams\nteams = [${
+        selectedTeamKeys.map((k) => `"${k}"`).join(", ")
+      }]\n`
     }
 
     tomlContent += `

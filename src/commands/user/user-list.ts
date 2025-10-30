@@ -66,21 +66,25 @@ export const listCommand = new Command()
 
       // Apply filters
       if (activeOnly) {
-        users = users.filter(u => u.active)
+        users = users.filter((u) => u.active)
       }
 
       if (adminsOnly) {
-        users = users.filter(u => u.admin)
+        users = users.filter((u) => u.admin)
       }
 
       // Sort by display name
       users.sort((a, b) => a.displayName.localeCompare(b.displayName))
 
       if (json) {
-        console.log(JSON.stringify({
-          users,
-          count: users.length,
-        }, null, 2))
+        console.log(JSON.stringify(
+          {
+            users,
+            count: users.length,
+          },
+          null,
+          2,
+        ))
         return
       }
 
@@ -105,13 +109,16 @@ export const listCommand = new Command()
       table.render()
 
       console.log(`\n${dim(`Showing ${users.length} user(s)`)}`)
-
     } catch (error) {
       if (json) {
-        console.log(JSON.stringify({
-          error: "Failed to fetch users",
-          message: error instanceof Error ? error.message : String(error),
-        }, null, 2))
+        console.log(JSON.stringify(
+          {
+            error: "Failed to fetch users",
+            message: error instanceof Error ? error.message : String(error),
+          },
+          null,
+          2,
+        ))
       } else {
         console.error("Failed to fetch users:", error)
       }

@@ -102,10 +102,14 @@ export const viewCommand = new Command()
         const errorMsg = `Project with ID "${projectId}" not found.`
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: { code: "NOT_FOUND", message: errorMsg },
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "NOT_FOUND", message: errorMsg },
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorMsg)
@@ -126,64 +130,68 @@ export const viewCommand = new Command()
         )
 
         console.log(
-          JSON.stringify({
-            project: {
-              id: project.id,
-              name: project.name,
-              slugId: project.slugId,
-              description: project.description,
-              url: project.url,
-              icon: project.icon,
-              color: project.color,
-              status: {
-                id: project.status.id,
-                name: project.status.name,
-                color: project.status.color,
+          JSON.stringify(
+            {
+              project: {
+                id: project.id,
+                name: project.name,
+                slugId: project.slugId,
+                description: project.description,
+                url: project.url,
+                icon: project.icon,
+                color: project.color,
+                status: {
+                  id: project.status.id,
+                  name: project.status.name,
+                  color: project.status.color,
+                },
+                creator: project.creator
+                  ? {
+                    name: project.creator.name,
+                    displayName: project.creator.displayName,
+                  }
+                  : null,
+                lead: project.lead
+                  ? {
+                    name: project.lead.name,
+                    displayName: project.lead.displayName,
+                  }
+                  : null,
+                priority: project.priority,
+                health: project.health,
+                startDate: project.startDate,
+                targetDate: project.targetDate,
+                startedAt: project.startedAt,
+                completedAt: project.completedAt,
+                canceledAt: project.canceledAt,
+                createdAt: project.createdAt,
+                updatedAt: project.updatedAt,
+                teams: project.teams.nodes.map((t) => ({
+                  id: t.id,
+                  key: t.key,
+                  name: t.name,
+                })),
+                issuesSummary: {
+                  total: project.issues.nodes.length,
+                  byState: issuesByState,
+                },
+                lastUpdate: project.lastUpdate
+                  ? {
+                    id: project.lastUpdate.id,
+                    health: project.lastUpdate.health,
+                    bodyPreview: project.lastUpdate.body.substring(0, 200),
+                    createdAt: project.lastUpdate.createdAt,
+                    author: {
+                      name: project.lastUpdate.user.name,
+                      displayName: project.lastUpdate.user.displayName,
+                    },
+                  }
+                  : null,
               },
-              creator: project.creator
-                ? {
-                  name: project.creator.name,
-                  displayName: project.creator.displayName,
-                }
-                : null,
-              lead: project.lead
-                ? {
-                  name: project.lead.name,
-                  displayName: project.lead.displayName,
-                }
-                : null,
-              priority: project.priority,
-              health: project.health,
-              startDate: project.startDate,
-              targetDate: project.targetDate,
-              startedAt: project.startedAt,
-              completedAt: project.completedAt,
-              canceledAt: project.canceledAt,
-              createdAt: project.createdAt,
-              updatedAt: project.updatedAt,
-              teams: project.teams.nodes.map((t) => ({
-                id: t.id,
-                key: t.key,
-                name: t.name,
-              })),
-              issuesSummary: {
-                total: project.issues.nodes.length,
-                byState: issuesByState,
-              },
-              lastUpdate: project.lastUpdate
-                ? {
-                  id: project.lastUpdate.id,
-                  health: project.lastUpdate.health,
-                  bodyPreview: project.lastUpdate.body.substring(0, 200),
-                  createdAt: project.lastUpdate.createdAt,
-                  author: {
-                    name: project.lastUpdate.user.name,
-                    displayName: project.lastUpdate.user.displayName,
-                  },
-                }
-                : null,
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
         return
       }
@@ -339,10 +347,14 @@ export const viewCommand = new Command()
       const errorMsg = `Failed to fetch project details: ${error}`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: { code: "API_ERROR", message: errorMsg },
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: false,
+              error: { code: "API_ERROR", message: errorMsg },
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorMsg)

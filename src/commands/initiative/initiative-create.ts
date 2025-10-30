@@ -27,7 +27,10 @@ export const createCommand = new Command()
   .description("Create a new initiative")
   .option("-n, --name <name:string>", "Initiative name")
   .option("-d, --description <description:string>", "Initiative description")
-  .option("-c, --content <content:string>", "Initiative content/body (markdown)")
+  .option(
+    "-c, --content <content:string>",
+    "Initiative content/body (markdown)",
+  )
   .option("-s, --status <status:string>", "Status ID or name")
   .option("-o, --owner <owner:string>", "Owner user ID or display name")
   .option("-t, --target-date <date:string>", "Target date (YYYY-MM-DD)")
@@ -117,13 +120,17 @@ export const createCommand = new Command()
         const errorMsg = "Name is required. Use --name or run without flags"
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "MISSING_REQUIRED_FIELD",
-                message: errorMsg,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "MISSING_REQUIRED_FIELD",
+                  message: errorMsg,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -141,10 +148,14 @@ export const createCommand = new Command()
         const errorMsg = "Invalid date format. Use YYYY-MM-DD"
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: { code: "INVALID_VALUE", message: errorMsg },
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "INVALID_VALUE", message: errorMsg },
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -170,10 +181,14 @@ export const createCommand = new Command()
             const errorMsg = `Status '${options.status}' not found`
             if (useJson) {
               console.error(
-                JSON.stringify({
-                  success: false,
-                  error: { code: "NOT_FOUND", message: errorMsg },
-                }, null, 2),
+                JSON.stringify(
+                  {
+                    success: false,
+                    error: { code: "NOT_FOUND", message: errorMsg },
+                  },
+                  null,
+                  2,
+                ),
               )
             } else {
               console.error(errorColor(`Error: ${errorMsg}`))
@@ -201,10 +216,14 @@ export const createCommand = new Command()
             const errorMsg = `User '${options.owner}' not found`
             if (useJson) {
               console.error(
-                JSON.stringify({
-                  success: false,
-                  error: { code: "NOT_FOUND", message: errorMsg },
-                }, null, 2),
+                JSON.stringify(
+                  {
+                    success: false,
+                    error: { code: "NOT_FOUND", message: errorMsg },
+                  },
+                  null,
+                  2,
+                ),
               )
             } else {
               console.error(errorColor(`Error: ${errorMsg}`))
@@ -236,23 +255,30 @@ export const createCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "create",
-            initiative: {
-              id: initiative.id,
-              name: initiative.name,
-              slugId: initiative.slugId,
-              url: initiative.url,
-              status: initiative.status
-                ? { id: initiative.status.id, name: initiative.status.name }
-                : null,
-              owner: initiative.owner
-                ? { id: initiative.owner.id, name: initiative.owner.displayName }
-                : null,
-              targetDate: initiative.targetDate,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "create",
+              initiative: {
+                id: initiative.id,
+                name: initiative.name,
+                slugId: initiative.slugId,
+                url: initiative.url,
+                status: initiative.status
+                  ? { id: initiative.status.id, name: initiative.status.name }
+                  : null,
+                owner: initiative.owner
+                  ? {
+                    id: initiative.owner.id,
+                    name: initiative.owner.displayName,
+                  }
+                  : null,
+                targetDate: initiative.targetDate,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Created initiative ${initiative.slugId}`))
@@ -262,10 +288,14 @@ export const createCommand = new Command()
       spinner?.stop()
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: { code: "API_ERROR", message: err.message },
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: false,
+              error: { code: "API_ERROR", message: err.message },
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${err.message}`))

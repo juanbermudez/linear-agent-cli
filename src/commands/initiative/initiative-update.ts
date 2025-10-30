@@ -1,8 +1,8 @@
 import { Command } from "@cliffy/command"
 import {
-  updateInitiative,
   listInitiativeStatuses,
   listUsers,
+  updateInitiative,
 } from "../../utils/linear.ts"
 import {
   error as errorColor,
@@ -40,13 +40,17 @@ export const updateCommand = new Command()
       const errorMsg = "At least one field must be specified to update"
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "MISSING_REQUIRED_FIELD",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "MISSING_REQUIRED_FIELD",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -62,10 +66,14 @@ export const updateCommand = new Command()
       const errorMsg = "Invalid date format. Use YYYY-MM-DD"
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: { code: "INVALID_VALUE", message: errorMsg },
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: false,
+              error: { code: "INVALID_VALUE", message: errorMsg },
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -92,10 +100,14 @@ export const updateCommand = new Command()
           const errorMsg = `Status '${options.status}' not found`
           if (useJson) {
             console.error(
-              JSON.stringify({
-                success: false,
-                error: { code: "NOT_FOUND", message: errorMsg },
-              }, null, 2),
+              JSON.stringify(
+                {
+                  success: false,
+                  error: { code: "NOT_FOUND", message: errorMsg },
+                },
+                null,
+                2,
+              ),
             )
           } else {
             console.error(errorColor(`Error: ${errorMsg}`))
@@ -124,10 +136,14 @@ export const updateCommand = new Command()
           const errorMsg = `User '${options.owner}' not found`
           if (useJson) {
             console.error(
-              JSON.stringify({
-                success: false,
-                error: { code: "NOT_FOUND", message: errorMsg },
-              }, null, 2),
+              JSON.stringify(
+                {
+                  success: false,
+                  error: { code: "NOT_FOUND", message: errorMsg },
+                },
+                null,
+                2,
+              ),
             )
           } else {
             console.error(errorColor(`Error: ${errorMsg}`))
@@ -157,23 +173,30 @@ export const updateCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "update",
-            initiative: {
-              id: initiative.id,
-              name: initiative.name,
-              slugId: initiative.slugId,
-              url: initiative.url,
-              status: initiative.status
-                ? { id: initiative.status.id, name: initiative.status.name }
-                : null,
-              owner: initiative.owner
-                ? { id: initiative.owner.id, name: initiative.owner.displayName }
-                : null,
-              targetDate: initiative.targetDate,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "update",
+              initiative: {
+                id: initiative.id,
+                name: initiative.name,
+                slugId: initiative.slugId,
+                url: initiative.url,
+                status: initiative.status
+                  ? { id: initiative.status.id, name: initiative.status.name }
+                  : null,
+                owner: initiative.owner
+                  ? {
+                    id: initiative.owner.id,
+                    name: initiative.owner.displayName,
+                  }
+                  : null,
+                targetDate: initiative.targetDate,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Updated initiative ${initiative.slugId}`))
@@ -186,13 +209,19 @@ export const updateCommand = new Command()
         : `Failed to update initiative: ${err.message}`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

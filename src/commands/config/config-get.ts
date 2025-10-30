@@ -23,13 +23,17 @@ export const getCommand = new Command()
       if (value === undefined) {
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "NOT_FOUND",
-                message: `Config key '${key}' not found`,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "NOT_FOUND",
+                  message: `Config key '${key}' not found`,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: Config key '${key}' not found`))
@@ -39,11 +43,15 @@ export const getCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            key,
-            value,
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: true,
+              key,
+              value,
+            },
+            null,
+            2,
+          ),
         )
       } else {
         // Handle different value types
@@ -57,13 +65,17 @@ export const getCommand = new Command()
       const error = err as Error
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "API_ERROR",
-              message: error.message,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "API_ERROR",
+                message: error.message,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${error.message}`))

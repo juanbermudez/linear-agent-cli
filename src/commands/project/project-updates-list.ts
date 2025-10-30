@@ -23,7 +23,9 @@ export const updatesListCommand = new Command()
 
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
-    const spinner = showSpinner ? new Spinner({ message: "Fetching updates..." }) : null
+    const spinner = showSpinner
+      ? new Spinner({ message: "Fetching updates..." })
+      : null
     spinner?.start()
 
     try {
@@ -31,17 +33,21 @@ export const updatesListCommand = new Command()
       spinner?.stop()
 
       if (useJson) {
-        console.log(JSON.stringify({
-          projectUpdates: updates.map((u) => ({
-            id: u.id,
-            health: u.health,
-            bodyPreview: u.body.substring(0, 200),
-            createdAt: u.createdAt,
-            author: { id: u.user.id, name: u.user.displayName },
-            url: u.url,
-          })),
-          count: updates.length,
-        }, null, 2))
+        console.log(JSON.stringify(
+          {
+            projectUpdates: updates.map((u) => ({
+              id: u.id,
+              health: u.health,
+              bodyPreview: u.body.substring(0, 200),
+              createdAt: u.createdAt,
+              author: { id: u.user.id, name: u.user.displayName },
+              url: u.url,
+            })),
+            count: updates.length,
+          },
+          null,
+          2,
+        ))
         return
       }
 
@@ -54,10 +60,17 @@ export const updatesListCommand = new Command()
       console.log()
 
       for (const update of updates) {
-        const healthEmoji = { onTrack: "✅", atRisk: "⚠️ ", offTrack: "🔴" }[update.health] || ""
+        const healthEmoji =
+          { onTrack: "✅", atRisk: "⚠️ ", offTrack: "🔴" }[update.health] || ""
         const healthText = update.health.replace(/([A-Z])/g, " $1").trim()
 
-        console.log(bold(`${healthEmoji} ${healthText} - ${formatRelativeTime(update.createdAt)} by ${update.user.displayName}`))
+        console.log(
+          bold(
+            `${healthEmoji} ${healthText} - ${
+              formatRelativeTime(update.createdAt)
+            } by ${update.user.displayName}`,
+          ),
+        )
 
         const preview = update.body.split("\n")[0].substring(0, 150)
         console.log(preview + (update.body.length > 150 ? "..." : ""))
@@ -66,9 +79,25 @@ export const updatesListCommand = new Command()
       }
     } catch (err) {
       spinner?.stop()
-      const errorMsg = err.message.includes("not found") ? `Project '${projectId}' not found` : `Failed to fetch updates: ${err.message}`
+      const errorMsg = err.message.includes("not found")
+        ? `Project '${projectId}' not found`
+        : `Failed to fetch updates: ${err.message}`
       if (useJson) {
-        console.error(JSON.stringify({ success: false, error: { code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR", message: errorMsg } }, null, 2))
+        console.error(
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+              },
+            },
+            null,
+            2,
+          ),
+        )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
       }

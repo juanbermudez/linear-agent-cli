@@ -47,7 +47,9 @@ export const listCommand = new Command()
       table.render()
 
       console.log(
-        `\n${dim(`Showing ${states.length} workflow states for team ${teamKey}`)}`,
+        `\n${
+          dim(`Showing ${states.length} workflow states for team ${teamKey}`)
+        }`,
       )
     } catch (error) {
       console.error("Failed to fetch workflow states:", error)

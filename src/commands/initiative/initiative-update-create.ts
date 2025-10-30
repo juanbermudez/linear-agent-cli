@@ -1,7 +1,7 @@
 import { Command } from "@cliffy/command"
 import { Input, Select } from "@cliffy/prompt"
 import { createInitiativeUpdate } from "../../utils/linear.ts"
-import { openEditor, getEditor } from "../../utils/editor.ts"
+import { getEditor, openEditor } from "../../utils/editor.ts"
 import {
   error as errorColor,
   success as successColor,
@@ -69,13 +69,17 @@ export const updateCreateCommand = new Command()
           "Body and health are required. Use --body and --health or run without flags"
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "MISSING_REQUIRED_FIELD",
-                message: errorMsg,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "MISSING_REQUIRED_FIELD",
+                  message: errorMsg,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -89,10 +93,14 @@ export const updateCreateCommand = new Command()
         const errorMsg = "Health must be onTrack, atRisk, or offTrack"
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: { code: "INVALID_VALUE", message: errorMsg },
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "INVALID_VALUE", message: errorMsg },
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -118,18 +126,22 @@ export const updateCreateCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "create",
-            initiativeUpdate: {
-              id: update.id,
-              health: update.health,
-              bodyPreview: update.body.substring(0, 100),
-              url: update.url,
-              createdAt: update.createdAt,
-              author: { id: update.user.id, name: update.user.displayName },
+          JSON.stringify(
+            {
+              success: true,
+              operation: "create",
+              initiativeUpdate: {
+                id: update.id,
+                health: update.health,
+                bodyPreview: update.body.substring(0, 100),
+                url: update.url,
+                createdAt: update.createdAt,
+                author: { id: update.user.id, name: update.user.displayName },
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Created initiative update`))
@@ -139,10 +151,14 @@ export const updateCreateCommand = new Command()
       spinner?.stop()
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: { code: "API_ERROR", message: err.message },
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: false,
+              error: { code: "API_ERROR", message: err.message },
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${err.message}`))

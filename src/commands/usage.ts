@@ -3,7 +3,9 @@ import { bold, cyan, dim, green, yellow } from "@std/fmt/colors"
 
 export const usageCommand = new Command()
   .name("usage")
-  .description("Display CLI usage guide, content formatting, and cross-reference syntax")
+  .description(
+    "Display CLI usage guide, content formatting, and cross-reference syntax",
+  )
   .action(() => {
     console.log("")
     console.log(bold(green("Linear CLI Usage Guide")))
@@ -23,7 +25,7 @@ export const usageCommand = new Command()
     console.log("  Projects:")
     console.log("    linear project list            # List all projects")
     console.log("    linear project create          # Create new project")
-    console.log("    linear project view \"API\"      # View project details")
+    console.log('    linear project view "API"      # View project details')
     console.log("")
     console.log("  Documents:")
     console.log("    linear document list           # List all documents")
@@ -36,28 +38,51 @@ export const usageCommand = new Command()
     console.log(bold("  Project Content vs Description"))
     console.log("")
     console.log("  Projects have " + yellow("two separate fields") + ":")
-    console.log("    --description    Short summary " + dim("(max 255 characters)"))
+    console.log(
+      "    --description    Short summary " + dim("(max 255 characters)"),
+    )
     console.log("    --content        Full project body with rich markdown")
     console.log("")
     console.log("  Example:")
     console.log(dim("    linear project create \\"))
-    console.log(dim("      --name \"API Redesign\" \\"))
-    console.log(dim("      --description \"Modernize API with GraphQL\" \\"))
-    console.log(dim("      --content \"$(cat overview.md)\" \\"))
+    console.log(dim('      --name "API Redesign" \\'))
+    console.log(dim('      --description "Modernize API with GraphQL" \\'))
+    console.log(dim('      --content "$(cat overview.md)" \\'))
     console.log(dim("      --team ENG"))
     console.log("")
 
     // Cross-References
     console.log(bold(cyan("Cross-Reference Syntax")))
     console.log("")
-    console.log("  Linear requires " + yellow("markdown link format with full URLs") + ":")
+    console.log(
+      "  Linear requires " + yellow("markdown link format with full URLs") +
+        ":",
+    )
     console.log("")
-    console.log("  " + green("✓") + " Issues:     [ENG-123](https://linear.app/workspace/issue/ENG-123/...)")
-    console.log("  " + green("✓") + " Documents:  [Title](https://linear.app/workspace/document/...)")
-    console.log("  " + green("✓") + " Projects:   [Name](https://linear.app/workspace/project/...)")
-    console.log("  " + green("✓") + " Milestones: [Phase 1](https://.../project/.../overview#milestone-id)")
-    console.log("  " + green("✓") + " Labels:     [bug](https://linear.app/workspace/issue-label/bug)")
-    console.log("  " + green("✓") + " Users:      @username or @Display Name " + dim("(exception)"))
+    console.log(
+      "  " + green("✓") +
+        " Issues:     [ENG-123](https://linear.app/workspace/issue/ENG-123/...)",
+    )
+    console.log(
+      "  " + green("✓") +
+        " Documents:  [Title](https://linear.app/workspace/document/...)",
+    )
+    console.log(
+      "  " + green("✓") +
+        " Projects:   [Name](https://linear.app/workspace/project/...)",
+    )
+    console.log(
+      "  " + green("✓") +
+        " Milestones: [Phase 1](https://.../project/.../overview#milestone-id)",
+    )
+    console.log(
+      "  " + green("✓") +
+        " Labels:     [bug](https://linear.app/workspace/issue-label/bug)",
+    )
+    console.log(
+      "  " + green("✓") + " Users:      @username or @Display Name " +
+        dim("(exception)"),
+    )
     console.log("")
     console.log("  " + yellow("✗") + " Plain identifiers don't work:")
     console.log("    " + dim("ENG-123, @ENG-123, #ENG-123, [ENG-123]"))
@@ -77,7 +102,9 @@ export const usageCommand = new Command()
     console.log("")
     console.log("  " + green("✓") + " Headers, bold, italic, code blocks")
     console.log("  " + green("✓") + " Lists, tables, blockquotes")
-    console.log("  " + green("✓") + " Mermaid diagrams (flowchart, sequence, gantt, ER)")
+    console.log(
+      "  " + green("✓") + " Mermaid diagrams (flowchart, sequence, gantt, ER)",
+    )
     console.log("  " + green("✓") + " Interactive checklists")
     console.log("  " + green("✓") + " Syntax highlighting")
     console.log("  " + green("✓") + " Cross-references with full URLs")
@@ -89,11 +116,19 @@ export const usageCommand = new Command()
     console.log(dim("  ## Task: API Migration"))
     console.log(dim("  "))
     console.log(dim("  **Assigned to:** @john"))
-    console.log(dim("  **Project:** [API Redesign](https://linear.app/.../project/api-redesign)"))
+    console.log(
+      dim(
+        "  **Project:** [API Redesign](https://linear.app/.../project/api-redesign)",
+      ),
+    )
     console.log(dim("  "))
     console.log(dim("  ### Dependencies"))
-    console.log(dim("  - Depends on: [ENG-101](https://linear.app/.../issue/ENG-101)"))
-    console.log(dim("  - See: [Tech Spec](https://linear.app/.../document/tech-spec)"))
+    console.log(
+      dim("  - Depends on: [ENG-101](https://linear.app/.../issue/ENG-101)"),
+    )
+    console.log(
+      dim("  - See: [Tech Spec](https://linear.app/.../document/tech-spec)"),
+    )
     console.log(dim("  "))
     console.log(dim("  ### Architecture"))
     console.log(dim("  ```mermaid"))

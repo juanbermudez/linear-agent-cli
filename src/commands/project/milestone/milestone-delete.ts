@@ -1,7 +1,10 @@
 import { Command } from "@cliffy/command"
 import { Confirm } from "@cliffy/prompt"
 import { deleteMilestone } from "../../../utils/linear.ts"
-import { error as errorColor, success as successColor } from "../../../utils/styling.ts"
+import {
+  error as errorColor,
+  success as successColor,
+} from "../../../utils/styling.ts"
 
 interface DeleteOptions {
   force?: boolean
@@ -34,7 +37,9 @@ export const deleteCommand = new Command()
 
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
-    const spinner = showSpinner ? new Spinner({ message: `Deleting milestone ${milestoneId}...` }) : null
+    const spinner = showSpinner
+      ? new Spinner({ message: `Deleting milestone ${milestoneId}...` })
+      : null
 
     spinner?.start()
 
@@ -46,13 +51,17 @@ export const deleteCommand = new Command()
       if (success) {
         if (useJson) {
           console.log(
-            JSON.stringify({
-              success: true,
-              operation: "delete",
-              milestone: {
-                id: milestoneId,
+            JSON.stringify(
+              {
+                success: true,
+                operation: "delete",
+                milestone: {
+                  id: milestoneId,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.log(successColor(`✓ Deleted milestone: ${milestoneId}`))
@@ -69,17 +78,23 @@ export const deleteCommand = new Command()
 
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
-              ...(err.message.includes("not found") && {
-                resource: "milestone",
-                id: milestoneId,
-              }),
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+                ...(err.message.includes("not found") && {
+                  resource: "milestone",
+                  id: milestoneId,
+                }),
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

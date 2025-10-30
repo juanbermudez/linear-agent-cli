@@ -45,12 +45,21 @@ export const viewCommand = new Command()
       return
     }
 
-    const { title, description, comments: issueComments, ...metadata } = issueData
+    const { title, description, comments: issueComments, ...metadata } =
+      issueData
 
     // Format priority display
     const getPriorityDisplay = (priority: number) => {
-      const priorityNames = { 1: "Urgent", 2: "High", 3: "Medium", 4: "Low", 0: "None" }
-      return `${priorityNames[priority as keyof typeof priorityNames] || priority} (${priority})`
+      const priorityNames = {
+        1: "Urgent",
+        2: "High",
+        3: "Medium",
+        4: "Low",
+        0: "None",
+      }
+      return `${
+        priorityNames[priority as keyof typeof priorityNames] || priority
+      } (${priority})`
     }
 
     // Build metadata section
@@ -69,7 +78,9 @@ export const viewCommand = new Command()
       metadataMarkdown += `**Assignee:** @${metadata.assignee.displayName}\n`
     }
     if (metadata.priority !== undefined && metadata.priority !== null) {
-      metadataMarkdown += `**Priority:** ${getPriorityDisplay(metadata.priority)}\n`
+      metadataMarkdown += `**Priority:** ${
+        getPriorityDisplay(metadata.priority)
+      }\n`
     }
     if (metadata.estimate) {
       metadataMarkdown += `**Estimate:** ${metadata.estimate} points\n`
@@ -81,56 +92,89 @@ export const viewCommand = new Command()
       metadataMarkdown += `**Project:** ${metadata.project.name}\n`
     }
     if (metadata.projectMilestone) {
-      metadataMarkdown += `**Milestone:** ${metadata.projectMilestone.name}${metadata.projectMilestone.targetDate ? ` (${metadata.projectMilestone.targetDate})` : ""}\n`
+      metadataMarkdown += `**Milestone:** ${metadata.projectMilestone.name}${
+        metadata.projectMilestone.targetDate
+          ? ` (${metadata.projectMilestone.targetDate})`
+          : ""
+      }\n`
     }
     if (metadata.cycle) {
       metadataMarkdown += `**Cycle:** ${metadata.cycle.name}\n`
     }
     if (metadata.parent) {
-      metadataMarkdown += `**Parent:** ${metadata.parent.identifier} - ${metadata.parent.title}\n`
+      metadataMarkdown +=
+        `**Parent:** ${metadata.parent.identifier} - ${metadata.parent.title}\n`
     }
 
     // Add children if any
-    if (metadata.children && metadata.children.nodes && metadata.children.nodes.length > 0) {
+    if (
+      metadata.children && metadata.children.nodes &&
+      metadata.children.nodes.length > 0
+    ) {
       metadataMarkdown += `\n**Child Issues:**\n`
       for (const child of metadata.children.nodes) {
-        metadataMarkdown += `- ${child.identifier}: ${child.title} (${child.state.name})\n`
+        metadataMarkdown +=
+          `- ${child.identifier}: ${child.title} (${child.state.name})\n`
       }
     }
 
     // Add outgoing relationships if any
-    if (metadata.relations && metadata.relations.nodes && metadata.relations.nodes.length > 0) {
+    if (
+      metadata.relations && metadata.relations.nodes &&
+      metadata.relations.nodes.length > 0
+    ) {
       metadataMarkdown += `\n**Relationships:**\n`
       for (const rel of metadata.relations.nodes) {
         const relType = rel.type.charAt(0).toUpperCase() + rel.type.slice(1)
-        metadataMarkdown += `- ${relType}: ${rel.relatedIssue.identifier} - ${rel.relatedIssue.title} (${rel.relatedIssue.state.name})\n`
+        metadataMarkdown +=
+          `- ${relType}: ${rel.relatedIssue.identifier} - ${rel.relatedIssue.title} (${rel.relatedIssue.state.name})\n`
       }
     }
 
     // Add incoming relationships if any
-    if (metadata.inverseRelations && metadata.inverseRelations.nodes && metadata.inverseRelations.nodes.length > 0) {
-      if (!metadata.relations || !metadata.relations.nodes || metadata.relations.nodes.length === 0) {
+    if (
+      metadata.inverseRelations && metadata.inverseRelations.nodes &&
+      metadata.inverseRelations.nodes.length > 0
+    ) {
+      if (
+        !metadata.relations || !metadata.relations.nodes ||
+        metadata.relations.nodes.length === 0
+      ) {
         metadataMarkdown += `\n**Relationships:**\n`
       }
       for (const rel of metadata.inverseRelations.nodes) {
         const relType = rel.type.charAt(0).toUpperCase() + rel.type.slice(1)
-        metadataMarkdown += `- ${relType} by: ${rel.issue.identifier} - ${rel.issue.title} (${rel.issue.state.name})\n`
+        metadataMarkdown +=
+          `- ${relType} by: ${rel.issue.identifier} - ${rel.issue.title} (${rel.issue.state.name})\n`
       }
     }
 
     // Add labels if any
-    if (metadata.labels && metadata.labels.nodes && metadata.labels.nodes.length > 0) {
-      metadataMarkdown += `\n**Labels:** ${metadata.labels.nodes.map((l) => l.parent ? `${l.parent.name}/${l.name}` : l.name).join(", ")}\n`
+    if (
+      metadata.labels && metadata.labels.nodes &&
+      metadata.labels.nodes.length > 0
+    ) {
+      metadataMarkdown += `\n**Labels:** ${
+        metadata.labels.nodes.map((l) =>
+          l.parent ? `${l.parent.name}/${l.name}` : l.name
+        ).join(", ")
+      }\n`
     }
 
     if (metadata.createdAt) {
-      metadataMarkdown += `\n**Created:** ${formatRelativeTime(metadata.createdAt)}\n`
+      metadataMarkdown += `\n**Created:** ${
+        formatRelativeTime(metadata.createdAt)
+      }\n`
     }
     if (metadata.updatedAt) {
-      metadataMarkdown += `**Updated:** ${formatRelativeTime(metadata.updatedAt)}\n`
+      metadataMarkdown += `**Updated:** ${
+        formatRelativeTime(metadata.updatedAt)
+      }\n`
     }
 
-    let markdown = `# ${title}\n\n${metadataMarkdown}${description ? "\n\n---\n\n" + description : ""}`
+    let markdown = `# ${title}\n\n${metadataMarkdown}${
+      description ? "\n\n---\n\n" + description : ""
+    }`
 
     if (Deno.stdout.isTerminal()) {
       const { columns: terminalWidth } = Deno.consoleSize()

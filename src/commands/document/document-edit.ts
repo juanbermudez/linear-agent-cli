@@ -1,7 +1,10 @@
 import { Command } from "@cliffy/command"
-import { updateDocument, getProjectIdByName } from "../../utils/linear.ts"
+import { getProjectIdByName, updateDocument } from "../../utils/linear.ts"
 import { openEditor } from "../../utils/editor.ts"
-import { error as errorColor, success as successColor } from "../../utils/styling.ts"
+import {
+  error as errorColor,
+  success as successColor,
+} from "../../utils/styling.ts"
 
 interface EditOptions {
   title?: string
@@ -18,7 +21,10 @@ export const editCommand = new Command()
   .description("Update a Linear document")
   .arguments("<docId:string>")
   .option("-t, --title <title:string>", "New document title")
-  .option("-c, --content [content:string]", "New document content (omit value to open editor)")
+  .option(
+    "-c, --content [content:string]",
+    "New document content (omit value to open editor)",
+  )
   .option("-p, --project <project:string>", "New project association")
   .option("-i, --icon <icon:string>", "New icon emoji")
   .option("--color <color:string>", "New icon color (hex format: #RRGGBB)")
@@ -28,17 +34,25 @@ export const editCommand = new Command()
     const useJson = options.json || options.format === "json"
 
     // Validate at least one field is provided
-    if (!options.title && !options.content && !options.project && !options.icon && !options.color) {
-      const errorMsg = "No fields provided to update. Use --title, --content, --project, --icon, or --color"
+    if (
+      !options.title && !options.content && !options.project && !options.icon &&
+      !options.color
+    ) {
+      const errorMsg =
+        "No fields provided to update. Use --title, --content, --project, --icon, or --color"
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "MISSING_REQUIRED_FIELD",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "MISSING_REQUIRED_FIELD",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -48,18 +62,23 @@ export const editCommand = new Command()
 
     // Validate color format if provided
     if (options.color && !/^#?[0-9A-Fa-f]{6}$/.test(options.color)) {
-      const errorMsg = `Invalid color '${options.color}'. Use hex format: #RRGGBB (e.g., #FF0000)`
+      const errorMsg =
+        `Invalid color '${options.color}'. Use hex format: #RRGGBB (e.g., #FF0000)`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "INVALID_VALUE",
-              message: errorMsg,
-              field: "color",
-              value: options.color,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "INVALID_VALUE",
+                message: errorMsg,
+                field: "color",
+                value: options.color,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -91,15 +110,19 @@ export const editCommand = new Command()
         const errorMsg = `Project '${options.project}' not found`
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "NOT_FOUND",
-                message: errorMsg,
-                resource: "project",
-                id: options.project,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "NOT_FOUND",
+                  message: errorMsg,
+                  resource: "project",
+                  id: options.project,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -126,7 +149,9 @@ export const editCommand = new Command()
     // Show spinner only in non-JSON mode
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
-    const spinner = showSpinner ? new Spinner({ message: `Updating document ${docId}...` }) : null
+    const spinner = showSpinner
+      ? new Spinner({ message: `Updating document ${docId}...` })
+      : null
 
     spinner?.start()
 
@@ -137,16 +162,20 @@ export const editCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "update",
-            document: {
-              id: document.id,
-              title: document.title,
-              slugId: document.slugId,
-              url: document.url,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "update",
+              document: {
+                id: document.id,
+                title: document.title,
+                slugId: document.slugId,
+                url: document.url,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Updated document: ${document.title}`))
@@ -161,17 +190,23 @@ export const editCommand = new Command()
 
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
-              ...(err.message.includes("not found") && {
-                resource: "document",
-                id: docId,
-              }),
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+                ...(err.message.includes("not found") && {
+                  resource: "document",
+                  id: docId,
+                }),
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

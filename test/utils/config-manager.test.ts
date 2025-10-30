@@ -1,8 +1,8 @@
 import { assertEquals, assertExists } from "@std/assert"
 import {
   ConfigManager,
-  type LinearConfig,
   getConfigManager,
+  type LinearConfig,
 } from "../../src/utils/config-manager.ts"
 import { join } from "@std/path"
 

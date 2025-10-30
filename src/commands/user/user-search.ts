@@ -66,12 +66,12 @@ export const searchCommand = new Command()
 
       // Apply filters
       if (activeOnly) {
-        users = users.filter(u => u.active)
+        users = users.filter((u) => u.active)
       }
 
       // Search filter
       const searchLower = query.toLowerCase()
-      const matchedUsers = users.filter(user =>
+      const matchedUsers = users.filter((user) =>
         user.displayName.toLowerCase().includes(searchLower) ||
         user.email.toLowerCase().includes(searchLower) ||
         user.name.toLowerCase().includes(searchLower)
@@ -81,11 +81,15 @@ export const searchCommand = new Command()
       matchedUsers.sort((a, b) => a.displayName.localeCompare(b.displayName))
 
       if (json) {
-        console.log(JSON.stringify({
-          users: matchedUsers,
-          count: matchedUsers.length,
-          query,
-        }, null, 2))
+        console.log(JSON.stringify(
+          {
+            users: matchedUsers,
+            count: matchedUsers.length,
+            query,
+          },
+          null,
+          2,
+        ))
         return
       }
 
@@ -114,14 +118,19 @@ export const searchCommand = new Command()
       table.border(true)
       table.render()
 
-      console.log(`\n${dim(`Found ${matchedUsers.length} user(s) matching "${query}"`)}`)
-
+      console.log(
+        `\n${dim(`Found ${matchedUsers.length} user(s) matching "${query}"`)}`,
+      )
     } catch (error) {
       if (json) {
-        console.log(JSON.stringify({
-          error: "Failed to search users",
-          message: error instanceof Error ? error.message : String(error),
-        }, null, 2))
+        console.log(JSON.stringify(
+          {
+            error: "Failed to search users",
+            message: error instanceof Error ? error.message : String(error),
+          },
+          null,
+          2,
+        ))
       } else {
         console.error("Failed to search users:", error)
       }

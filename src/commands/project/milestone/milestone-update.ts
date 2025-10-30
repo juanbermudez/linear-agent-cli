@@ -1,6 +1,9 @@
 import { Command } from "@cliffy/command"
 import { updateMilestone } from "../../../utils/linear.ts"
-import { error as errorColor, success as successColor } from "../../../utils/styling.ts"
+import {
+  error as errorColor,
+  success as successColor,
+} from "../../../utils/styling.ts"
 
 interface UpdateOptions {
   name?: string
@@ -18,24 +21,35 @@ export const updateCommand = new Command()
   .option("-n, --name <name:string>", "New milestone name")
   .option("-d, --description <description:string>", "New description")
   .option("--target-date <date:string>", "New target date (YYYY-MM-DD)")
-  .option("-s, --status <status:string>", "New status (todo, in_progress, done, canceled)")
+  .option(
+    "-s, --status <status:string>",
+    "New status (todo, in_progress, done, canceled)",
+  )
   .option("-j, --json", "Output result as JSON (for AI agents)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: UpdateOptions, milestoneId: string) => {
     const useJson = options.json || options.format === "json"
 
     // Validate at least one field is provided
-    if (!options.name && !options.description && !options.targetDate && !options.status) {
-      const errorMsg = "No fields provided to update. Use --name, --description, --target-date, or --status"
+    if (
+      !options.name && !options.description && !options.targetDate &&
+      !options.status
+    ) {
+      const errorMsg =
+        "No fields provided to update. Use --name, --description, --target-date, or --status"
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "MISSING_REQUIRED_FIELD",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "MISSING_REQUIRED_FIELD",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -45,18 +59,23 @@ export const updateCommand = new Command()
 
     // Validate date format if provided
     if (options.targetDate && !/^\d{4}-\d{2}-\d{2}$/.test(options.targetDate)) {
-      const errorMsg = `Invalid target date '${options.targetDate}'. Use YYYY-MM-DD format`
+      const errorMsg =
+        `Invalid target date '${options.targetDate}'. Use YYYY-MM-DD format`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "INVALID_VALUE",
-              message: errorMsg,
-              field: "targetDate",
-              value: options.targetDate,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "INVALID_VALUE",
+                message: errorMsg,
+                field: "targetDate",
+                value: options.targetDate,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -67,18 +86,24 @@ export const updateCommand = new Command()
     // Validate status if provided
     const validStatuses = ["todo", "in_progress", "done", "canceled"]
     if (options.status && !validStatuses.includes(options.status)) {
-      const errorMsg = `Invalid status '${options.status}'. Must be one of: ${validStatuses.join(", ")}`
+      const errorMsg = `Invalid status '${options.status}'. Must be one of: ${
+        validStatuses.join(", ")
+      }`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "INVALID_VALUE",
-              message: errorMsg,
-              field: "status",
-              value: options.status,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "INVALID_VALUE",
+                message: errorMsg,
+                field: "status",
+                value: options.status,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -101,7 +126,9 @@ export const updateCommand = new Command()
 
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
-    const spinner = showSpinner ? new Spinner({ message: `Updating milestone ${milestoneId}...` }) : null
+    const spinner = showSpinner
+      ? new Spinner({ message: `Updating milestone ${milestoneId}...` })
+      : null
 
     spinner?.start()
 
@@ -112,17 +139,21 @@ export const updateCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "update",
-            milestone: {
-              id: milestone.id,
-              name: milestone.name,
-              description: milestone.description,
-              targetDate: milestone.targetDate,
-              status: milestone.status,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "update",
+              milestone: {
+                id: milestone.id,
+                name: milestone.name,
+                description: milestone.description,
+                targetDate: milestone.targetDate,
+                status: milestone.status,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Updated milestone: ${milestone.name}`))
@@ -136,17 +167,23 @@ export const updateCommand = new Command()
 
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
-              ...(err.message.includes("not found") && {
-                resource: "milestone",
-                id: milestoneId,
-              }),
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+                ...(err.message.includes("not found") && {
+                  resource: "milestone",
+                  id: milestoneId,
+                }),
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

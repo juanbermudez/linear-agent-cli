@@ -34,17 +34,21 @@ export const updatesListCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            initiativeUpdates: updates.map((u) => ({
-              id: u.id,
-              health: u.health,
-              bodyPreview: u.body.substring(0, 200),
-              createdAt: u.createdAt,
-              author: { id: u.user.id, name: u.user.displayName },
-              url: u.url,
-            })),
-            count: updates.length,
-          }, null, 2),
+          JSON.stringify(
+            {
+              initiativeUpdates: updates.map((u) => ({
+                id: u.id,
+                health: u.health,
+                bodyPreview: u.body.substring(0, 200),
+                createdAt: u.createdAt,
+                author: { id: u.user.id, name: u.user.displayName },
+                url: u.url,
+              })),
+              count: updates.length,
+            },
+            null,
+            2,
+          ),
         )
         return
       }
@@ -85,15 +89,19 @@ export const updatesListCommand = new Command()
         : `Failed to fetch updates: ${err.message}`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found")
-                ? "NOT_FOUND"
-                : "API_ERROR",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

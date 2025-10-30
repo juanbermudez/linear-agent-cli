@@ -6,7 +6,10 @@ import {
   getProjectIdByName,
 } from "../../utils/linear.ts"
 import { getEditor, openEditor } from "../../utils/editor.ts"
-import { error as errorColor, success as successColor } from "../../utils/styling.ts"
+import {
+  error as errorColor,
+  success as successColor,
+} from "../../utils/styling.ts"
 
 interface CreateOptions {
   title?: string
@@ -124,9 +127,7 @@ async function interactiveCreate(_options: CreateOptions) {
       },
     })
     if (colorInput.trim()) {
-      color = colorInput.startsWith("#")
-        ? colorInput
-        : `#${colorInput}`
+      color = colorInput.startsWith("#") ? colorInput : `#${colorInput}`
     }
   }
 
@@ -159,17 +160,22 @@ async function flagBasedCreate(options: CreateOptions) {
 
   // Validate required field
   if (!options.title) {
-    const errorMsg = "Title is required. Use --title or run without flags for interactive mode"
+    const errorMsg =
+      "Title is required. Use --title or run without flags for interactive mode"
     if (useJson) {
       console.error(
-        JSON.stringify({
-          success: false,
-          error: {
-            code: "MISSING_REQUIRED_FIELD",
-            message: errorMsg,
-            field: "title",
+        JSON.stringify(
+          {
+            success: false,
+            error: {
+              code: "MISSING_REQUIRED_FIELD",
+              message: errorMsg,
+              field: "title",
+            },
           },
-        }, null, 2),
+          null,
+          2,
+        ),
       )
     } else {
       console.error(errorColor(`Error: ${errorMsg}`))
@@ -179,18 +185,23 @@ async function flagBasedCreate(options: CreateOptions) {
 
   // Validate color format if provided
   if (options.color && !/^#?[0-9A-Fa-f]{6}$/.test(options.color)) {
-    const errorMsg = `Invalid color '${options.color}'. Use hex format: #RRGGBB (e.g., #FF0000)`
+    const errorMsg =
+      `Invalid color '${options.color}'. Use hex format: #RRGGBB (e.g., #FF0000)`
     if (useJson) {
       console.error(
-        JSON.stringify({
-          success: false,
-          error: {
-            code: "INVALID_VALUE",
-            message: errorMsg,
-            field: "color",
-            value: options.color,
+        JSON.stringify(
+          {
+            success: false,
+            error: {
+              code: "INVALID_VALUE",
+              message: errorMsg,
+              field: "color",
+              value: options.color,
+            },
           },
-        }, null, 2),
+          null,
+          2,
+        ),
       )
     } else {
       console.error(errorColor(`Error: ${errorMsg}`))
@@ -214,14 +225,18 @@ async function flagBasedCreate(options: CreateOptions) {
       const details = "Make sure you're on a branch with an issue ID"
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "VCS_CONTEXT_NOT_FOUND",
-              message: errorMsg,
-              details,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "VCS_CONTEXT_NOT_FOUND",
+                message: errorMsg,
+                details,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -241,15 +256,19 @@ async function flagBasedCreate(options: CreateOptions) {
       const errorMsg = `Project '${options.project}' not found`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "NOT_FOUND",
-              message: errorMsg,
-              resource: "project",
-              id: options.project,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "NOT_FOUND",
+                message: errorMsg,
+                resource: "project",
+                id: options.project,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -261,7 +280,9 @@ async function flagBasedCreate(options: CreateOptions) {
   // Show spinner only in non-JSON mode
   const { Spinner } = await import("@std/cli/unstable-spinner")
   const showSpinner = !useJson && Deno.stdout.isTerminal()
-  const spinner = showSpinner ? new Spinner({ message: "Creating document..." }) : null
+  const spinner = showSpinner
+    ? new Spinner({ message: "Creating document..." })
+    : null
 
   spinner?.start()
 
@@ -278,16 +299,20 @@ async function flagBasedCreate(options: CreateOptions) {
 
     if (useJson) {
       console.log(
-        JSON.stringify({
-          success: true,
-          operation: "create",
-          document: {
-            id: document.id,
-            title: document.title,
-            slugId: document.slugId,
-            url: document.url,
+        JSON.stringify(
+          {
+            success: true,
+            operation: "create",
+            document: {
+              id: document.id,
+              title: document.title,
+              slugId: document.slugId,
+              url: document.url,
+            },
           },
-        }, null, 2),
+          null,
+          2,
+        ),
       )
     } else {
       console.log(successColor(`✓ Created document: ${document.title}`))
@@ -298,16 +323,22 @@ async function flagBasedCreate(options: CreateOptions) {
 
     if (useJson) {
       console.error(
-        JSON.stringify({
-          success: false,
-          error: {
-            code: "API_ERROR",
-            message: err.message,
+        JSON.stringify(
+          {
+            success: false,
+            error: {
+              code: "API_ERROR",
+              message: err.message,
+            },
           },
-        }, null, 2),
+          null,
+          2,
+        ),
       )
     } else {
-      console.error(errorColor(`Error: Failed to create document: ${err.message}`))
+      console.error(
+        errorColor(`Error: Failed to create document: ${err.message}`),
+      )
     }
     Deno.exit(1)
   }
@@ -318,8 +349,14 @@ export const createCommand = new Command()
   .description("Create a new Linear document")
   .option("-t, --title <title:string>", "Document title")
   .option("-c, --content <content:string>", "Document content (markdown)")
-  .option("-p, --project <project:string>", "Project name or ID to associate with")
-  .option("--current-project", "Link to current issue's project (from VCS context)")
+  .option(
+    "-p, --project <project:string>",
+    "Project name or ID to associate with",
+  )
+  .option(
+    "--current-project",
+    "Link to current issue's project (from VCS context)",
+  )
   .option("-i, --icon <icon:string>", "Icon emoji (e.g., 📄, 📋)")
   .option("--color <color:string>", "Icon color (hex format: #RRGGBB)")
   .option("--no-interactive", "Disable interactive mode")
@@ -327,7 +364,8 @@ export const createCommand = new Command()
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {
     const useJson = options.json || options.format === "json"
-    const interactive = !options.title && !useJson && !options.noInteractive && Deno.stdout.isTerminal()
+    const interactive = !options.title && !useJson && !options.noInteractive &&
+      Deno.stdout.isTerminal()
 
     if (interactive) {
       await interactiveCreate(options)

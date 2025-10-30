@@ -31,10 +31,14 @@ export const deleteCommand = new Command()
       if (!confirmed) {
         if (useJson) {
           console.log(
-            JSON.stringify({
-              success: false,
-              error: { code: "CANCELLED", message: "Operation cancelled" },
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "CANCELLED", message: "Operation cancelled" },
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.log("Cancelled")
@@ -56,11 +60,15 @@ export const deleteCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "delete",
-            labelId,
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: true,
+              operation: "delete",
+              labelId,
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Deleted label ${labelId}`))
@@ -72,13 +80,19 @@ export const deleteCommand = new Command()
         : `Failed to delete label: ${err.message}`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

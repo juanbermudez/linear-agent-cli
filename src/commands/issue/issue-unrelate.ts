@@ -2,7 +2,10 @@ import { Command } from "@cliffy/command"
 import { gql } from "../../__codegen__/gql.ts"
 import { getGraphQLClient } from "../../utils/graphql.ts"
 import { getIssueId, getIssueIdentifier } from "../../utils/linear.ts"
-import { error as errorColor, success as successColor } from "../../utils/styling.ts"
+import {
+  error as errorColor,
+  success as successColor,
+} from "../../utils/styling.ts"
 
 export const unrelateCommand = new Command()
   .name("unrelate")
@@ -21,13 +24,17 @@ export const unrelateCommand = new Command()
       if (!issueIdentifier || !relatedIssueIdentifier) {
         const errorMsg = "Could not resolve issue identifiers"
         if (useJson) {
-          console.error(JSON.stringify({
-            success: false,
-            error: {
-              code: "INVALID_ISSUE_ID",
-              message: errorMsg,
+          console.error(JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "INVALID_ISSUE_ID",
+                message: errorMsg,
+              },
             },
-          }, null, 2))
+            null,
+            2,
+          ))
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
         }
@@ -41,13 +48,17 @@ export const unrelateCommand = new Command()
       if (!issueId || !relatedIssueId) {
         const errorMsg = "Could not resolve issue IDs"
         if (useJson) {
-          console.error(JSON.stringify({
-            success: false,
-            error: {
-              code: "INVALID_ISSUE_ID",
-              message: errorMsg,
+          console.error(JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "INVALID_ISSUE_ID",
+                message: errorMsg,
+              },
             },
-          }, null, 2))
+            null,
+            2,
+          ))
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
         }
@@ -83,19 +94,24 @@ export const unrelateCommand = new Command()
 
       // Find the relation ID
       const relation = issueData.issue.relations.nodes.find(
-        (r) => r.relatedIssue.id === relatedIssueId
+        (r) => r.relatedIssue.id === relatedIssueId,
       )
 
       if (!relation) {
-        const errorMsg = `No relationship found between ${issueIdentifier} and ${relatedIssueIdentifier}`
+        const errorMsg =
+          `No relationship found between ${issueIdentifier} and ${relatedIssueIdentifier}`
         if (useJson) {
-          console.error(JSON.stringify({
-            success: false,
-            error: {
-              code: "NOT_FOUND",
-              message: errorMsg,
+          console.error(JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "NOT_FOUND",
+                message: errorMsg,
+              },
             },
-          }, null, 2))
+            null,
+            2,
+          ))
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
         }
@@ -118,25 +134,36 @@ export const unrelateCommand = new Command()
       }
 
       if (useJson) {
-        console.log(JSON.stringify({
-          success: true,
-          operation: "unrelate",
-          message: `Removed relationship between ${issueIdentifier} and ${relatedIssueIdentifier}`,
-        }, null, 2))
+        console.log(JSON.stringify(
+          {
+            success: true,
+            operation: "unrelate",
+            message:
+              `Removed relationship between ${issueIdentifier} and ${relatedIssueIdentifier}`,
+          },
+          null,
+          2,
+        ))
       } else {
         console.log(successColor(`✓ Removed relationship`))
-        console.log(`${issueIdentifier} and ${relatedIssueIdentifier} are no longer related`)
+        console.log(
+          `${issueIdentifier} and ${relatedIssueIdentifier} are no longer related`,
+        )
       }
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : String(err)
       if (useJson) {
-        console.error(JSON.stringify({
-          success: false,
-          error: {
-            code: "API_ERROR",
-            message: errorMsg,
+        console.error(JSON.stringify(
+          {
+            success: false,
+            error: {
+              code: "API_ERROR",
+              message: errorMsg,
+            },
           },
-        }, null, 2))
+          null,
+          2,
+        ))
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
       }

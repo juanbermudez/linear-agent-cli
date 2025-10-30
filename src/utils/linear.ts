@@ -10,12 +10,7 @@ import { Select } from "@cliffy/prompt"
 import { getOption } from "../config.ts"
 import { getGraphQLClient } from "./graphql.ts"
 import { getCurrentIssueFromVcs } from "./vcs.ts"
-import {
-  getTeamCacheKey,
-  
-  readCache,
-  writeCache,
-} from "./cache.ts"
+import { getTeamCacheKey, readCache, writeCache } from "./cache.ts"
 
 function isValidLinearIdentifier(id: string): boolean {
   return /^[a-zA-Z0-9]+-[1-9][0-9]*$/i.test(id)
@@ -584,7 +579,8 @@ export async function getProjectIdByName(
   name: string,
 ): Promise<string | undefined> {
   // If input looks like a UUID, return it directly
-  const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  const uuidPattern =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
   if (uuidPattern.test(name)) {
     return name
   }
@@ -668,7 +664,9 @@ export async function searchTeamsByKeySubstring(
   )
 }
 
-export async function listUsers(): Promise<Array<{ id: string; displayName: string; email: string }>> {
+export async function listUsers(): Promise<
+  Array<{ id: string; displayName: string; email: string }>
+> {
   const client = getGraphQLClient()
   const query = gql(/* GraphQL */ `
     query ListUsers {
@@ -875,12 +873,14 @@ export async function getLabelsForTeam(
   )
 }
 
-export async function getCycles(teamKey: string): Promise<Array<{
-  id: string
-  name: string
-  startsAt: string
-  endsAt: string
-}>> {
+export async function getCycles(teamKey: string): Promise<
+  Array<{
+    id: string
+    name: string
+    startsAt: string
+    endsAt: string
+  }>
+> {
   const teamId = await getTeamIdByKey(teamKey)
   if (!teamId) return []
 
@@ -905,10 +905,12 @@ export async function getCycles(teamKey: string): Promise<Array<{
 
   // Filter out cycles with missing required fields and convert to expected type
   return cycles
-    .filter((c): c is { id: string; name: string; startsAt: string; endsAt: string } =>
+    .filter((
+      c,
+    ): c is { id: string; name: string; startsAt: string; endsAt: string } =>
       c != null && c.name != null
     )
-    .map(c => ({
+    .map((c) => ({
       id: c.id,
       name: c.name,
       startsAt: String(c.startsAt),
@@ -916,19 +918,26 @@ export async function getCycles(teamKey: string): Promise<Array<{
     }))
 }
 
-export async function getCycleId(teamKey: string, cycleName: string): Promise<string | undefined> {
+export async function getCycleId(
+  teamKey: string,
+  cycleName: string,
+): Promise<string | undefined> {
   const cycles = await getCycles(teamKey)
-  const cycle = cycles.find(c =>
+  const cycle = cycles.find((c) =>
     c.name.toLowerCase() === cycleName.toLowerCase() || c.id === cycleName
   )
   return cycle?.id
 }
 
-export async function getProjectMilestones(projectIdOrName: string): Promise<Array<{
-  id: string
-  name: string
-  targetDate?: string
-}>> {
+export async function getProjectMilestones(
+  projectIdOrName: string,
+): Promise<
+  Array<{
+    id: string
+    name: string
+    targetDate?: string
+  }>
+> {
   const projectId = await getProjectIdByName(projectIdOrName)
   if (!projectId) return []
 
@@ -952,20 +961,26 @@ export async function getProjectMilestones(projectIdOrName: string): Promise<Arr
 
   // Filter out milestones with missing required fields and convert to expected type
   return milestones
-    .filter((m): m is { id: string; name: string; targetDate?: string | null } =>
+    .filter((
+      m,
+    ): m is { id: string; name: string; targetDate?: string | null } =>
       m != null && m.name != null
     )
-    .map(m => ({
+    .map((m) => ({
       id: m.id,
       name: m.name,
       targetDate: m.targetDate ?? undefined,
     }))
 }
 
-export async function getProjectMilestoneId(projectId: string, milestoneName: string): Promise<string | undefined> {
+export async function getProjectMilestoneId(
+  projectId: string,
+  milestoneName: string,
+): Promise<string | undefined> {
   const milestones = await getProjectMilestones(projectId)
-  const milestone = milestones.find(m =>
-    m.name.toLowerCase() === milestoneName.toLowerCase() || m.id === milestoneName
+  const milestone = milestones.find((m) =>
+    m.name.toLowerCase() === milestoneName.toLowerCase() ||
+    m.id === milestoneName
   )
   return milestone?.id
 }
@@ -1502,7 +1517,10 @@ export async function createMilestone(input: {
   const client = getGraphQLClient()
   const data = await client.request(mutation, { input })
 
-  if (!data.projectMilestoneCreate.success || !data.projectMilestoneCreate.projectMilestone) {
+  if (
+    !data.projectMilestoneCreate.success ||
+    !data.projectMilestoneCreate.projectMilestone
+  ) {
     throw new Error("Failed to create milestone")
   }
 
@@ -1534,7 +1552,9 @@ export async function listMilestones(projectId: string) {
 
   const client = getGraphQLClient()
   const data = await client.request(query, { projectId })
-  return data.project.projectMilestones.nodes.sort((a, b) => a.sortOrder - b.sortOrder)
+  return data.project.projectMilestones.nodes.sort((a, b) =>
+    a.sortOrder - b.sortOrder
+  )
 }
 
 export async function updateMilestone(
@@ -1564,7 +1584,10 @@ export async function updateMilestone(
   const client = getGraphQLClient()
   const data = await client.request(mutation, { id, input })
 
-  if (!data.projectMilestoneUpdate.success || !data.projectMilestoneUpdate.projectMilestone) {
+  if (
+    !data.projectMilestoneUpdate.success ||
+    !data.projectMilestoneUpdate.projectMilestone
+  ) {
     throw new Error("Failed to update milestone")
   }
 
@@ -1621,7 +1644,9 @@ export async function createProjectUpdate(input: {
   const client = getGraphQLClient()
   const data = await client.request(mutation, { input })
 
-  if (!data.projectUpdateCreate.success || !data.projectUpdateCreate.projectUpdate) {
+  if (
+    !data.projectUpdateCreate.success || !data.projectUpdateCreate.projectUpdate
+  ) {
     throw new Error("Failed to create project update")
   }
 
@@ -1666,9 +1691,30 @@ export function listInitiativeStatuses() {
   // Initiative statuses are now simple enums: Planned, Active, Completed
   // Return a static list matching the schema enum
   return [
-    { id: "planned", name: "Planned", type: "planned", color: "#95A2B3", description: "Planning phase", position: 0 },
-    { id: "active", name: "Active", type: "active", color: "#5E6AD2", description: "Currently active", position: 1 },
-    { id: "completed", name: "Completed", type: "completed", color: "#26B5CE", description: "Completed", position: 2 },
+    {
+      id: "planned",
+      name: "Planned",
+      type: "planned",
+      color: "#95A2B3",
+      description: "Planning phase",
+      position: 0,
+    },
+    {
+      id: "active",
+      name: "Active",
+      type: "active",
+      color: "#5E6AD2",
+      description: "Currently active",
+      position: 1,
+    },
+    {
+      id: "completed",
+      name: "Completed",
+      type: "completed",
+      color: "#26B5CE",
+      description: "Completed",
+      position: 2,
+    },
   ]
 }
 
@@ -1923,7 +1969,9 @@ export async function removeProjectFromInitiative(
 
   // Note: We need to find the initiativeToProject ID first
   // For now, this is a simplified version that needs the relation ID
-  const data = await client.request(mutation, { id: `${initiativeId}-${projectId}` })
+  const data = await client.request(mutation, {
+    id: `${initiativeId}-${projectId}`,
+  })
 
   if (!data.initiativeToProjectDelete.success) {
     throw new Error("Failed to remove project from initiative")
@@ -2093,7 +2141,10 @@ export async function listLabelsForTeam(teamId?: string) {
   return data.issueLabels.nodes
 }
 
-export async function getLabelIdByName(labelName: string, teamKey: string): Promise<string | undefined> {
+export async function getLabelIdByName(
+  labelName: string,
+  teamKey: string,
+): Promise<string | undefined> {
   const teamId = await getTeamIdByKey(teamKey)
   if (!teamId) {
     return undefined
@@ -2143,10 +2194,12 @@ export async function deleteLabel(labelId: string) {
 }
 
 // VCS Integration for Documents
-export async function getCurrentProjectFromIssue(): Promise<{
-  id: string
-  name: string
-} | null> {
+export async function getCurrentProjectFromIssue(): Promise<
+  {
+    id: string
+    name: string
+  } | null
+> {
   const issueId = await getCurrentIssueIdFromVcs()
   if (!issueId) {
     return null

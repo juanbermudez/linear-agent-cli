@@ -1,9 +1,5 @@
 import { Command } from "@cliffy/command"
-import {
-  getTimeAgo,
-  padDisplay,
-  truncateText,
-} from "../../utils/display.ts"
+import { getTimeAgo, padDisplay, truncateText } from "../../utils/display.ts"
 import {
   getCurrentProjectFromIssue,
   getProjectIdByName,
@@ -31,9 +27,18 @@ export const listCommand = new Command()
   .name("list")
   .description("List documents")
   .option("-p, --project <project:string>", "Filter by project name or ID")
-  .option("--current-project", "Show documents for current issue's project (from VCS context)")
-  .option("-i, --initiative <initiative:string>", "Filter by initiative name or ID")
-  .option("-c, --creator <creator:string>", "Filter by creator (username or 'self')")
+  .option(
+    "--current-project",
+    "Show documents for current issue's project (from VCS context)",
+  )
+  .option(
+    "-i, --initiative <initiative:string>",
+    "Filter by initiative name or ID",
+  )
+  .option(
+    "-c, --creator <creator:string>",
+    "Filter by creator (username or 'self')",
+  )
   .option("--include-archived", "Include trashed documents")
   .option("-l, --limit <limit:number>", "Max number of documents (default: 50)")
   .option("-w, --web", "Open documents view in browser")
@@ -62,14 +67,18 @@ export const listCommand = new Command()
         const details = "Make sure you're on a branch with an issue ID"
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "VCS_CONTEXT_NOT_FOUND",
-                message: errorMsg,
-                details,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "VCS_CONTEXT_NOT_FOUND",
+                  message: errorMsg,
+                  details,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(`Error: ${errorMsg}`)
@@ -89,15 +98,19 @@ export const listCommand = new Command()
       } catch (_err) {
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "NOT_FOUND",
-                message: `Project '${options.project}' not found`,
-                resource: "project",
-                id: options.project,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "NOT_FOUND",
+                  message: `Project '${options.project}' not found`,
+                  resource: "project",
+                  id: options.project,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(`Error: Project '${options.project}' not found`)
@@ -114,15 +127,19 @@ export const listCommand = new Command()
       } catch (_err) {
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "NOT_FOUND",
-                message: `Creator '${options.creator}' not found`,
-                resource: "user",
-                id: options.creator,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "NOT_FOUND",
+                  message: `Creator '${options.creator}' not found`,
+                  resource: "user",
+                  id: options.creator,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(`Error: Creator '${options.creator}' not found`)
@@ -136,7 +153,9 @@ export const listCommand = new Command()
     // Fetch documents
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
-    const spinner = showSpinner ? new Spinner({ message: "Fetching documents..." }) : null
+    const spinner = showSpinner
+      ? new Spinner({ message: "Fetching documents..." })
+      : null
 
     spinner?.start()
 
@@ -152,32 +171,39 @@ export const listCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            documents: documents.map((doc) => ({
-              id: doc.id,
-              title: doc.title,
-              slugId: doc.slugId,
-              url: doc.url,
-              icon: doc.icon,
-              project: doc.project ? {
-                id: doc.project.id,
-                name: doc.project.name,
-              } : null,
-              creator: {
-                id: doc.creator.id,
-                name: doc.creator.displayName,
+          JSON.stringify(
+            {
+              documents: documents.map((doc) => ({
+                id: doc.id,
+                title: doc.title,
+                slugId: doc.slugId,
+                url: doc.url,
+                icon: doc.icon,
+                project: doc.project
+                  ? {
+                    id: doc.project.id,
+                    name: doc.project.name,
+                  }
+                  : null,
+                creator: {
+                  id: doc.creator.id,
+                  name: doc.creator.displayName,
+                },
+                createdAt: doc.createdAt,
+                updatedAt: doc.updatedAt,
+              })),
+              count: documents.length,
+              filters: {
+                ...(options.project && { project: options.project }),
+                ...(options.currentProject && projectName &&
+                  { project: projectName, source: "vcs-context" }),
+                ...(options.creator && { creator: options.creator }),
+                ...(options.includeArchived && { includeArchived: true }),
               },
-              createdAt: doc.createdAt,
-              updatedAt: doc.updatedAt,
-            })),
-            count: documents.length,
-            filters: {
-              ...(options.project && { project: options.project }),
-              ...(options.currentProject && projectName && { project: projectName, source: "vcs-context" }),
-              ...(options.creator && { creator: options.creator }),
-              ...(options.includeArchived && { includeArchived: true }),
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
         return
       }
@@ -207,7 +233,8 @@ export const listCommand = new Command()
 
       const titleWidth = Math.max(
         20,
-        terminalWidth - ICON_WIDTH - PROJECT_WIDTH - CREATOR_WIDTH - UPDATED_WIDTH - SPACE * 5,
+        terminalWidth - ICON_WIDTH - PROJECT_WIDTH - CREATOR_WIDTH -
+          UPDATED_WIDTH - SPACE * 5,
       )
 
       // Build header
@@ -254,13 +281,17 @@ export const listCommand = new Command()
 
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "API_ERROR",
-              message: err.message,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "API_ERROR",
+                message: err.message,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(`Error: Failed to fetch documents: ${err.message}`)

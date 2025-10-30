@@ -1,6 +1,9 @@
 import { Command } from "@cliffy/command"
 import { getConfigManager } from "../../utils/config-manager.ts"
-import { error as errorColor, success as successColor } from "../../utils/styling.ts"
+import {
+  error as errorColor,
+  success as successColor,
+} from "../../utils/styling.ts"
 
 interface SetOptions {
   global?: boolean
@@ -38,12 +41,16 @@ export const setCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "set",
-            key,
-            value: parsedValue,
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: true,
+              operation: "set",
+              key,
+              value: parsedValue,
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Set ${key} = ${value}`))
@@ -52,13 +59,17 @@ export const setCommand = new Command()
       const error = err as Error
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "API_ERROR",
-              message: error.message,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "API_ERROR",
+                message: error.message,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${error.message}`))

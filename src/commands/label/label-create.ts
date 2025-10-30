@@ -1,6 +1,11 @@
 import { Command } from "@cliffy/command"
 import { Input, Select } from "@cliffy/prompt"
-import { createLabel, getAllTeams, getTeamIdByKey, getLabelIdByName } from "../../utils/linear.ts"
+import {
+  createLabel,
+  getAllTeams,
+  getLabelIdByName,
+  getTeamIdByKey,
+} from "../../utils/linear.ts"
 import {
   error as errorColor,
   success as successColor,
@@ -36,7 +41,10 @@ export const createCommand = new Command()
   .option("-d, --description <description:string>", "Label description")
   .option("-c, --color <color:string>", "Label color (hex code)")
   .option("-t, --team <team:string>", "Team ID or key")
-  .option("-p, --parent <parent:string>", "Parent label name (for label groups/hierarchy)")
+  .option(
+    "-p, --parent <parent:string>",
+    "Parent label name (for label groups/hierarchy)",
+  )
   .option("--is-group", "Mark this label as a group (container for sub-labels)")
   .option("--no-interactive", "Disable interactive mode")
   .option("-j, --json", "Output result as JSON")
@@ -117,13 +125,17 @@ export const createCommand = new Command()
         const errorMsg = "Name is required. Use --name or run without flags"
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "MISSING_REQUIRED_FIELD",
-                message: errorMsg,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "MISSING_REQUIRED_FIELD",
+                  message: errorMsg,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -140,10 +152,14 @@ export const createCommand = new Command()
         const errorMsg = "Invalid hex color. Use format: #rrggbb"
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: { code: "INVALID_VALUE", message: errorMsg },
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "INVALID_VALUE", message: errorMsg },
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -163,10 +179,14 @@ export const createCommand = new Command()
           const errorMsg = `Team '${options.team}' not found`
           if (useJson) {
             console.error(
-              JSON.stringify({
-                success: false,
-                error: { code: "NOT_FOUND", message: errorMsg },
-              }, null, 2),
+              JSON.stringify(
+                {
+                  success: false,
+                  error: { code: "NOT_FOUND", message: errorMsg },
+                },
+                null,
+                2,
+              ),
             )
           } else {
             console.error(errorColor(`Error: ${errorMsg}`))
@@ -182,10 +202,14 @@ export const createCommand = new Command()
         const errorMsg = "Team is required when specifying a parent label"
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: { code: "MISSING_REQUIRED_FIELD", message: errorMsg },
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "MISSING_REQUIRED_FIELD", message: errorMsg },
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -199,13 +223,18 @@ export const createCommand = new Command()
           throw new Error("Parent label not found")
         }
       } catch (_err) {
-        const errorMsg = `Parent label '${options.parent}' not found in team ${options.team}`
+        const errorMsg =
+          `Parent label '${options.parent}' not found in team ${options.team}`
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: { code: "NOT_FOUND", message: errorMsg },
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "NOT_FOUND", message: errorMsg },
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -222,27 +251,42 @@ export const createCommand = new Command()
     spinner?.start()
 
     try {
-      const label = await createLabel({ name, description, color, teamId, parentId, isGroup })
+      const label = await createLabel({
+        name,
+        description,
+        color,
+        teamId,
+        parentId,
+        isGroup,
+      })
       spinner?.stop()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "create",
-            label: {
-              id: label.id,
-              name: label.name,
-              description: label.description,
-              color: label.color,
-              team: label.team
-                ? { id: label.team.id, key: label.team.key, name: label.team.name }
-                : null,
-              parent: label.parent
-                ? { id: label.parent.id, name: label.parent.name }
-                : null,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "create",
+              label: {
+                id: label.id,
+                name: label.name,
+                description: label.description,
+                color: label.color,
+                team: label.team
+                  ? {
+                    id: label.team.id,
+                    key: label.team.key,
+                    name: label.team.name,
+                  }
+                  : null,
+                parent: label.parent
+                  ? { id: label.parent.id, name: label.parent.name }
+                  : null,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Created label '${label.name}'`))
@@ -257,10 +301,14 @@ export const createCommand = new Command()
       spinner?.stop()
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: { code: "API_ERROR", message: err.message },
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: false,
+              error: { code: "API_ERROR", message: err.message },
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${err.message}`))

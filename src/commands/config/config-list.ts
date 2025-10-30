@@ -52,17 +52,23 @@ export const listCommand = new Command()
         if (sectionValue === undefined) {
           if (useJson) {
             console.error(
-              JSON.stringify({
-                success: false,
-                error: {
-                  code: "NOT_FOUND",
-                  message: `Config section '${options.section}' not found`,
+              JSON.stringify(
+                {
+                  success: false,
+                  error: {
+                    code: "NOT_FOUND",
+                    message: `Config section '${options.section}' not found`,
+                  },
                 },
-              }, null, 2),
+                null,
+                2,
+              ),
             )
           } else {
             console.error(
-              errorColor(`Error: Config section '${options.section}' not found`),
+              errorColor(
+                `Error: Config section '${options.section}' not found`,
+              ),
             )
           }
           Deno.exit(1)
@@ -70,11 +76,15 @@ export const listCommand = new Command()
 
         if (useJson) {
           console.log(
-            JSON.stringify({
-              success: true,
-              section: options.section,
-              values: sectionValue,
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: true,
+                section: options.section,
+                values: sectionValue,
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.log(bold(`[${options.section}]`))
@@ -99,10 +109,14 @@ export const listCommand = new Command()
           }
 
           console.log(
-            JSON.stringify({
-              success: true,
-              config: maskedConfig,
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: true,
+                config: maskedConfig,
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.log(bold("Configuration:\n"))
@@ -114,13 +128,17 @@ export const listCommand = new Command()
       const error = err as Error
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "API_ERROR",
-              message: error.message,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "API_ERROR",
+                message: error.message,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${error.message}`))

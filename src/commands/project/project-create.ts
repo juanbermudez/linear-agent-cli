@@ -4,11 +4,14 @@ import {
   createDocument,
   createProject,
   getTeamIdByKey,
-  lookupUserId,
   listProjectStatuses,
+  lookupUserId,
 } from "../../utils/linear.ts"
 import { getOption } from "../../config.ts"
-import { error as errorColor, success as successColor } from "../../utils/styling.ts"
+import {
+  error as errorColor,
+  success as successColor,
+} from "../../utils/styling.ts"
 
 interface CreateOptions {
   name?: string
@@ -104,7 +107,11 @@ async function interactiveCreate(options: CreateOptions) {
     try {
       leadId = await lookupUserId(leadInput.trim())
     } catch (_err) {
-      console.error(errorColor(`Warning: User '${leadInput}' not found, proceeding without lead`))
+      console.error(
+        errorColor(
+          `Warning: User '${leadInput}' not found, proceeding without lead`,
+        ),
+      )
     }
   }
 
@@ -240,17 +247,22 @@ async function flagBasedCreate(options: CreateOptions) {
 
   // Validate required fields
   if (!options.name) {
-    const errorMsg = "Project name is required. Use --name or run without flags for interactive mode"
+    const errorMsg =
+      "Project name is required. Use --name or run without flags for interactive mode"
     if (useJson) {
       console.error(
-        JSON.stringify({
-          success: false,
-          error: {
-            code: "MISSING_REQUIRED_FIELD",
-            message: errorMsg,
-            field: "name",
+        JSON.stringify(
+          {
+            success: false,
+            error: {
+              code: "MISSING_REQUIRED_FIELD",
+              message: errorMsg,
+              field: "name",
+            },
           },
-        }, null, 2),
+          null,
+          2,
+        ),
       )
     } else {
       console.error(errorColor(`Error: ${errorMsg}`))
@@ -265,17 +277,22 @@ async function flagBasedCreate(options: CreateOptions) {
     if (defaultTeam) {
       teamKeys = [defaultTeam]
     } else {
-      const errorMsg = "At least one team is required. Use --team or set a default team"
+      const errorMsg =
+        "At least one team is required. Use --team or set a default team"
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "MISSING_REQUIRED_FIELD",
-              message: errorMsg,
-              field: "team",
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "MISSING_REQUIRED_FIELD",
+                message: errorMsg,
+                field: "team",
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -295,15 +312,19 @@ async function flagBasedCreate(options: CreateOptions) {
       const errorMsg = `Team '${teamKey}' not found`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "NOT_FOUND",
-              message: errorMsg,
-              resource: "team",
-              id: teamKey,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "NOT_FOUND",
+                message: errorMsg,
+                resource: "team",
+                id: teamKey,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -317,15 +338,19 @@ async function flagBasedCreate(options: CreateOptions) {
     const errorMsg = `Invalid color '${options.color}'. Use hex format: #RRGGBB`
     if (useJson) {
       console.error(
-        JSON.stringify({
-          success: false,
-          error: {
-            code: "INVALID_VALUE",
-            message: errorMsg,
-            field: "color",
-            value: options.color,
+        JSON.stringify(
+          {
+            success: false,
+            error: {
+              code: "INVALID_VALUE",
+              message: errorMsg,
+              field: "color",
+              value: options.color,
+            },
           },
-        }, null, 2),
+          null,
+          2,
+        ),
       )
     } else {
       console.error(errorColor(`Error: ${errorMsg}`))
@@ -340,18 +365,23 @@ async function flagBasedCreate(options: CreateOptions) {
 
   // Validate date formats
   if (options.startDate && !/^\d{4}-\d{2}-\d{2}$/.test(options.startDate)) {
-    const errorMsg = `Invalid start date '${options.startDate}'. Use YYYY-MM-DD format`
+    const errorMsg =
+      `Invalid start date '${options.startDate}'. Use YYYY-MM-DD format`
     if (useJson) {
       console.error(
-        JSON.stringify({
-          success: false,
-          error: {
-            code: "INVALID_VALUE",
-            message: errorMsg,
-            field: "startDate",
-            value: options.startDate,
+        JSON.stringify(
+          {
+            success: false,
+            error: {
+              code: "INVALID_VALUE",
+              message: errorMsg,
+              field: "startDate",
+              value: options.startDate,
+            },
           },
-        }, null, 2),
+          null,
+          2,
+        ),
       )
     } else {
       console.error(errorColor(`Error: ${errorMsg}`))
@@ -360,18 +390,23 @@ async function flagBasedCreate(options: CreateOptions) {
   }
 
   if (options.targetDate && !/^\d{4}-\d{2}-\d{2}$/.test(options.targetDate)) {
-    const errorMsg = `Invalid target date '${options.targetDate}'. Use YYYY-MM-DD format`
+    const errorMsg =
+      `Invalid target date '${options.targetDate}'. Use YYYY-MM-DD format`
     if (useJson) {
       console.error(
-        JSON.stringify({
-          success: false,
-          error: {
-            code: "INVALID_VALUE",
-            message: errorMsg,
-            field: "targetDate",
-            value: options.targetDate,
+        JSON.stringify(
+          {
+            success: false,
+            error: {
+              code: "INVALID_VALUE",
+              message: errorMsg,
+              field: "targetDate",
+              value: options.targetDate,
+            },
           },
-        }, null, 2),
+          null,
+          2,
+        ),
       )
     } else {
       console.error(errorColor(`Error: ${errorMsg}`))
@@ -383,10 +418,16 @@ async function flagBasedCreate(options: CreateOptions) {
   let statusId = options.status
   if (statusId) {
     // If not a UUID, try to resolve as status name
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(statusId)) {
+    if (
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        statusId,
+      )
+    ) {
       const statuses = await listProjectStatuses()
       const status = statuses.find(
-        (s) => s.name.toLowerCase() === statusId!.toLowerCase() || s.type === statusId!.toLowerCase(),
+        (s) =>
+          s.name.toLowerCase() === statusId!.toLowerCase() ||
+          s.type === statusId!.toLowerCase(),
       )
       if (status) {
         statusId = status.id
@@ -394,15 +435,19 @@ async function flagBasedCreate(options: CreateOptions) {
         const errorMsg = `Status '${statusId}' not found`
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "NOT_FOUND",
-                message: errorMsg,
-                resource: "status",
-                id: statusId,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "NOT_FOUND",
+                  message: errorMsg,
+                  resource: "status",
+                  id: statusId,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -421,15 +466,19 @@ async function flagBasedCreate(options: CreateOptions) {
       const errorMsg = `User '${options.lead}' not found`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "NOT_FOUND",
-              message: errorMsg,
-              resource: "user",
-              id: options.lead,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "NOT_FOUND",
+                message: errorMsg,
+                resource: "user",
+                id: options.lead,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
@@ -441,7 +490,9 @@ async function flagBasedCreate(options: CreateOptions) {
   // Show spinner only in non-JSON mode
   const { Spinner } = await import("@std/cli/unstable-spinner")
   const showSpinner = !useJson && Deno.stdout.isTerminal()
-  const spinner = showSpinner ? new Spinner({ message: "Creating project..." }) : null
+  const spinner = showSpinner
+    ? new Spinner({ message: "Creating project..." })
+    : null
 
   spinner?.start()
 
@@ -486,25 +537,34 @@ async function flagBasedCreate(options: CreateOptions) {
         docSpinner?.stop()
 
         if (!useJson) {
-          console.log(successColor(`✓ Created document: ${document.title} (linked to project)`))
+          console.log(
+            successColor(
+              `✓ Created document: ${document.title} (linked to project)`,
+            ),
+          )
           console.log(document.url)
         }
       } catch (_err) {
         docSpinner?.stop()
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "API_ERROR",
-                message: `Project created but document creation failed: ${err.message}`,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "API_ERROR",
+                  message:
+                    `Project created but document creation failed: ${err.message}`,
+                },
+                project: {
+                  id: project.id,
+                  name: project.name,
+                  url: project.url,
+                },
               },
-              project: {
-                id: project.id,
-                name: project.name,
-                url: project.url,
-              },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(
@@ -529,10 +589,12 @@ async function flagBasedCreate(options: CreateOptions) {
             name: project.status.name,
             type: project.status.type,
           },
-          lead: project.lead ? {
-            id: project.lead.id,
-            name: project.lead.displayName,
-          } : null,
+          lead: project.lead
+            ? {
+              id: project.lead.id,
+              name: project.lead.displayName,
+            }
+            : null,
           teams: project.teams?.nodes?.map((team) => ({
             id: team.id,
             key: team.key,
@@ -564,16 +626,22 @@ async function flagBasedCreate(options: CreateOptions) {
 
     if (useJson) {
       console.error(
-        JSON.stringify({
-          success: false,
-          error: {
-            code: "API_ERROR",
-            message: err.message,
+        JSON.stringify(
+          {
+            success: false,
+            error: {
+              code: "API_ERROR",
+              message: err.message,
+            },
           },
-        }, null, 2),
+          null,
+          2,
+        ),
       )
     } else {
-      console.error(errorColor(`Error: Failed to create project: ${err.message}`))
+      console.error(
+        errorColor(`Error: Failed to create project: ${err.message}`),
+      )
     }
     Deno.exit(1)
   }
@@ -583,16 +651,27 @@ export const createCommand = new Command()
   .name("create")
   .description("Create a new Linear project")
   .option("-n, --name <name:string>", "Project name")
-  .option("-d, --description <description:string>", "Project description (max 255 chars)")
-  .option("-c, --content <content:string>", "Project content/body (markdown, for full details)")
-  .option("-t, --team <team:string>", "Team key (can be repeated)", { collect: true })
+  .option(
+    "-d, --description <description:string>",
+    "Project description (max 255 chars)",
+  )
+  .option(
+    "-c, --content <content:string>",
+    "Project content/body (markdown, for full details)",
+  )
+  .option("-t, --team <team:string>", "Team key (can be repeated)", {
+    collect: true,
+  })
   .option("-s, --status <status:string>", "Project status name or ID")
   .option("-l, --lead <lead:string>", "Project lead (username or email)")
   .option("-i, --icon <icon:string>", "Icon emoji")
   .option("--color <color:string>", "Color (hex format: #RRGGBB)")
   .option("--start-date <date:string>", "Start date (YYYY-MM-DD)")
   .option("--target-date <date:string>", "Target date (YYYY-MM-DD)")
-  .option("-p, --priority <priority:number>", "Priority (0-4: none, urgent, high, normal, low)")
+  .option(
+    "-p, --priority <priority:number>",
+    "Priority (0-4: none, urgent, high, normal, low)",
+  )
   .option("--with-doc", "Create a design document with the project")
   .option("--doc-title <title:string>", "Document title (used with --with-doc)")
   .option("--no-interactive", "Disable interactive mode")
@@ -600,7 +679,8 @@ export const createCommand = new Command()
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {
     const useJson = options.json || options.format === "json"
-    const interactive = !options.name && !useJson && !options.noInteractive && Deno.stdout.isTerminal()
+    const interactive = !options.name && !useJson && !options.noInteractive &&
+      Deno.stdout.isTerminal()
 
     if (interactive) {
       await interactiveCreate(options)

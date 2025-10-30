@@ -20,13 +20,17 @@ export const relationsCommand = new Command()
       if (!issueIdentifier) {
         const errorMsg = "Could not resolve issue identifier"
         if (useJson) {
-          console.error(JSON.stringify({
-            success: false,
-            error: {
-              code: "INVALID_ISSUE_ID",
-              message: errorMsg,
+          console.error(JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "INVALID_ISSUE_ID",
+                message: errorMsg,
+              },
             },
-          }, null, 2))
+            null,
+            2,
+          ))
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
         }
@@ -39,13 +43,17 @@ export const relationsCommand = new Command()
       if (!issueId) {
         const errorMsg = "Could not resolve issue ID"
         if (useJson) {
-          console.error(JSON.stringify({
-            success: false,
-            error: {
-              code: "INVALID_ISSUE_ID",
-              message: errorMsg,
+          console.error(JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "INVALID_ISSUE_ID",
+                message: errorMsg,
+              },
             },
-          }, null, 2))
+            null,
+            2,
+          ))
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
         }
@@ -105,31 +113,35 @@ export const relationsCommand = new Command()
       const incomingRelations = issue.inverseRelations.nodes
 
       if (useJson) {
-        console.log(JSON.stringify({
-          success: true,
-          issue: {
-            identifier: issue.identifier,
-            title: issue.title,
+        console.log(JSON.stringify(
+          {
+            success: true,
+            issue: {
+              identifier: issue.identifier,
+              title: issue.title,
+            },
+            outgoing: outgoingRelations.map((r) => ({
+              id: r.id,
+              type: r.type,
+              relatedIssue: {
+                identifier: r.relatedIssue.identifier,
+                title: r.relatedIssue.title,
+                state: r.relatedIssue.state.name,
+              },
+            })),
+            incoming: incomingRelations.map((r) => ({
+              id: r.id,
+              type: r.type,
+              fromIssue: {
+                identifier: r.issue.identifier,
+                title: r.issue.title,
+                state: r.issue.state.name,
+              },
+            })),
           },
-          outgoing: outgoingRelations.map(r => ({
-            id: r.id,
-            type: r.type,
-            relatedIssue: {
-              identifier: r.relatedIssue.identifier,
-              title: r.relatedIssue.title,
-              state: r.relatedIssue.state.name,
-            },
-          })),
-          incoming: incomingRelations.map(r => ({
-            id: r.id,
-            type: r.type,
-            fromIssue: {
-              identifier: r.issue.identifier,
-              title: r.issue.title,
-              state: r.issue.state.name,
-            },
-          })),
-        }, null, 2))
+          null,
+          2,
+        ))
       } else {
         console.log(`\nRelationships for ${issue.identifier}: ${issue.title}`)
         console.log()
@@ -142,8 +154,11 @@ export const relationsCommand = new Command()
         if (outgoingRelations.length > 0) {
           console.log("Outgoing relationships:")
           for (const relation of outgoingRelations) {
-            const typeLabel = relation.type.charAt(0).toUpperCase() + relation.type.slice(1)
-            console.log(`  ${typeLabel}: ${relation.relatedIssue.identifier} - ${relation.relatedIssue.title}`)
+            const typeLabel = relation.type.charAt(0).toUpperCase() +
+              relation.type.slice(1)
+            console.log(
+              `  ${typeLabel}: ${relation.relatedIssue.identifier} - ${relation.relatedIssue.title}`,
+            )
             console.log(muted(`    State: ${relation.relatedIssue.state.name}`))
           }
           console.log()
@@ -152,8 +167,11 @@ export const relationsCommand = new Command()
         if (incomingRelations.length > 0) {
           console.log("Incoming relationships:")
           for (const relation of incomingRelations) {
-            const typeLabel = relation.type.charAt(0).toUpperCase() + relation.type.slice(1)
-            console.log(`  ${typeLabel} by: ${relation.issue.identifier} - ${relation.issue.title}`)
+            const typeLabel = relation.type.charAt(0).toUpperCase() +
+              relation.type.slice(1)
+            console.log(
+              `  ${typeLabel} by: ${relation.issue.identifier} - ${relation.issue.title}`,
+            )
             console.log(muted(`    State: ${relation.issue.state.name}`))
           }
         }
@@ -161,13 +179,17 @@ export const relationsCommand = new Command()
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : String(err)
       if (useJson) {
-        console.error(JSON.stringify({
-          success: false,
-          error: {
-            code: "API_ERROR",
-            message: errorMsg,
+        console.error(JSON.stringify(
+          {
+            success: false,
+            error: {
+              code: "API_ERROR",
+              message: errorMsg,
+            },
           },
-        }, null, 2))
+          null,
+          2,
+        ))
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))
       }

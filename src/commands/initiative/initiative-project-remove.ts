@@ -37,12 +37,16 @@ export const projectRemoveCommand = new Command()
 
         if (useJson) {
           console.log(
-            JSON.stringify({
-              success: true,
-              operation: "remove-project",
-              initiativeId,
-              projectId,
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: true,
+                operation: "remove-project",
+                initiativeId,
+                projectId,
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.log(
@@ -58,15 +62,19 @@ export const projectRemoveCommand = new Command()
           : `Failed to remove project: ${err.message}`
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: err.message.includes("not found")
-                  ? "NOT_FOUND"
-                  : "API_ERROR",
-                message: errorMsg,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: err.message.includes("not found")
+                    ? "NOT_FOUND"
+                    : "API_ERROR",
+                  message: errorMsg,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))

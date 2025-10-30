@@ -1,7 +1,10 @@
 import { Command } from "@cliffy/command"
 import { Input } from "@cliffy/prompt"
 import { createMilestone } from "../../../utils/linear.ts"
-import { error as errorColor, success as successColor } from "../../../utils/styling.ts"
+import {
+  error as errorColor,
+  success as successColor,
+} from "../../../utils/styling.ts"
 
 interface CreateOptions {
   name?: string
@@ -24,7 +27,8 @@ export const createCommand = new Command()
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions, projectId: string) => {
     const useJson = options.json || options.format === "json"
-    const interactive = !options.name && !useJson && !options.noInteractive && Deno.stdout.isTerminal()
+    const interactive = !options.name && !useJson && !options.noInteractive &&
+      Deno.stdout.isTerminal()
 
     let name: string
     let description: string | undefined
@@ -61,17 +65,22 @@ export const createCommand = new Command()
       targetDate = dateInput.trim() || undefined
     } else {
       if (!options.name) {
-        const errorMsg = "Milestone name is required. Use --name or run without flags for interactive mode"
+        const errorMsg =
+          "Milestone name is required. Use --name or run without flags for interactive mode"
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "MISSING_REQUIRED_FIELD",
-                message: errorMsg,
-                field: "name",
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "MISSING_REQUIRED_FIELD",
+                  message: errorMsg,
+                  field: "name",
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -85,18 +94,23 @@ export const createCommand = new Command()
 
       // Validate date format if provided
       if (targetDate && !/^\d{4}-\d{2}-\d{2}$/.test(targetDate)) {
-        const errorMsg = `Invalid target date '${targetDate}'. Use YYYY-MM-DD format`
+        const errorMsg =
+          `Invalid target date '${targetDate}'. Use YYYY-MM-DD format`
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: "INVALID_VALUE",
-                message: errorMsg,
-                field: "targetDate",
-                value: targetDate,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "INVALID_VALUE",
+                  message: errorMsg,
+                  field: "targetDate",
+                  value: targetDate,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -107,7 +121,9 @@ export const createCommand = new Command()
 
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
-    const spinner = showSpinner ? new Spinner({ message: "Creating milestone..." }) : null
+    const spinner = showSpinner
+      ? new Spinner({ message: "Creating milestone..." })
+      : null
 
     spinner?.start()
 
@@ -123,18 +139,22 @@ export const createCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "create",
-            milestone: {
-              id: milestone.id,
-              name: milestone.name,
-              description: milestone.description,
-              targetDate: milestone.targetDate,
-              status: milestone.status,
-              progress: milestone.progress,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "create",
+              milestone: {
+                id: milestone.id,
+                name: milestone.name,
+                description: milestone.description,
+                targetDate: milestone.targetDate,
+                status: milestone.status,
+                progress: milestone.progress,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Created milestone: ${milestone.name}`))
@@ -147,16 +167,22 @@ export const createCommand = new Command()
 
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: "API_ERROR",
-              message: err.message,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: "API_ERROR",
+                message: err.message,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
-        console.error(errorColor(`Error: Failed to create milestone: ${err.message}`))
+        console.error(
+          errorColor(`Error: Failed to create milestone: ${err.message}`),
+        )
       }
       Deno.exit(1)
     }

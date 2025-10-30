@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command"
 import { Table } from "@cliffy/table"
-import { listLabelsForTeam, getTeamIdByKey } from "../../utils/linear.ts"
+import { getTeamIdByKey, listLabelsForTeam } from "../../utils/linear.ts"
 import { muted } from "../../utils/styling.ts"
 import { error as errorColor } from "../../utils/styling.ts"
 import { bgRgb24 } from "@std/fmt/colors"
@@ -45,10 +45,14 @@ export const listCommand = new Command()
         const errorMsg = error.message || `Team '${options.team}' not found`
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: { code: "NOT_FOUND", message: errorMsg },
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "NOT_FOUND", message: errorMsg },
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
@@ -70,18 +74,22 @@ export const listCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            labels: labels.map((l) => ({
-              id: l.id,
-              name: l.name,
-              description: l.description,
-              color: l.color,
-              team: l.team
-                ? { id: l.team.id, key: l.team.key, name: l.team.name }
-                : null,
-            })),
-            count: labels.length,
-          }, null, 2),
+          JSON.stringify(
+            {
+              labels: labels.map((l) => ({
+                id: l.id,
+                name: l.name,
+                description: l.description,
+                color: l.color,
+                team: l.team
+                  ? { id: l.team.id, key: l.team.key, name: l.team.name }
+                  : null,
+              })),
+              count: labels.length,
+            },
+            null,
+            2,
+          ),
         )
         return
       }
@@ -121,10 +129,14 @@ export const listCommand = new Command()
       spinner?.stop()
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: { code: "API_ERROR", message: err.message },
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: false,
+              error: { code: "API_ERROR", message: err.message },
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${err.message}`))

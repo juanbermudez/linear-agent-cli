@@ -39,7 +39,9 @@ export const viewCommand = new Command()
     // Fetch document
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
-    const spinner = showSpinner ? new Spinner({ message: `Fetching document ${docId}...` }) : null
+    const spinner = showSpinner
+      ? new Spinner({ message: `Fetching document ${docId}...` })
+      : null
 
     spinner?.start()
 
@@ -51,48 +53,60 @@ export const viewCommand = new Command()
       // Handle JSON output
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "view",
-            document: {
-              id: document.id,
-              title: document.title,
-              slugId: document.slugId,
-              url: document.url,
-              icon: document.icon,
-              color: document.color,
-              content: document.content,
-              creator: {
-                id: document.creator.id,
-                name: document.creator.displayName,
-              },
-              updatedBy: document.updatedBy ? {
-                id: document.updatedBy.id,
-                name: document.updatedBy.displayName,
-              } : null,
-              project: document.project ? {
-                id: document.project.id,
-                name: document.project.name,
-                url: document.project.url,
-              } : null,
-              initiative: document.initiative ? {
-                id: document.initiative.id,
-                name: document.initiative.name,
-                url: document.initiative.url,
-              } : null,
-              createdAt: document.createdAt,
-              updatedAt: document.updatedAt,
-              comments: showComments ? document.comments.nodes.map((comment) => ({
-                id: comment.id,
-                body: comment.body,
-                createdAt: comment.createdAt,
-                user: {
-                  id: comment.user.id,
-                  name: comment.user.displayName,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "view",
+              document: {
+                id: document.id,
+                title: document.title,
+                slugId: document.slugId,
+                url: document.url,
+                icon: document.icon,
+                color: document.color,
+                content: document.content,
+                creator: {
+                  id: document.creator.id,
+                  name: document.creator.displayName,
                 },
-              })) : undefined,
+                updatedBy: document.updatedBy
+                  ? {
+                    id: document.updatedBy.id,
+                    name: document.updatedBy.displayName,
+                  }
+                  : null,
+                project: document.project
+                  ? {
+                    id: document.project.id,
+                    name: document.project.name,
+                    url: document.project.url,
+                  }
+                  : null,
+                initiative: document.initiative
+                  ? {
+                    id: document.initiative.id,
+                    name: document.initiative.name,
+                    url: document.initiative.url,
+                  }
+                  : null,
+                createdAt: document.createdAt,
+                updatedAt: document.updatedAt,
+                comments: showComments
+                  ? document.comments.nodes.map((comment) => ({
+                    id: comment.id,
+                    body: comment.body,
+                    createdAt: comment.createdAt,
+                    user: {
+                      id: comment.user.id,
+                      name: comment.user.displayName,
+                    },
+                  }))
+                  : undefined,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
         return
       }
@@ -108,11 +122,25 @@ export const viewCommand = new Command()
       outputLines.push("")
 
       // Metadata
-      outputLines.push(muted(`Created by ${document.creator.displayName} ${formatRelativeTime(document.createdAt)}`))
+      outputLines.push(
+        muted(
+          `Created by ${document.creator.displayName} ${
+            formatRelativeTime(document.createdAt)
+          }`,
+        ),
+      )
       if (document.updatedBy && document.updatedBy.id !== document.creator.id) {
-        outputLines.push(muted(`Updated by ${document.updatedBy.displayName} ${formatRelativeTime(document.updatedAt)}`))
+        outputLines.push(
+          muted(
+            `Updated by ${document.updatedBy.displayName} ${
+              formatRelativeTime(document.updatedAt)
+            }`,
+          ),
+        )
       } else {
-        outputLines.push(muted(`Updated ${formatRelativeTime(document.updatedAt)}`))
+        outputLines.push(
+          muted(`Updated ${formatRelativeTime(document.updatedAt)}`),
+        )
       }
 
       if (document.project) {
@@ -156,7 +184,13 @@ export const viewCommand = new Command()
         outputLines.push("")
 
         for (const comment of document.comments.nodes) {
-          outputLines.push(bold(`${comment.user.displayName} ${muted(formatRelativeTime(comment.createdAt))}`))
+          outputLines.push(
+            bold(
+              `${comment.user.displayName} ${
+                muted(formatRelativeTime(comment.createdAt))
+              }`,
+            ),
+          )
 
           if (Deno.stdout.isTerminal()) {
             let terminalWidth = 120
@@ -195,17 +229,23 @@ export const viewCommand = new Command()
 
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
-              ...(err.message.includes("not found") && {
-                resource: "document",
-                id: docId,
-              }),
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+                ...(err.message.includes("not found") && {
+                  resource: "document",
+                  id: docId,
+                }),
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(`Error: ${errorMsg}`)

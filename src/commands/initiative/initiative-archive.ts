@@ -31,10 +31,14 @@ export const archiveCommand = new Command()
       if (!confirmed) {
         if (useJson) {
           console.log(
-            JSON.stringify({
-              success: false,
-              error: { code: "CANCELLED", message: "Operation cancelled" },
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "CANCELLED", message: "Operation cancelled" },
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.log("Cancelled")
@@ -56,15 +60,19 @@ export const archiveCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "archive",
-            initiative: {
-              id: initiative.id,
-              name: initiative.name,
-              slugId: initiative.slugId,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "archive",
+              initiative: {
+                id: initiative.id,
+                name: initiative.name,
+                slugId: initiative.slugId,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Archived initiative ${initiative.slugId}`))
@@ -76,13 +84,19 @@ export const archiveCommand = new Command()
         : `Failed to archive initiative: ${err.message}`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

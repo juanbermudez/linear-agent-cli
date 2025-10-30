@@ -103,10 +103,14 @@ export const listCommand = new Command()
         const errorMsg = "Cannot use both --team and --all-teams flags"
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: { code: "INVALID_VALUE", message: errorMsg },
-            }, null, 2),
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "INVALID_VALUE", message: errorMsg },
+              },
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorMsg)
@@ -138,39 +142,43 @@ export const listCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            projects: projects.map((p) => ({
-              id: p.id,
-              name: p.name,
-              slugId: p.slugId,
-              description: p.description,
-              url: p.url,
-              status: {
-                id: p.status.id,
-                name: p.status.name,
-                type: p.status.type,
-                color: p.status.color,
-              },
-              lead: p.lead
-                ? {
-                  name: p.lead.name,
-                  displayName: p.lead.displayName,
-                  initials: p.lead.initials,
-                }
-                : null,
-              priority: p.priority,
-              health: p.health,
-              startDate: p.startDate,
-              targetDate: p.targetDate,
-              startedAt: p.startedAt,
-              completedAt: p.completedAt,
-              canceledAt: p.canceledAt,
-              createdAt: p.createdAt,
-              updatedAt: p.updatedAt,
-              teams: p.teams.nodes.map((t) => ({ key: t.key })),
-            })),
-            count: projects.length,
-          }, null, 2),
+          JSON.stringify(
+            {
+              projects: projects.map((p) => ({
+                id: p.id,
+                name: p.name,
+                slugId: p.slugId,
+                description: p.description,
+                url: p.url,
+                status: {
+                  id: p.status.id,
+                  name: p.status.name,
+                  type: p.status.type,
+                  color: p.status.color,
+                },
+                lead: p.lead
+                  ? {
+                    name: p.lead.name,
+                    displayName: p.lead.displayName,
+                    initials: p.lead.initials,
+                  }
+                  : null,
+                priority: p.priority,
+                health: p.health,
+                startDate: p.startDate,
+                targetDate: p.targetDate,
+                startedAt: p.startedAt,
+                completedAt: p.completedAt,
+                canceledAt: p.canceledAt,
+                createdAt: p.createdAt,
+                updatedAt: p.updatedAt,
+                teams: p.teams.nodes.map((t) => ({ key: t.key })),
+              })),
+              count: projects.length,
+            },
+            null,
+            2,
+          ),
         )
         return
       }
@@ -364,10 +372,14 @@ export const listCommand = new Command()
       const errorMsg = `Failed to fetch projects: ${error}`
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: { code: "API_ERROR", message: errorMsg },
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: false,
+              error: { code: "API_ERROR", message: errorMsg },
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorMsg)

@@ -18,7 +18,10 @@ export const listCommand = new Command()
   .description("List initiatives")
   .option("-s, --status <status:string>", "Filter by status ID or name")
   .option("-o, --owner <owner:string>", "Filter by owner ID or display name")
-  .option("-l, --limit <limit:number>", "Max number of initiatives (default: 50)")
+  .option(
+    "-l, --limit <limit:number>",
+    "Max number of initiatives (default: 50)",
+  )
   .option("-j, --json", "Output result as JSON")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: ListOptions) => {
@@ -51,10 +54,14 @@ export const listCommand = new Command()
           const errorMsg = `User '${options.owner}' not found`
           if (useJson) {
             console.error(
-              JSON.stringify({
-                success: false,
-                error: { code: "NOT_FOUND", message: errorMsg },
-              }, null, 2),
+              JSON.stringify(
+                {
+                  success: false,
+                  error: { code: "NOT_FOUND", message: errorMsg },
+                },
+                null,
+                2,
+              ),
             )
           } else {
             console.error(errorColor(`Error: ${errorMsg}`))
@@ -82,24 +89,32 @@ export const listCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            initiatives: initiatives.map((i) => ({
-              id: i.id,
-              name: i.name,
-              slugId: i.slugId,
-              url: i.url,
-              status: i.status
-                ? { id: i.status.id, name: i.status.name, type: i.status.type }
-                : null,
-              owner: i.owner
-                ? { id: i.owner.id, name: i.owner.displayName }
-                : null,
-              targetDate: i.targetDate,
-              createdAt: i.createdAt,
-              updatedAt: i.updatedAt,
-            })),
-            count: initiatives.length,
-          }, null, 2),
+          JSON.stringify(
+            {
+              initiatives: initiatives.map((i) => ({
+                id: i.id,
+                name: i.name,
+                slugId: i.slugId,
+                url: i.url,
+                status: i.status
+                  ? {
+                    id: i.status.id,
+                    name: i.status.name,
+                    type: i.status.type,
+                  }
+                  : null,
+                owner: i.owner
+                  ? { id: i.owner.id, name: i.owner.displayName }
+                  : null,
+                targetDate: i.targetDate,
+                createdAt: i.createdAt,
+                updatedAt: i.updatedAt,
+              })),
+              count: initiatives.length,
+            },
+            null,
+            2,
+          ),
         )
         return
       }
@@ -112,9 +127,7 @@ export const listCommand = new Command()
       const rows = initiatives.map((i) => {
         const status = i.status ? i.status.name : "-"
         const owner = i.owner ? i.owner.displayName : "-"
-        const targetDate = i.targetDate
-          ? formatRelativeTime(i.targetDate)
-          : "-"
+        const targetDate = i.targetDate ? formatRelativeTime(i.targetDate) : "-"
 
         return [
           i.slugId,
@@ -144,10 +157,14 @@ export const listCommand = new Command()
       spinner?.stop()
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: { code: "API_ERROR", message: err.message },
-          }, null, 2),
+          JSON.stringify(
+            {
+              success: false,
+              error: { code: "API_ERROR", message: err.message },
+            },
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${err.message}`))

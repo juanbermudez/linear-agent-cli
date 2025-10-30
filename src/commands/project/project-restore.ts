@@ -1,6 +1,9 @@
 import { Command } from "@cliffy/command"
 import { unarchiveProject } from "../../utils/linear.ts"
-import { error as errorColor, success as successColor } from "../../utils/styling.ts"
+import {
+  error as errorColor,
+  success as successColor,
+} from "../../utils/styling.ts"
 
 interface RestoreOptions {
   json?: boolean
@@ -19,7 +22,9 @@ export const restoreCommand = new Command()
     // Show spinner only in non-JSON mode
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
-    const spinner = showSpinner ? new Spinner({ message: `Restoring project ${projectId}...` }) : null
+    const spinner = showSpinner
+      ? new Spinner({ message: `Restoring project ${projectId}...` })
+      : null
 
     spinner?.start()
 
@@ -30,15 +35,19 @@ export const restoreCommand = new Command()
 
       if (useJson) {
         console.log(
-          JSON.stringify({
-            success: true,
-            operation: "restore",
-            project: {
-              id: project.id,
-              name: project.name,
-              url: project.url,
+          JSON.stringify(
+            {
+              success: true,
+              operation: "restore",
+              project: {
+                id: project.id,
+                name: project.name,
+                url: project.url,
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.log(successColor(`✓ Restored project: ${project.name}`))
@@ -53,17 +62,23 @@ export const restoreCommand = new Command()
 
       if (useJson) {
         console.error(
-          JSON.stringify({
-            success: false,
-            error: {
-              code: err.message.includes("not found") ? "NOT_FOUND" : "API_ERROR",
-              message: errorMsg,
-              ...(err.message.includes("not found") && {
-                resource: "project",
-                id: projectId,
-              }),
+          JSON.stringify(
+            {
+              success: false,
+              error: {
+                code: err.message.includes("not found")
+                  ? "NOT_FOUND"
+                  : "API_ERROR",
+                message: errorMsg,
+                ...(err.message.includes("not found") && {
+                  resource: "project",
+                  id: projectId,
+                }),
+              },
             },
-          }, null, 2),
+            null,
+            2,
+          ),
         )
       } else {
         console.error(errorColor(`Error: ${errorMsg}`))

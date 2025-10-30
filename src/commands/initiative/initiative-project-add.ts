@@ -36,16 +36,20 @@ export const projectAddCommand = new Command()
 
         if (useJson) {
           console.log(
-            JSON.stringify({
-              success: true,
-              operation: "add-project",
-              initiative: {
-                id: initiative.id,
-                name: initiative.name,
-                slugId: initiative.slugId,
+            JSON.stringify(
+              {
+                success: true,
+                operation: "add-project",
+                initiative: {
+                  id: initiative.id,
+                  name: initiative.name,
+                  slugId: initiative.slugId,
+                },
+                projectId,
               },
-              projectId,
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.log(
@@ -61,15 +65,19 @@ export const projectAddCommand = new Command()
           : `Failed to add project: ${err.message}`
         if (useJson) {
           console.error(
-            JSON.stringify({
-              success: false,
-              error: {
-                code: err.message.includes("not found")
-                  ? "NOT_FOUND"
-                  : "API_ERROR",
-                message: errorMsg,
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: err.message.includes("not found")
+                    ? "NOT_FOUND"
+                    : "API_ERROR",
+                  message: errorMsg,
+                },
               },
-            }, null, 2),
+              null,
+              2,
+            ),
           )
         } else {
           console.error(errorColor(`Error: ${errorMsg}`))
