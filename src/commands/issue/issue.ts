@@ -14,19 +14,24 @@ import { updateCommand } from "./issue-update.ts"
 import { urlCommand } from "./issue-url.ts"
 import { viewCommand } from "./issue-view.ts"
 
-// deno-lint-ignore no-explicit-any
-export const issueCommand = new Command()
+const baseCommand = new Command()
   .description("Manage Linear issues")
   .action(function () {
     this.showHelp()
   })
+
+// deno-lint-ignore no-explicit-any
+const commandWithSubcommands = baseCommand
   .command("id", idCommand)
   .command("list", listCommand)
   .command("title", titleCommand)
   .command("start", startCommand)
   .command("view", viewCommand)
   .command("url", urlCommand)
-  .command("describe", describeCommand)
+  .command("describe", describeCommand) as any
+
+// deno-lint-ignore no-explicit-any
+export const issueCommand = commandWithSubcommands
   .command("pull-request", pullRequestCommand)
   .command("delete", deleteCommand)
   .command("create", createCommand)
