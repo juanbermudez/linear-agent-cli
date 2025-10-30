@@ -22,7 +22,7 @@ await snapshotTest({
   name: "Document View Command - Markdown Rendering",
   meta: import.meta,
   colors: false,
-  args: ["doc-123", "--no-color"],
+  args: ["doc-123", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -68,7 +68,7 @@ await snapshotTest({
   name: "Document View Command - JSON Output",
   meta: import.meta,
   colors: false,
-  args: ["doc-456", "--json", "--no-color"],
+  args: ["doc-456", "--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -110,7 +110,7 @@ await snapshotTest({
   name: "Document View Command - No Project Linked",
   meta: import.meta,
   colors: false,
-  args: ["doc-solo", "--no-color"],
+  args: ["doc-solo", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -152,7 +152,7 @@ await snapshotTest({
   name: "Document View Command - Empty Content",
   meta: import.meta,
   colors: false,
-  args: ["doc-empty", "--no-color"],
+  args: ["doc-empty", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -197,7 +197,7 @@ await snapshotTest({
   name: "Document View Command - Not Found",
   meta: import.meta,
   colors: false,
-  args: ["doc-nonexistent", "--json", "--no-color"],
+  args: ["doc-nonexistent", "--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -227,7 +227,7 @@ await snapshotTest({
   name: "Document View Command - By Slug ID",
   meta: import.meta,
   colors: false,
-  args: ["api-design-document", "--no-color"],
+  args: ["api-design-document", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([

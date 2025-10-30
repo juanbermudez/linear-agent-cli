@@ -15,7 +15,7 @@ Options:
   -w, --web                - Open in web browser                    
   -a, --app                - Open in Linear.app                     
   --no-comments            - Exclude comments from output           
-  --no-color               - Disable colored output                 
+  --plain                  - Disable colored output                 
   --no-pager               - Disable automatic paging               
   -j, --json               - Output result as JSON (for AI agents)  
   --format       <format>  - Output format: text|json               

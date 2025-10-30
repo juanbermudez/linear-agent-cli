@@ -366,7 +366,7 @@ export const createCommand = new Command()
   .option("-i, --icon <icon:string>", "Icon emoji (e.g., 📄, 📋)")
   .option("--color <color:string>", "Icon color (hex format: #RRGGBB)")
   .option("--no-interactive", "Disable interactive mode")
-  .option("--no-color", "Disable colored output")
+  .option("--plain", "Disable colored output")
   .option("-j, --json", "Output result as JSON (for AI agents)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {

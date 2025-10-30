@@ -26,7 +26,7 @@ Options:
   --with-doc                        - Create a design document with the project          
   --doc-title        <title>        - Document title (used with --with-doc)              
   --no-interactive                  - Disable interactive mode                           
-  --no-color                        - Disable colored output                             
+  --plain                           - Disable colored output                             
   -j, --json                        - Output result as JSON (for AI agents)              
   --format           <format>       - Output format: text|json                           
 

@@ -47,7 +47,7 @@ export const createCommand = new Command()
   )
   .option("--is-group", "Mark this label as a group (container for sub-labels)")
   .option("--no-interactive", "Disable interactive mode")
-  .option("--no-color", "Disable colored output")
+  .option("--plain", "Disable colored output")
   .option("-j, --json", "Output result as JSON")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {

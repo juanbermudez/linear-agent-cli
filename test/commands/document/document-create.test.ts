@@ -30,7 +30,7 @@ await snapshotTest({
     "--project",
     "project-123",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -79,7 +79,7 @@ await snapshotTest({
     "--title",
     "Quick Note",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -124,7 +124,7 @@ await snapshotTest({
     "Implementation Notes",
     "--current-project",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -194,7 +194,7 @@ await snapshotTest({
     "Test Doc",
     "--current-project",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -229,7 +229,7 @@ await snapshotTest({
     "--project",
     "project-123",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -253,7 +253,7 @@ await snapshotTest({
   args: [
     "--title",
     "Design Document",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {

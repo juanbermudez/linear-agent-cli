@@ -32,7 +32,7 @@ await snapshotTest({
     "--color",
     "#FF0000",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -92,7 +92,7 @@ await snapshotTest({
     "--name",
     "feature",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -137,7 +137,7 @@ await snapshotTest({
     "--color",
     "FF6B00",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -180,7 +180,7 @@ await snapshotTest({
     "--color",
     "#FF0000",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -207,7 +207,7 @@ await snapshotTest({
     "--team",
     "NONEXISTENT",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -245,7 +245,7 @@ await snapshotTest({
     "enhancement",
     "--color",
     "#0000FF",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {

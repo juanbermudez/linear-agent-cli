@@ -32,7 +32,7 @@ await snapshotTest({
     "--status",
     "planned",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -122,7 +122,7 @@ await snapshotTest({
     "--doc-title",
     "Mobile Redesign Design Doc",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -219,7 +219,7 @@ await snapshotTest({
     "ENG",
     "--with-doc",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -306,7 +306,7 @@ await snapshotTest({
     "--name",
     "Quick Project",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -357,7 +357,7 @@ await snapshotTest({
     "ENG",
     "--with-doc",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -430,7 +430,7 @@ await snapshotTest({
     "--team",
     "ENG",
     "--json",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {
@@ -456,7 +456,7 @@ await snapshotTest({
     "Infrastructure Project",
     "--team",
     "OPS",
-    "--no-color",
+    "--plain",
   ],
   denoArgs: commonDenoArgs,
   async fn() {

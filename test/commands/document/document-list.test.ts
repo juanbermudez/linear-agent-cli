@@ -22,7 +22,7 @@ await snapshotTest({
   name: "Document List Command - All Documents",
   meta: import.meta,
   colors: false,
-  args: ["--no-color"],
+  args: ["--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -98,7 +98,7 @@ await snapshotTest({
   name: "Document List Command - JSON Output",
   meta: import.meta,
   colors: false,
-  args: ["--json", "--no-color"],
+  args: ["--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -144,7 +144,7 @@ await snapshotTest({
   name: "Document List Command - Current Project (VCS)",
   meta: import.meta,
   colors: false,
-  args: ["--current-project", "--json", "--no-color"],
+  args: ["--current-project", "--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -229,7 +229,7 @@ await snapshotTest({
   name: "Document List Command - Filter By Project",
   meta: import.meta,
   colors: false,
-  args: ["--project", "project-123", "--json", "--no-color"],
+  args: ["--project", "project-123", "--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -276,7 +276,7 @@ await snapshotTest({
   name: "Document List Command - No Documents Found",
   meta: import.meta,
   colors: false,
-  args: ["--no-color"],
+  args: ["--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -305,7 +305,7 @@ await snapshotTest({
   name: "Document List Command - VCS Context Not Found",
   meta: import.meta,
   colors: false,
-  args: ["--current-project", "--json", "--no-color"],
+  args: ["--current-project", "--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([

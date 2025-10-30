@@ -19,7 +19,7 @@ Options:
   -i, --icon         <icon>     - Icon emoji (e.g., 📄, 📋)                           
   --color            <color>    - Icon color (hex format: #RRGGBB)                    
   --no-interactive              - Disable interactive mode                            
-  --no-color                    - Disable colored output                              
+  --plain                       - Disable colored output                              
   -j, --json                    - Output result as JSON (for AI agents)               
   --format           <format>   - Output format: text|json                            
 

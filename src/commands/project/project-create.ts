@@ -705,7 +705,7 @@ export const createCommand = new Command()
   .option("--with-doc", "Create a design document with the project")
   .option("--doc-title <title:string>", "Document title (used with --with-doc)")
   .option("--no-interactive", "Disable interactive mode")
-  .option("--no-color", "Disable colored output")
+  .option("--plain", "Disable colored output")
   .option("-j, --json", "Output result as JSON (for AI agents)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {

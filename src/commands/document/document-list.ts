@@ -45,7 +45,7 @@ export const listCommand = new Command()
   .option("-a, --app", "Open documents view in Linear.app")
   .option("-j, --json", "Output result as JSON (for AI agents)")
   .option("--format <format:string>", "Output format: text|json")
-  .option("--no-color", "Disable colored output")
+  .option("--plain", "Disable colored output")
   .option("--no-pager", "Disable automatic paging")
   .action(async (options: ListOptions) => {
     const useJson = options.json || options.format === "json"

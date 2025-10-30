@@ -22,7 +22,7 @@ await snapshotTest({
   name: "Label List Command - All Labels",
   meta: import.meta,
   colors: false,
-  args: ["--no-color"],
+  args: ["--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -87,7 +87,7 @@ await snapshotTest({
   name: "Label List Command - JSON Output",
   meta: import.meta,
   colors: false,
-  args: ["--json", "--no-color"],
+  args: ["--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -130,7 +130,7 @@ await snapshotTest({
   name: "Label List Command - Filter By Team",
   meta: import.meta,
   colors: false,
-  args: ["--team", "ENG", "--json", "--no-color"],
+  args: ["--team", "ENG", "--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -200,7 +200,7 @@ await snapshotTest({
   name: "Label List Command - No Labels Found",
   meta: import.meta,
   colors: false,
-  args: ["--no-color"],
+  args: ["--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -229,7 +229,7 @@ await snapshotTest({
   name: "Label List Command - Team Not Found",
   meta: import.meta,
   colors: false,
-  args: ["--team", "NONEXISTENT", "--json", "--no-color"],
+  args: ["--team", "NONEXISTENT", "--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
