@@ -20,7 +20,6 @@ const baseCommand = new Command()
     this.showHelp()
   })
 
-// deno-lint-ignore no-explicit-any
 const commandWithSubcommands = baseCommand
   .command("id", idCommand)
   .command("list", listCommand)
@@ -28,9 +27,9 @@ const commandWithSubcommands = baseCommand
   .command("start", startCommand)
   .command("view", viewCommand)
   .command("url", urlCommand)
+  // deno-lint-ignore no-explicit-any
   .command("describe", describeCommand) as any
 
-// deno-lint-ignore no-explicit-any
 export const issueCommand = commandWithSubcommands
   .command("pull-request", pullRequestCommand)
   .command("delete", deleteCommand)
@@ -38,4 +37,5 @@ export const issueCommand = commandWithSubcommands
   .command("update", updateCommand)
   .command("relate", relateCommand)
   .command("unrelate", unrelateCommand)
+  // deno-lint-ignore no-explicit-any
   .command("relations", relationsCommand) as any
