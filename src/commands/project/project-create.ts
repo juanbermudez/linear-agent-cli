@@ -106,7 +106,7 @@ async function interactiveCreate(options: CreateOptions) {
   if (leadInput.trim()) {
     try {
       leadId = await lookupUserId(leadInput.trim())
-    } catch (err) {
+    } catch (_err) {
       console.error(
         errorColor(
           `Warning: User '${leadInput}' not found, proceeding without lead`,
@@ -206,7 +206,7 @@ async function interactiveCreate(options: CreateOptions) {
       if (teamId) {
         teamIds.push(teamId)
       }
-    } catch (err) {
+    } catch (_err) {
       console.error(errorColor(`Error: Team '${teamKey}' not found`))
       Deno.exit(1)
     }
@@ -308,7 +308,7 @@ async function flagBasedCreate(options: CreateOptions) {
       if (teamId) {
         teamIds.push(teamId)
       }
-    } catch (err) {
+    } catch (_err) {
       const errorMsg = `Team '${teamKey}' not found`
       if (useJson) {
         console.error(
@@ -462,7 +462,7 @@ async function flagBasedCreate(options: CreateOptions) {
   if (options.lead) {
     try {
       leadId = await lookupUserId(options.lead)
-    } catch (err) {
+    } catch (_err) {
       const errorMsg = `User '${options.lead}' not found`
       if (useJson) {
         console.error(

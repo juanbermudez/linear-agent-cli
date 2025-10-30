@@ -106,7 +106,7 @@ export const editCommand = new Command()
     if (options.project) {
       try {
         projectId = await getProjectIdByName(options.project)
-      } catch (err) {
+      } catch (_err) {
         const errorMsg = `Project '${options.project}' not found`
         if (useJson) {
           console.error(

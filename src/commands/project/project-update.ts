@@ -179,7 +179,7 @@ export const updateCommand = new Command()
           if (teamId) {
             teamIds.push(teamId)
           }
-        } catch (err) {
+        } catch (_err) {
           const errorMsg = `Team '${teamKey}' not found`
           if (useJson) {
             console.error(
@@ -253,7 +253,7 @@ export const updateCommand = new Command()
     if (options.lead) {
       try {
         leadId = await lookupUserId(options.lead)
-      } catch (err) {
+      } catch (_err) {
         const errorMsg = `User '${options.lead}' not found`
         if (useJson) {
           console.error(
