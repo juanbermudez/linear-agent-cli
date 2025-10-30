@@ -3,7 +3,7 @@ import { expect } from "@std/expect"
 
 describe("Config System", () => {
   describe("Environment Variable Precedence", () => {
-    it("should prioritize environment variables over config file", () => {
+    it("should prioritize environment variables over config file", async () => {
       // Set environment variable
       Deno.env.set("LINEAR_TEAM_ID", "ENV_TEAM")
 
@@ -17,7 +17,7 @@ describe("Config System", () => {
       Deno.env.delete("LINEAR_TEAM_ID")
     })
 
-    it("should use CLI value over environment variable", () => {
+    it("should use CLI value over environment variable", async () => {
       // Set environment variable
       Deno.env.set("LINEAR_TEAM_ID", "ENV_TEAM")
 
@@ -31,7 +31,7 @@ describe("Config System", () => {
       Deno.env.delete("LINEAR_TEAM_ID")
     })
 
-    it("should handle boolean environment variables", () => {
+    it("should handle boolean environment variables", async () => {
       // Test "true" string
       Deno.env.set("LINEAR_AUTO_BRANCH", "true")
       const { getOption: getOption1 } = await import("../../src/config.ts")
@@ -60,7 +60,7 @@ describe("Config System", () => {
   })
 
   describe("Default Values", () => {
-    it("should use default value when not set elsewhere", () => {
+    it("should use default value when not set elsewhere", async () => {
       // Ensure no env var is set
       Deno.env.delete("LINEAR_VCS")
       Deno.env.delete("LINEAR_AUTO_BRANCH")
@@ -81,7 +81,7 @@ describe("Config System", () => {
   })
 
   describe("Config Path Mapping", () => {
-    it("should map auto_branch to vcs.autoBranch path", () => {
+    it("should map auto_branch to vcs.autoBranch path", async () => {
       // This test verifies the config path mapping exists
       const { OPTION_CONFIG_PATHS } = await import("../../src/config.ts")
 
@@ -94,7 +94,7 @@ describe("Config System", () => {
       expect(typeof autoBranch).toBe("boolean")
     })
 
-    it("should map cache_enabled to cache.enabled path", () => {
+    it("should map cache_enabled to cache.enabled path", async () => {
       const { getOption } = await import("../../src/config.ts")
 
       const cacheEnabled = getOption("cache_enabled")
@@ -103,7 +103,7 @@ describe("Config System", () => {
   })
 
   describe("Environment Variable Formats", () => {
-    it("should handle LINEAR_ prefix for all options", () => {
+    it("should handle LINEAR_ prefix for all options", async () => {
       // Test various options with LINEAR_ prefix
       Deno.env.set("LINEAR_API_KEY", "test-key")
       Deno.env.set("LINEAR_WORKSPACE", "test-workspace")
@@ -121,7 +121,7 @@ describe("Config System", () => {
       Deno.env.delete("LINEAR_ISSUE_SORT")
     })
 
-    it("should handle uppercase conversion of option names", () => {
+    it("should handle uppercase conversion of option names", async () => {
       // team_id -> LINEAR_TEAM_ID
       Deno.env.set("LINEAR_TEAM_ID", "MY_TEAM")
 
@@ -135,7 +135,7 @@ describe("Config System", () => {
   })
 
   describe("Undefined Values", () => {
-    it("should return undefined for unset options without defaults", () => {
+    it("should return undefined for unset options without defaults", async () => {
       // Ensure no env vars
       Deno.env.delete("LINEAR_API_KEY")
 
@@ -145,7 +145,7 @@ describe("Config System", () => {
       expect(apiKey).toBeUndefined()
     })
 
-    it("should not return undefined for options with defaults", () => {
+    it("should not return undefined for options with defaults", async () => {
       Deno.env.delete("LINEAR_VCS")
 
       const { getOption } = await import("../../src/config.ts")
@@ -157,7 +157,7 @@ describe("Config System", () => {
   })
 
   describe("Type Safety", () => {
-    it("should handle string option types", () => {
+    it("should handle string option types", async () => {
       Deno.env.set("LINEAR_TEAM_ID", "ENG")
 
       const { getOption } = await import("../../src/config.ts")
@@ -168,7 +168,7 @@ describe("Config System", () => {
       Deno.env.delete("LINEAR_TEAM_ID")
     })
 
-    it("should handle boolean option types", () => {
+    it("should handle boolean option types", async () => {
       Deno.env.set("LINEAR_AUTO_BRANCH", "true")
 
       const { getOption } = await import("../../src/config.ts")

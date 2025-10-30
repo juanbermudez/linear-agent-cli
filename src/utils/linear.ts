@@ -1901,7 +1901,15 @@ export async function unarchiveInitiative(id: string) {
         entity {
           id
           name
+          slugId
           url
+          status
+          owner {
+            id
+            name
+            displayName
+          }
+          targetDate
         }
       }
     }
