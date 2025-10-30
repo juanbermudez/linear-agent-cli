@@ -1,7 +1,7 @@
 import { Command } from "@cliffy/command"
 import { Table } from "@cliffy/table"
 import { listInitiatives, listUsers } from "../../utils/linear.ts"
-import { formatRelativeTime, truncate, unicodeWidth } from "../../utils/display.ts"
+import { formatRelativeTime, truncate } from "../../utils/display.ts"
 import { muted } from "../../utils/styling.ts"
 import { error as errorColor } from "../../utils/styling.ts"
 

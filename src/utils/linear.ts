@@ -12,7 +12,7 @@ import { getGraphQLClient } from "./graphql.ts"
 import { getCurrentIssueFromVcs } from "./vcs.ts"
 import {
   getTeamCacheKey,
-  getWorkspaceCacheKey,
+  
   readCache,
   writeCache,
 } from "./cache.ts"
@@ -188,7 +188,7 @@ export async function fetchIssueDetails(
   issueId: string,
   showSpinner = false,
   includeComments = false,
-): Promise<any> {
+): Promise<unknown> {
   const { Spinner } = await import("@std/cli/unstable-spinner")
   const spinner = showSpinner ? new Spinner() : null
   spinner?.start()
@@ -1662,7 +1662,7 @@ export async function listProjectUpdates(projectId: string, limit = 20) {
 // Initiative Commands
 // ============================================================================
 
-export async function listInitiativeStatuses() {
+export function listInitiativeStatuses() {
   // Initiative statuses are now simple enums: Planned, Active, Completed
   // Return a static list matching the schema enum
   return [

@@ -18,10 +18,9 @@ Linear supports full GitHub-Flavored Markdown (GFM) in issue descriptions, proje
 #### Basic Formatting
 
 ```markdown
-**Bold text** and *italic text* and `inline code`
+**Bold text** and _italic text_ and `inline code`
 
-> Blockquotes work
-> Across multiple lines
+> Blockquotes work Across multiple lines
 
 ---
 
@@ -43,11 +42,11 @@ Horizontal rules for visual separation
 #### Tables
 
 ```markdown
-| Feature | Status | Priority |
-|---------|--------|----------|
-| Auth | Done | High |
-| API | In Progress | Medium |
-| UI | Not Started | Low |
+| Feature | Status      | Priority |
+| ------- | ----------- | -------- |
+| Auth    | Done        | High     |
+| API     | In Progress | Medium   |
+| UI      | Not Started | Low      |
 ```
 
 **Result**: Tables render with proper alignment and formatting in Linear's UI.
@@ -57,7 +56,7 @@ Horizontal rules for visual separation
 ````markdown
 ```typescript
 function example(): string {
-  return 'Code blocks work with syntax highlighting';
+  return "Code blocks work with syntax highlighting"
 }
 ```
 ````
@@ -163,6 +162,7 @@ CC: @display-name for visibility
 ```
 
 **Supported Formats**:
+
 - `@username` (Linear username)
 - `@display-name` (User's display name)
 
@@ -183,8 +183,7 @@ Part of project: Mobile App Redesign
 Paste full Linear URLs for explicit linking:
 
 ```markdown
-[Related Issue](https://linear.app/workspace/issue/DIV-123/title)
-[Design Doc](https://linear.app/workspace/document/doc-slug-id)
+[Related Issue](https://linear.app/workspace/issue/DIV-123/title) [Design Doc](https://linear.app/workspace/document/doc-slug-id)
 ```
 
 **Result**: Standard markdown links work as expected.
@@ -197,6 +196,7 @@ Paste full Linear URLs for explicit linking:
 **Assignee**: @jfbg84
 
 **Related Issues**:
+
 - Blocks DIV-100
 - Related to DIV-101, DIV-102
 
@@ -217,12 +217,12 @@ Based on testing with the Linear GraphQL API:
 
 #### Test Results
 
-| Size | Status | Notes |
-|------|--------|-------|
-| 10KB | ✅ Success | Optimal size |
-| 50KB | ✅ Success | Still manageable |
-| 100KB | ✅ Success | Large but works |
-| 200KB | ✅ Success | Maximum tested |
+| Size  | Status     | Notes            |
+| ----- | ---------- | ---------------- |
+| 10KB  | ✅ Success | Optimal size     |
+| 50KB  | ✅ Success | Still manageable |
+| 100KB | ✅ Success | Large but works  |
+| 200KB | ✅ Success | Maximum tested   |
 
 ### Document Content
 
@@ -233,13 +233,13 @@ Based on testing with the Linear GraphQL API:
 
 #### Test Results
 
-| Size | Status | Notes |
-|------|--------|-------|
-| 10KB | ✅ Success | Optimal size |
-| 50KB | ✅ Success | Good for most docs |
-| 100KB | ✅ Success | Large document |
+| Size  | Status     | Notes                  |
+| ----- | ---------- | ---------------------- |
+| 10KB  | ✅ Success | Optimal size           |
+| 50KB  | ✅ Success | Good for most docs     |
+| 100KB | ✅ Success | Large document         |
 | 200KB | ✅ Success | Maximum tested working |
-| 500KB | ❌ Failed | Exceeds API limits |
+| 500KB | ❌ Failed  | Exceeds API limits     |
 
 ### Project Descriptions
 
@@ -268,6 +268,7 @@ For AI agents creating content:
 2. **Use Mermaid for Architecture**: Diagrams are worth 1000 words
    ````markdown
    ## Architecture
+
    ```mermaid
    graph TB
        Client --> API
@@ -277,15 +278,14 @@ For AI agents creating content:
 
 3. **Cross-Reference Liberally**: Link related issues and docs
    ```markdown
-   Implements DIV-100
-   See design in DIV-101
+   Implements DIV-100 See design in DIV-101
    ```
 
 4. **Use Tables for Structure**: Better than plain text lists
    ```markdown
-   | Endpoint | Status |
-   |----------|--------|
-   | /api/users | Ready |
+   | Endpoint   | Status |
+   | ---------- | ------ |
+   | /api/users | Ready  |
    ```
 
 5. **Add Checklists for Tasks**: Interactive and trackable
@@ -299,29 +299,35 @@ For AI agents creating content:
 
 #### Issue Descriptions
 
-```markdown
+````markdown
 ## Summary
+
 Brief overview in 1-2 sentences
 
 ## Details
+
 More comprehensive information
 
 ## Technical Approach
+
 ```mermaid
 graph LR
     A --> B
     B --> C
 ```
+````
 
 ## Tasks
+
 - [ ] Task 1
 - [ ] Task 2
 
 ## Related
+
 - Depends on: DIV-100
 - Blocked by: DIV-101
-```
 
+````
 #### Document Structure
 
 ```markdown
@@ -334,26 +340,29 @@ What this document covers
 ```mermaid
 graph TB
     Component1 --> Component2
-```
+````
 
 ## Implementation Details
 
 ### Module A
+
 Details...
 
 ### Module B
+
 Details...
 
 ## API Reference
 
 | Endpoint | Method | Description |
-|----------|--------|-------------|
-| /api/foo | GET | ... |
+| -------- | ------ | ----------- |
+| /api/foo | GET    | ...         |
 
 ## Next Steps
-- [ ] Checklist of todos
-```
 
+- [ ] Checklist of todos
+
+````
 ### Performance Tips
 
 1. **Limit Mermaid Complexity**: Keep diagrams under 50 nodes
@@ -375,19 +384,19 @@ Feature description here
 graph LR
     UI --> API
     API --> DB
-```
+````
 
 ## Tasks
+
 - [ ] Design UI
-- [ ] Implement API
-EOF
+- [ ] Implement API EOF
 
-linear issue create \
-  --team ENG \
-  --title "Rich Feature" \
-  --description "$(cat issue.md)"
-```
+linear issue create\
+--team ENG\
+--title "Rich Feature"\
+--description "$(cat issue.md)"
 
+````
 ### Create Document with Mermaid
 
 ```bash
@@ -395,7 +404,7 @@ linear document create \
   --project "API Redesign" \
   --title "Technical Spec" \
   --content "$(cat technical-spec.md)"
-```
+````
 
 ### Cross-Reference Pattern
 

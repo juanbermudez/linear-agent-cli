@@ -3,7 +3,7 @@ import { Table } from "@cliffy/table"
 import { listLabelsForTeam, getTeamIdByKey } from "../../utils/linear.ts"
 import { muted } from "../../utils/styling.ts"
 import { error as errorColor } from "../../utils/styling.ts"
-import { bgRgb24, rgb24 } from "@std/fmt/colors"
+import { bgRgb24 } from "@std/fmt/colors"
 
 interface ListOptions {
   team?: string

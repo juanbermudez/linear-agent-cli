@@ -5,6 +5,7 @@ This document provides comprehensive guidance for Claude and Claude Code agents 
 ## 🎯 Overview
 
 The Linear CLI is a comprehensive command-line tool designed specifically for AI agents. It provides:
+
 - **JSON output** for all commands (use `--json` flag)
 - **Complete CRUD operations** for all Linear resources
 - **Rich metadata support** including relationships, milestones, cycles, and label groups
@@ -30,7 +31,9 @@ linear issue list
 Parse JSON responses to verify success:
 
 ```typescript
-const result = JSON.parse(await exec('linear issue create --title "Task" --json'))
+const result = JSON.parse(
+  await exec('linear issue create --title "Task" --json'),
+)
 if (!result.success) {
   console.error(`Error: ${result.error.message}`)
   // Handle error
@@ -70,6 +73,7 @@ linear issue update --state "In Progress"  # Updates ENG-123
 #### Creating Issues
 
 **All Available Options:**
+
 ```bash
 linear issue create \
   --title "Task title" \
@@ -93,6 +97,7 @@ linear issue create \
 ```
 
 **Common Patterns:**
+
 ```bash
 # Quick bug report
 linear issue create \
@@ -192,6 +197,7 @@ linear project create \
 ```
 
 **Key Points:**
+
 - `--description`: Short summary (max 255 chars)
 - `--content`: Full markdown content (large body)
 - `--lead`: Use `@me` for yourself or username/email
@@ -269,6 +275,7 @@ linear label create \
 **Important**: Parent labels MUST be created with `--is-group` before creating children.
 
 **Usage on Issues:**
+
 ```bash
 # Labels display as "parent/child"
 linear issue create \
@@ -361,53 +368,54 @@ Linear supports rich markdown with cross-references:
 # Technical Specification
 
 ## Overview
+
 This feature implements OAuth 2.0 authentication.
 
 ## Dependencies
+
 - Depends on: [ENG-100](https://linear.app/workspace/issue/ENG-100)
 - Part of: [Auth Project](https://linear.app/workspace/project/auth-abc)
 
 ## Implementation
-\`\`\`typescript
-// Code example
-\`\`\`
+
+\`\`\`typescript // Code example \`\`\`
 
 ## Checklist
+
 - [ ] Task 1
 - [ ] Task 2
 
 ## Diagrams
-\`\`\`mermaid
-graph TB
-    A --> B
-\`\`\`
+
+\`\`\`mermaid graph TB A --> B \`\`\`
 ```
 
 ### Cross-Reference Format
 
 **All cross-references require markdown links with full URLs:**
 
-| Resource | Format | Example |
-|----------|--------|---------|
-| Issues | `[ID](url)` | `[ENG-123](https://linear.app/workspace/issue/ENG-123)` |
-| Projects | `[Name](url)` | `[Project](https://linear.app/workspace/project/slug)` |
-| Documents | `[Title](url)` | `[Spec](https://linear.app/workspace/document/id)` |
-| Users | `@username` | `@john` or `@John Doe` |
+| Resource  | Format         | Example                                                 |
+| --------- | -------------- | ------------------------------------------------------- |
+| Issues    | `[ID](url)`    | `[ENG-123](https://linear.app/workspace/issue/ENG-123)` |
+| Projects  | `[Name](url)`  | `[Project](https://linear.app/workspace/project/slug)`  |
+| Documents | `[Title](url)` | `[Spec](https://linear.app/workspace/document/id)`      |
+| Users     | `@username`    | `@john` or `@John Doe`                                  |
 
 **What doesn't work:**
+
 - ❌ Plain identifiers: `ENG-123`
 - ❌ Hash symbol: `#ENG-123`
 - ❌ At symbol for issues: `@ENG-123`
 
 ### Content Fields
 
-| Resource | Field | Limit |
-|----------|-------|-------|
-| Project | description | 255 chars |
-| Project | content | ~200KB |
-| Issue | description | ~200KB |
-| Initiative | content | ~200KB |
-| Document | content | ~200KB |
+| Resource   | Field       | Limit     |
+| ---------- | ----------- | --------- |
+| Project    | description | 255 chars |
+| Project    | content     | ~200KB    |
+| Issue      | description | ~200KB    |
+| Initiative | content     | ~200KB    |
+| Document   | content     | ~200KB    |
 
 ## 🔄 Common Workflows
 
@@ -532,18 +540,18 @@ linear issue relations $PARENT --json
 // Parse and check for errors
 try {
   const result = JSON.parse(
-    await exec('linear issue create --title "Task" --json')
+    await exec('linear issue create --title "Task" --json'),
   )
 
   if (!result.success) {
     switch (result.error.code) {
-      case 'MISSING_REQUIRED_FIELD':
+      case "MISSING_REQUIRED_FIELD":
         // Handle validation error
         break
-      case 'NOT_FOUND':
+      case "NOT_FOUND":
         // Resource not found
         break
-      case 'API_ERROR':
+      case "API_ERROR":
         // Linear API error
         break
       default:

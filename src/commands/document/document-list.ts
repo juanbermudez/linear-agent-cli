@@ -1,5 +1,4 @@
 import { Command } from "@cliffy/command"
-import { unicodeWidth } from "@std/cli"
 import {
   getTimeAgo,
   padDisplay,
@@ -87,7 +86,7 @@ export const listCommand = new Command()
     } else if (options.project) {
       try {
         projectId = await getProjectIdByName(options.project)
-      } catch (err) {
+      } catch (_err) {
         if (useJson) {
           console.error(
             JSON.stringify({
@@ -112,7 +111,7 @@ export const listCommand = new Command()
     if (options.creator) {
       try {
         creatorId = await lookupUserId(options.creator)
-      } catch (err) {
+      } catch (_err) {
         if (useJson) {
           console.error(
             JSON.stringify({

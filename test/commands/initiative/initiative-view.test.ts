@@ -36,7 +36,8 @@ await snapshotTest({
               name: "Q1 2025 Platform Goals",
               slugId: "q1-2025-platform-goals",
               url: "https://linear.app/test/initiative/q1-2025-platform-goals",
-              description: "Focus on platform stability and performance improvements",
+              description:
+                "Focus on platform stability and performance improvements",
               status: {
                 id: "status-active",
                 name: "Active",

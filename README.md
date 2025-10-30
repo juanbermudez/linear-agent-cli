@@ -51,14 +51,14 @@ This CLI is **specifically designed** to be used by AI coding agents:
 
 ### Advantages Over Linear MCP
 
-| Feature | This CLI | Linear MCP |
-|---------|----------|------------|
-| Full CRUD operations | ✅ | Partial |
-| Cross-entity ops (project + doc) | ✅ | ❌ |
-| VCS integration (git/jj) | ✅ | ❌ |
-| JSON output everywhere | ✅ | ❌ |
-| Offline-first config | ✅ | ❌ |
-| Composable with shell tools | ✅ | Limited |
+| Feature                          | This CLI | Linear MCP |
+| -------------------------------- | -------- | ---------- |
+| Full CRUD operations             | ✅       | Partial    |
+| Cross-entity ops (project + doc) | ✅       | ❌         |
+| VCS integration (git/jj)         | ✅       | ❌         |
+| JSON output everywhere           | ✅       | ❌         |
+| Offline-first config             | ✅       | ❌         |
+| Composable with shell tools      | ✅       | Limited    |
 
 ## 🎓 Claude Code Skill
 
@@ -102,8 +102,7 @@ The skill package (`.claude-skills/linear-cli-expert/`) provides:
    vim ~/.claude/skills/linear-cli-expert/assets/config/label-structure.json
    ```
 
-4. **Start Using**:
-   The skill automatically triggers when you:
+4. **Start Using**: The skill automatically triggers when you:
    - Ask Claude to create issues, projects, or documents in Linear
    - Request help organizing team labels or workflows
    - Need to create PRDs, technical specs, or status updates
@@ -112,6 +111,7 @@ The skill package (`.claude-skills/linear-cli-expert/`) provides:
 #### For Regular Claude Users
 
 Share the skill package with your team:
+
 ```bash
 # The packaged skill is at:
 .claude-skills/linear-cli-expert/linear-cli-expert.zip
@@ -157,15 +157,15 @@ See [`.claude-skills/README.md`](./.claude-skills/README.md) for complete skill 
 
 ### Comprehensive Resource Management
 
-| Resource | Create | Update | Delete | Restore | List | View | Search | Relationships |
-|----------|--------|--------|--------|---------|------|------|--------|---------------|
-| **Issues** | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ❌ | ✅ |
-| **Projects** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | N/A |
-| **Initiatives** | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | N/A |
-| **Documents** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | N/A |
-| **Labels** | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ | ✅ (Groups) |
-| **Teams** | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | N/A |
-| **Users** | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ | N/A |
+| Resource        | Create | Update | Delete | Restore | List | View | Search | Relationships |
+| --------------- | ------ | ------ | ------ | ------- | ---- | ---- | ------ | ------------- |
+| **Issues**      | ✅     | ✅     | ✅     | ❌      | ✅   | ✅   | ❌     | ✅            |
+| **Projects**    | ✅     | ✅     | ✅     | ✅      | ✅   | ✅   | ❌     | N/A           |
+| **Initiatives** | ✅     | ✅     | ❌     | ✅      | ✅   | ✅   | ❌     | N/A           |
+| **Documents**   | ✅     | ✅     | ✅     | ✅      | ✅   | ✅   | ❌     | N/A           |
+| **Labels**      | ✅     | ✅     | ✅     | ❌      | ✅   | ❌   | ❌     | ✅ (Groups)   |
+| **Teams**       | ✅     | ❌     | ❌     | ❌      | ✅   | ❌   | ❌     | N/A           |
+| **Users**       | ❌     | ❌     | ❌     | ❌      | ✅   | ❌   | ✅     | N/A           |
 
 ### Special Capabilities
 
@@ -197,6 +197,7 @@ curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/
 ```
 
 This script will:
+
 - ✅ Detect your OS and shell (bash/zsh/fish)
 - ✅ Install Deno if not present
 - ✅ Configure PATH automatically
@@ -402,6 +403,7 @@ Projects have **two separate text fields**:
 ```
 
 **Example:**
+
 ```bash
 linear project create \
   --name "Mobile App" \
@@ -424,35 +426,40 @@ graph TB
 
 Linear requires **markdown link format with full URLs** for all resource cross-references:
 
-| Resource Type | Format | Example |
-|---------------|--------|---------|
-| **Issues** | `[TEAM-NUM](url)` | `[ENG-123](https://linear.app/workspace/issue/ENG-123/slug)` |
-| **Documents** | `[Title](url)` | `[Spec](https://linear.app/workspace/document/slug-id)` |
-| **Projects** | `[Name](url)` | `[Project](https://linear.app/workspace/project/slug-id)` |
-| **Milestones** | `[Name](url#milestone-id)` | `[Phase 1](https://linear.app/workspace/project/slug/overview#milestone-abc)` |
-| **Labels** | `[name](url)` | `[bug](https://linear.app/workspace/issue-label/bug)` |
-| **Users** | `@username` or `@Display Name` | `@john` or `@John Doe` |
+| Resource Type  | Format                         | Example                                                                       |
+| -------------- | ------------------------------ | ----------------------------------------------------------------------------- |
+| **Issues**     | `[TEAM-NUM](url)`              | `[ENG-123](https://linear.app/workspace/issue/ENG-123/slug)`                  |
+| **Documents**  | `[Title](url)`                 | `[Spec](https://linear.app/workspace/document/slug-id)`                       |
+| **Projects**   | `[Name](url)`                  | `[Project](https://linear.app/workspace/project/slug-id)`                     |
+| **Milestones** | `[Name](url#milestone-id)`     | `[Phase 1](https://linear.app/workspace/project/slug/overview#milestone-abc)` |
+| **Labels**     | `[name](url)`                  | `[bug](https://linear.app/workspace/issue-label/bug)`                         |
+| **Users**      | `@username` or `@Display Name` | `@john` or `@John Doe`                                                        |
 
 **What doesn't work:**
+
 - ❌ Plain identifiers: `ENG-123`
 - ❌ @ symbol for issues: `@ENG-123`
 - ❌ # symbol for issues: `#ENG-123`
 - ❌ Square brackets alone: `[ENG-123]`
 
 **Example with cross-references:**
+
 ```markdown
 ## Task Overview
 
 This task ([ENG-123](https://linear.app/workspace/issue/ENG-123)) is assigned to @john.
 
 ### Dependencies
+
 - Depends on: [ENG-122](https://linear.app/workspace/issue/ENG-122)
 - Part of [API Project](https://linear.app/workspace/project/api-redesign-abc)
 
 ### Documentation
+
 See [Technical Spec](https://linear.app/workspace/document/tech-spec-123).
 
 ### Milestone
+
 Targeting [Phase 2](https://linear.app/workspace/project/api-redesign-abc/overview#milestone-xyz).
 
 Tagged: [backend](https://linear.app/workspace/issue-label/backend)
@@ -460,15 +467,16 @@ Tagged: [backend](https://linear.app/workspace/issue-label/backend)
 
 #### Content Length Limits
 
-| Resource | Field | Limit |
-|----------|-------|-------|
-| Project | description | 255 characters |
-| Project | content | ~200KB (estimated) |
-| Issue | description | ~200KB |
-| Document | content | ~200KB |
-| Comment | body | ~200KB (estimated) |
+| Resource | Field       | Limit              |
+| -------- | ----------- | ------------------ |
+| Project  | description | 255 characters     |
+| Project  | content     | ~200KB (estimated) |
+| Issue    | description | ~200KB             |
+| Document | content     | ~200KB             |
+| Comment  | body        | ~200KB (estimated) |
 
 **Supported Markdown Features:**
+
 - ✅ Headers, bold, italic, code blocks
 - ✅ Lists, tables, blockquotes
 - ✅ Mermaid diagrams (flowcharts, sequence, state, gantt, ER)
@@ -489,17 +497,17 @@ This CLI was built from the ground up for AI coding agents. See the [AI Agent Gu
 ### Quick Integration
 
 ```typescript
-import { execSync } from 'child_process';
+import { execSync } from "child_process"
 
 // Get current issue from VCS
-const result = execSync('linear issue view --json').toString();
-const issue = JSON.parse(result).issue;
+const result = execSync("linear issue view --json").toString()
+const issue = JSON.parse(result).issue
 
 // Create related document
 execSync(`linear document create \
   --current-project \
   --title "Notes for ${issue.title}" \
-  --json`);
+  --json`)
 ```
 
 ## 🔗 VCS Integration
@@ -565,6 +573,7 @@ The wizard will guide you through:
 ### Configuration Precedence
 
 The CLI follows this precedence order (highest to lowest):
+
 1. CLI flags (e.g., `--team ENG`)
 2. Environment variables (e.g., `LINEAR_TEAM_ID=ENG`)
 3. Config file (`.linear.toml`)

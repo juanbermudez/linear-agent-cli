@@ -10,6 +10,7 @@ Expert assistant for the Linear CLI - a comprehensive command-line tool for Line
 ## Overview
 
 The Linear CLI enables complete programmatic control over Linear workspaces, including:
+
 - **Issue Management**: Create, update, and organize issues with full metadata
 - **Project Management**: Manage projects with milestones, status updates, and rich content
 - **Team Organization**: Set up label hierarchies, workflows, and team structures
@@ -24,12 +25,14 @@ The Linear CLI enables complete programmatic control over Linear workspaces, inc
 Create and manage issues with comprehensive metadata including relationships, milestones, cycles, and hierarchical labels.
 
 **When to use**:
+
 - Creating bug reports, features, or tasks
 - Tracking work in sprints or milestones
 - Managing dependencies between issues
 - Organizing work with label hierarchies
 
 **Key Features**:
+
 - Full CRUD operations on issues
 - Parent/child hierarchies for epics and subtasks
 - Issue relationships (blocks, related, duplicate, similar)
@@ -38,6 +41,7 @@ Create and manage issues with comprehensive metadata including relationships, mi
 - VCS integration (auto-detects issue from git branch)
 
 **Common Commands**:
+
 ```bash
 # Create issue with full metadata
 linear issue create \
@@ -63,6 +67,7 @@ linear issue view ENG-123 --json
 ```
 
 **Use Python wrapper for complex operations**:
+
 ```python
 from scripts.linear_wrapper import LinearCLI
 
@@ -81,12 +86,14 @@ result = cli.create_issue(
 Use pre-configured templates for consistent issue and project creation across the team.
 
 **Available Templates**:
+
 - `assets/templates/issue-bug.json` - Bug report template
 - `assets/templates/issue-feature.json` - Feature request template
 - `assets/templates/issue-task.json` - Task template
 - `assets/templates/project-template.json` - Project structure with milestones
 
 **Using Templates**:
+
 ```bash
 # Create issue from template with variable substitution
 python3 scripts/create_from_template.py issue assets/templates/issue-bug.json
@@ -106,29 +113,30 @@ EOF
 python3 scripts/create_from_template.py issue assets/templates/issue-bug.json vars.json
 ```
 
-**Customizing Templates**:
-Templates use `{{VARIABLE}}` syntax for substitution. Edit templates in `assets/templates/` to match your team's needs.
+**Customizing Templates**: Templates use `{{VARIABLE}}` syntax for substitution. Edit templates in `assets/templates/` to match your team's needs.
 
 ### 3. Label Hierarchy Management
 
 Organize work using hierarchical label groups for better categorization.
 
 **Setup Team Labels**:
+
 ```bash
 # Automated label setup for a team
 bash scripts/setup_labels.sh ENG
 ```
 
 This creates:
+
 - **Work-Type** group: Feature, Bug, Enhancement, Refactor, Documentation
 - **Scope** group: Frontend, Backend, API, Database, Infrastructure, DevOps
 - **Priority** group: Critical, High, Medium, Low
 - **Status** labels: Blocked, Needs-Review, In-Testing, Ready-to-Deploy
 
-**Custom Label Structure**:
-Modify `assets/config/label-structure.json` to customize label hierarchy for your organization.
+**Custom Label Structure**: Modify `assets/config/label-structure.json` to customize label hierarchy for your organization.
 
 **Using Labels**:
+
 ```bash
 # Labels display as "parent/child"
 linear issue create \
@@ -144,6 +152,7 @@ linear issue create \
 Create and manage projects with structured phases, milestones, and status tracking.
 
 **Complete Project Setup**:
+
 ```bash
 # 1. Create project
 PROJECT=$(linear project create \
@@ -192,12 +201,14 @@ linear project update-create $PROJECT_SLUG \
 Manage complex dependencies between issues for better workflow visibility.
 
 **Relationship Types**:
+
 - `--blocks`: This issue must be completed before others
 - `--related-to`: General relationship between issues
 - `--duplicate-of`: Mark issue as duplicate
 - `--similar-to`: Link similar issues
 
 **Managing Dependencies**:
+
 ```bash
 # Create foundation work
 DB=$(linear issue create \
@@ -230,11 +241,13 @@ linear issue relations $DB --json
 Create structured technical documentation linked to projects.
 
 **Document Templates**:
+
 - `assets/templates/prd.md` - Product Requirements Document
 - `assets/templates/tech-spec.md` - Technical Specification
 - `assets/templates/status-update.md` - Status Update
 
 **Creating Documents**:
+
 ```bash
 # Customize template
 cat assets/templates/prd.md | sed 's/{{PROJECT_NAME}}/OAuth System/g' > prd.md
@@ -262,6 +275,7 @@ Automate repetitive workflows using scripts and templates.
 **Common Automation Patterns**:
 
 **A. Sprint/Cycle Setup**:
+
 ```bash
 #!/bin/bash
 # setup-sprint.sh
@@ -288,6 +302,7 @@ done
 ```
 
 **B. Release Planning**:
+
 ```bash
 # Create release milestone
 PROJECT_ID=$(linear project view mobile-app --json | jq -r '.project.id')
@@ -310,6 +325,7 @@ linear issue create \
 ```
 
 **C. Bug Triage Workflow**:
+
 ```python
 # triage-bugs.py
 from scripts.linear_wrapper import LinearCLI
@@ -346,6 +362,7 @@ print(f"Created bug: {issue_id}")
 **Start Here**: What do you need to do in Linear?
 
 ### I need to create issues
+
 1. **Simple issue**: Use `linear issue create` with required options
 2. **Consistent format**: Use template - `python3 scripts/create_from_template.py issue assets/templates/[template].json`
 3. **Bulk creation**: Use Python wrapper in a loop
@@ -354,6 +371,7 @@ print(f"Created bug: {issue_id}")
 → See **Capability 1: Issue Management** above
 
 ### I need to set up a project
+
 1. **Quick project**: Use `linear project create` directly
 2. **Full project with milestones**: Use project template
 3. **With documentation**: Create project, then use document templates
@@ -361,6 +379,7 @@ print(f"Created bug: {issue_id}")
 → See **Capability 4: Project Management** above
 
 ### I need to organize labels
+
 1. **First time setup**: Run `bash scripts/setup_labels.sh TEAM`
 2. **Custom structure**: Modify `assets/config/label-structure.json`, then run setup script
 3. **Single label**: Use `linear label create --name "..." --team TEAM`
@@ -369,6 +388,7 @@ print(f"Created bug: {issue_id}")
 → See **Capability 3: Label Hierarchy** above
 
 ### I need to create documentation
+
 1. **PRD**: Customize `assets/templates/prd.md`
 2. **Tech Spec**: Customize `assets/templates/tech-spec.md`
 3. **Status Update**: Customize `assets/templates/status-update.md`
@@ -377,6 +397,7 @@ print(f"Created bug: {issue_id}")
 → See **Capability 6: Documentation** above
 
 ### I need to manage dependencies
+
 1. **Create blocking relationship**: Use `--blocks ISSUE-ID` when creating
 2. **Add relationship later**: Use `linear issue relate ISSUE1 ISSUE2 --blocks`
 3. **View relationships**: Use `linear issue relations ISSUE-ID --json`
@@ -385,6 +406,7 @@ print(f"Created bug: {issue_id}")
 → See **Capability 5: Issue Relationships** above
 
 ### I need to automate workflows
+
 1. **Repeatable processes**: Create bash script using Linear CLI commands
 2. **Error handling**: Use Python wrapper from `scripts/linear_wrapper.py`
 3. **Template-based**: Use `scripts/create_from_template.py`
@@ -418,12 +440,14 @@ The skill includes customizable preferences in `assets/config/preferences.json`:
 ```
 
 **Adapting to User Preferences**:
+
 1. Read preferences file to understand user's workflow
 2. Apply defaults when creating issues/projects
 3. Use preferred label structure
 4. Follow naming conventions
 
 **Example Workflow Adaptation**:
+
 ```bash
 # Read user preferences
 TEAM=$(jq -r '.team.default_team' assets/config/preferences.json)
@@ -443,6 +467,7 @@ linear issue create \
 **Quick reference - see `references/command-reference.md` for complete documentation.**
 
 ### Issues
+
 ```bash
 linear issue create --title "..." --team TEAM --json
 linear issue update TEAM-NUM --state "..." --json
@@ -453,6 +478,7 @@ linear issue relations TEAM-NUM --json
 ```
 
 ### Projects
+
 ```bash
 linear project create --name "..." --team TEAM --json
 linear project update SLUG --content "..." --json
@@ -461,6 +487,7 @@ linear project update-create SLUG --body "..." --health onTrack --json
 ```
 
 ### Labels
+
 ```bash
 linear label create --name "..." --team TEAM --json
 linear label create --name "..." --parent "..." --team TEAM --json
@@ -468,6 +495,7 @@ linear label list --team TEAM --json
 ```
 
 ### Documents
+
 ```bash
 linear document create --title "..." --content "$(cat file.md)" --project "..." --json
 ```
@@ -475,6 +503,7 @@ linear document create --title "..." --content "$(cat file.md)" --project "..." 
 ## Best Practices
 
 ### 1. Always Use JSON Output
+
 ```bash
 # ✓ Correct: Programmatic output
 linear issue create --title "Task" --json
@@ -484,6 +513,7 @@ linear issue create --title "Task"
 ```
 
 ### 2. Check Success in Responses
+
 ```bash
 RESULT=$(linear issue create --title "Task" --team ENG --json)
 if echo "$RESULT" | jq -e '.success' > /dev/null; then
@@ -494,12 +524,14 @@ fi
 ```
 
 ### 3. Use Templates for Consistency
+
 ```bash
 # Ensures consistent structure across team
 python3 scripts/create_from_template.py issue assets/templates/issue-bug.json
 ```
 
 ### 4. Leverage VCS Context
+
 ```bash
 # On branch: feature/ENG-123-oauth
 linear issue view      # Automatically shows ENG-123
@@ -507,6 +539,7 @@ linear issue update --state "In Progress"  # Updates ENG-123
 ```
 
 ### 5. Keep Content in Files
+
 ```bash
 # ✓ Correct: Content in files
 linear issue create --description "$(cat spec.md)" --json
@@ -516,6 +549,7 @@ linear issue create --description "Very long text..." --json
 ```
 
 ### 6. Use Hierarchical Labels
+
 ```bash
 # ✓ Correct: Organized label groups
 linear issue create --label Bug Backend --json
@@ -526,6 +560,7 @@ linear issue create --label bug --json
 ```
 
 ### 7. Document Relationships in Descriptions
+
 ```bash
 linear issue create \
   --title "Implement feature X" \
@@ -542,38 +577,46 @@ EOF
 ## Important Notes
 
 ### User References
+
 - Use `@me` for yourself, NOT `self`
 - Use username or email for others
 
 ### Labels
+
 - Space-separated: `--label A B C`
 - NOT repeated: `--label A --label B` ❌
 
 ### Label Groups
+
 - Parent must have `--is-group` flag
 - Children use `--parent "ParentName"`
 - Display as `parent/child`
 
 ### Milestones
+
 - Require project UUID (not slug)
 - Get UUID: `linear project view SLUG --json | jq -r '.project.id'`
 
 ### Cross-References
+
 - Use markdown links with full URLs
 - Format: `[Text](https://linear.app/...)`
 - Plain text like `ENG-123` won't link ❌
 
 ### Content Fields
+
 - Project description: Max 255 chars
 - Project content: ~200KB
 - Use files for long content: `--content "$(cat file.md)"`
 
 ### Relationships
+
 - All types are bidirectional
 - View both directions with `issue relations`
 - Types: blocks, related, duplicate, similar
 
 ### Error Handling
+
 - Always check `success` field in JSON responses
 - Use Python wrapper for automatic retry logic
 - See `references/json-api.md` for error codes
@@ -583,19 +626,25 @@ EOF
 This skill includes comprehensive resources:
 
 ### scripts/
+
 Executable utilities for common operations:
+
 - `linear_wrapper.py` - Python API wrapper with error handling and retry logic
 - `setup_labels.sh` - Initialize team label hierarchy
 - `create_from_template.py` - Create issues/projects from JSON templates
 
 ### references/
+
 Detailed documentation to load as needed:
+
 - `command-reference.md` - Complete command syntax reference
 - `relationship-patterns.md` - Patterns for managing issue dependencies
 - `json-api.md` - JSON response formats and parsing examples
 
 ### assets/templates/
+
 Ready-to-use templates:
+
 - `issue-bug.json` - Bug report template
 - `issue-feature.json` - Feature request template
 - `issue-task.json` - Task template
@@ -605,13 +654,16 @@ Ready-to-use templates:
 - `status-update.md` - Project Status Update
 
 ### assets/config/
+
 Customizable configuration:
+
 - `preferences.json` - Workflow preferences and defaults
 - `label-structure.json` - Team label hierarchy template
 
 ---
 
 **When to Load Additional Resources**:
+
 - Need complete command syntax? → Load `references/command-reference.md`
 - Managing complex dependencies? → Load `references/relationship-patterns.md`
 - Parsing JSON responses? → Load `references/json-api.md`

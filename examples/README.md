@@ -22,6 +22,7 @@ linear config setup  # or: linear config init
 ### Option B: Manual Setup
 
 1. **Set your workspace and team**:
+
 ```bash
 export LINEAR_API_KEY="lin_api_YOUR_KEY"
 export LINEAR_WORKSPACE="your-workspace"
@@ -29,6 +30,7 @@ export LINEAR_TEAM_ID="YOUR-TEAM"
 ```
 
 2. **Run Setup Script**:
+
 ```bash
 cd examples/scripts
 chmod +x *.sh
@@ -36,11 +38,13 @@ chmod +x *.sh
 ```
 
 3. **See Features**:
+
 ```bash
 ./demo-features.sh
 ```
 
 4. **Create Demo Project**:
+
 ```bash
 ./create-ai-project.sh
 ```
@@ -56,9 +60,11 @@ chmod +x *.sh
 All scripts are in the `scripts/` directory:
 
 #### 1. setup-demo.sh
+
 Initial configuration and environment setup.
 
 **What it does**:
+
 - Checks Linear CLI installation
 - Verifies API key
 - Configures workspace and team
@@ -67,19 +73,23 @@ Initial configuration and environment setup.
 - Tests connection
 
 **Usage**:
+
 ```bash
 ./setup-demo.sh
 ```
 
 **Requirements**:
+
 - Linear API key (get at https://linear.app/settings/api)
 
 ---
 
 #### 2. demo-features.sh
+
 Interactive demonstration of all CLI features.
 
 **What it demonstrates**:
+
 - Configuration system
 - Workflow management with caching
 - Project status management
@@ -93,6 +103,7 @@ Interactive demonstration of all CLI features.
 - Environment variable precedence
 
 **Usage**:
+
 ```bash
 ./demo-features.sh
 ```
@@ -102,15 +113,18 @@ Interactive demonstration of all CLI features.
 ---
 
 #### 3. create-ai-project.sh
+
 Creates a complete demo project with issues and documents.
 
 **What it creates**:
+
 - 1 Project: "🤖 AI Investment Analysis Tool"
 - 8 Issues with priorities and labels
 - 3 Documents (Technical Spec, Meeting Notes, Implementation)
 - 3 Labels (demo-ai, demo-backend, demo-frontend)
 
 **Usage**:
+
 ```bash
 ./create-ai-project.sh
 ```
@@ -120,9 +134,11 @@ Creates a complete demo project with issues and documents.
 ---
 
 #### 4. ai-agent-automation.sh
+
 Examples of AI agent automation patterns.
 
 **What it shows**:
+
 - Daily standup report generation
 - Automated issue triage
 - Sprint planning assistant
@@ -132,6 +148,7 @@ Examples of AI agent automation patterns.
 - Release notes generation
 
 **Usage**:
+
 ```bash
 ./ai-agent-automation.sh
 ```
@@ -141,6 +158,7 @@ Examples of AI agent automation patterns.
 ## Workspace Configuration
 
 Configure these environment variables for your workspace:
+
 ```bash
 export LINEAR_WORKSPACE="your-workspace"
 export LINEAR_TEAM_ID="YOUR-TEAM"
@@ -148,6 +166,7 @@ export LINEAR_API_KEY="lin_api_YOUR_KEY"
 ```
 
 Or use the CLI configuration file `.linear.toml`:
+
 ```toml
 [defaults]
 workspace = "your-workspace"
@@ -160,27 +179,32 @@ token = "lin_api_YOUR_KEY"
 ## Features Demonstrated
 
 ### 1. Configuration Management
+
 - Environment variables vs config files
 - Precedence order
 - Per-directory configuration
 
 ### 2. Caching System
+
 - Automatic 24-hour caching
 - Cache performance comparison
 - Force refresh with `--refresh` flag
 
 ### 3. Workflow Management
+
 - List workflow states with colors
 - Cache workflows per team
 - JSON output for automation
 
 ### 4. Project & Issue Management
+
 - Create projects with documents
 - Create and manage issues
 - Cross-entity operations
 - Flexible resource identification
 
 ### 5. AI Agent Automation
+
 - JSON parsing with `jq`
 - Automated reporting
 - Smart categorization
@@ -189,6 +213,7 @@ token = "lin_api_YOUR_KEY"
 ## Prerequisites
 
 1. **Install Linear CLI**:
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/install.sh | bash
 ```
@@ -199,6 +224,7 @@ curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/
    - Copy key (starts with `lin_api_`)
 
 3. **Set API Key**:
+
 ```bash
 export LINEAR_API_KEY="lin_api_YOUR_KEY"
 echo 'export LINEAR_API_KEY="lin_api_YOUR_KEY"' >> ~/.zshrc
@@ -207,6 +233,7 @@ echo 'export LINEAR_API_KEY="lin_api_YOUR_KEY"' >> ~/.zshrc
 ## Running the Examples
 
 ### Option A: Full Demo (Recommended)
+
 ```bash
 cd examples/scripts
 
@@ -224,6 +251,7 @@ cd examples/scripts
 ```
 
 ### Option B: Individual Commands
+
 ```bash
 # List workflows (using configured team from env or config)
 linear workflow list
@@ -244,6 +272,7 @@ linear issue list --json | jq '.issues[0]'
 ## Troubleshooting
 
 ### "Command not found: linear"
+
 ```bash
 # Check installation
 which linear
@@ -253,6 +282,7 @@ export PATH="$HOME/.deno/bin:$PATH"
 ```
 
 ### "Please set LINEAR_API_KEY"
+
 ```bash
 # Set API key
 export LINEAR_API_KEY="lin_api_YOUR_KEY"
@@ -262,12 +292,14 @@ echo $LINEAR_API_KEY
 ```
 
 ### "Failed to connect to Linear"
+
 1. Check API key is correct
 2. Verify workspace access
 3. Confirm team exists
 4. Test connection: `linear team list`
 
 ### Cache Issues
+
 ```bash
 # Clear cache
 rm -rf ~/.cache/linear-cli/
@@ -329,6 +361,7 @@ jobs:
 ## Example Outputs
 
 ### Workflow List
+
 ```
 Type          Name            Position  ID
 ● triage      Triage          0         abc123
@@ -340,6 +373,7 @@ Type          Name            Position  ID
 ```
 
 ### Project Summary JSON
+
 ```json
 {
   "project": {

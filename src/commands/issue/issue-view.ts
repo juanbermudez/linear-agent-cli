@@ -120,7 +120,7 @@ export const viewCommand = new Command()
 
     // Add labels if any
     if (metadata.labels && metadata.labels.nodes && metadata.labels.nodes.length > 0) {
-      metadataMarkdown += `\n**Labels:** ${metadata.labels.nodes.map((l: any) => l.parent ? `${l.parent.name}/${l.name}` : l.name).join(", ")}\n`
+      metadataMarkdown += `\n**Labels:** ${metadata.labels.nodes.map((l) => l.parent ? `${l.parent.name}/${l.name}` : l.name).join(", ")}\n`
     }
 
     if (metadata.createdAt) {

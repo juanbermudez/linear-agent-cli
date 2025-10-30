@@ -151,7 +151,7 @@ export const updateCommand = new Command()
           if (teamId) {
             teamIds.push(teamId)
           }
-        } catch (err) {
+        } catch (_err) {
           const errorMsg = `Team '${teamKey}' not found`
           if (useJson) {
             console.error(
@@ -211,7 +211,7 @@ export const updateCommand = new Command()
     if (options.lead) {
       try {
         leadId = await lookupUserId(options.lead)
-      } catch (err) {
+      } catch (_err) {
         const errorMsg = `User '${options.lead}' not found`
         if (useJson) {
           console.error(
@@ -292,7 +292,7 @@ export const updateCommand = new Command()
         console.log(successColor(`✓ Updated project: ${project.name}`))
         console.log(project.url)
       }
-    } catch (err) {
+    } catch (_err) {
       spinner?.stop()
 
       const errorMsg = err.message.includes("not found")

@@ -36,7 +36,8 @@ await snapshotTest({
               title: "API Design Document",
               slugId: "api-design-document",
               url: "https://linear.app/test/document/api-design-document",
-              content: "# API Design\n\nThis document describes the API design for the new backend service.\n\n## Overview\n\nThe API will use REST principles with JSON payloads.",
+              content:
+                "# API Design\n\nThis document describes the API design for the new backend service.\n\n## Overview\n\nThe API will use REST principles with JSON payloads.",
               project: {
                 id: "project-789",
                 name: "Backend Platform",
@@ -81,7 +82,8 @@ await snapshotTest({
               title: "Meeting Notes",
               slugId: "meeting-notes",
               url: "https://linear.app/test/document/meeting-notes",
-              content: "# Meeting Notes\n\n- Discussed API design\n- Next steps: prototype",
+              content:
+                "# Meeting Notes\n\n- Discussed API design\n- Next steps: prototype",
               project: null,
               creator: {
                 name: "bob",
@@ -122,7 +124,8 @@ await snapshotTest({
               title: "Standalone Document",
               slugId: "standalone-document",
               url: "https://linear.app/test/document/standalone-document",
-              content: "# Standalone\n\nThis document is not linked to any project.",
+              content:
+                "# Standalone\n\nThis document is not linked to any project.",
               project: null,
               creator: {
                 name: "charlie",
@@ -238,7 +241,8 @@ await snapshotTest({
               title: "API Design Document",
               slugId: "api-design-document",
               url: "https://linear.app/test/document/api-design-document",
-              content: "# API Design\n\nDetailed specifications for the new API.",
+              content:
+                "# API Design\n\nDetailed specifications for the new API.",
               project: {
                 id: "project-456",
                 name: "Backend Services",

@@ -62,7 +62,8 @@
   "lint": {
     "exclude": [
       "__generated__/",
-      "src/__codegen__/"
+      "src/__codegen__/",
+      "test/"
     ]
   },
   "unstable": [

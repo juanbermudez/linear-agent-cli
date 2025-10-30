@@ -8,8 +8,7 @@ This directory contains specialized skills for Claude and Claude Code that enhan
 
 A comprehensive skill that transforms Claude into an expert Linear CLI user with deep knowledge of workflows, templates, and best practices.
 
-**Location**: `linear-cli-expert/`
-**Packaged Version**: `linear-cli-expert/linear-cli-expert.zip`
+**Location**: `linear-cli-expert/` **Packaged Version**: `linear-cli-expert/linear-cli-expert.zip`
 
 ## 🎯 What are Claude Code Skills?
 
@@ -48,6 +47,7 @@ linear-cli-expert/
 ### For Claude Code Users
 
 **Option 1: Copy from Repository**
+
 ```bash
 # Clone or navigate to the repository
 cd linear-cli-main/.claude-skills/linear-cli-expert
@@ -57,12 +57,14 @@ cp -r . ~/.claude/skills/linear-cli-expert
 ```
 
 **Option 2: Install from Package**
+
 ```bash
 # Unzip the packaged skill
 unzip linear-cli-main/.claude-skills/linear-cli-expert/linear-cli-expert.zip -d ~/.claude/skills/
 ```
 
 **Verify Installation**
+
 ```bash
 # Check that the skill is installed
 ls ~/.claude/skills/linear-cli-expert/SKILL.md
@@ -93,7 +95,7 @@ Configure how the skill adapts to your team's workflow:
     "default_team": "ENG"
   },
   "workflow": {
-    "type": "agile",              // agile, kanban, or custom
+    "type": "agile", // agile, kanban, or custom
     "sprint_length_weeks": 2,
     "use_cycles": true,
     "use_milestones": true
@@ -143,6 +145,7 @@ All templates support variable substitution using `{{VARIABLE}}` syntax:
 ### Issue Templates
 
 **Bug Report** (`assets/templates/issue-bug.json`):
+
 ```json
 {
   "title": "{{TITLE}}",
@@ -154,6 +157,7 @@ All templates support variable substitution using `{{VARIABLE}}` syntax:
 ```
 
 **Feature Request** (`assets/templates/issue-feature.json`):
+
 ```json
 {
   "title": "{{TITLE}}",
@@ -167,14 +171,17 @@ All templates support variable substitution using `{{VARIABLE}}` syntax:
 ### Document Templates
 
 **PRD** (`assets/templates/prd.md`):
+
 - Product requirements document with sections for goals, user stories, technical requirements
 - 300+ lines with comprehensive structure
 
 **Technical Spec** (`assets/templates/tech-spec.md`):
+
 - Architecture, API design, data models, testing strategy
 - 400+ lines with detailed technical sections
 
 **Status Update** (`assets/templates/status-update.md`):
+
 - Weekly/sprint status updates with metrics, highlights, blockers
 - Progress tracking and timeline visualization
 
@@ -262,6 +269,7 @@ The skill includes comprehensive reference documentation in the `references/` di
 ### 1. Command Reference (`command-reference.md`)
 
 Complete syntax for all Linear CLI commands:
+
 - Issue operations (create, update, view, list, relate, relations)
 - Project operations (create, update, milestones, status updates)
 - Label operations (create, update, delete, groups)
@@ -271,6 +279,7 @@ Complete syntax for all Linear CLI commands:
 ### 2. Relationship Patterns (`relationship-patterns.md`)
 
 Detailed guide to managing issue dependencies:
+
 - 4 relationship types (blocks, related, duplicate, similar)
 - 5 workflow patterns (epics, sequential features, cross-team, bugs, refactoring)
 - Best practices and anti-patterns
@@ -279,6 +288,7 @@ Detailed guide to managing issue dependencies:
 ### 3. JSON API Reference (`json-api.md`)
 
 Complete guide to parsing CLI responses:
+
 - Response schemas for all resources
 - Error codes and handling
 - Parsing examples in Bash, Python, and JavaScript
@@ -296,20 +306,15 @@ When you ask Claude to work with Linear, it will:
 
 ### Example Interactions
 
-**"Create a bug report for the login issue"**
-→ Claude loads bug template, asks for details, creates issue with proper structure
+**"Create a bug report for the login issue"** → Claude loads bug template, asks for details, creates issue with proper structure
 
-**"Set up our team's label hierarchy"**
-→ Claude runs `setup_labels.sh` script with your team key
+**"Set up our team's label hierarchy"** → Claude runs `setup_labels.sh` script with your team key
 
-**"Generate a PRD for the OAuth feature"**
-→ Claude uses PRD template, fills in details, creates Linear document
+**"Generate a PRD for the OAuth feature"** → Claude uses PRD template, fills in details, creates Linear document
 
-**"Show me all issues blocking ENG-123"**
-→ Claude uses relationship patterns to query and visualize dependencies
+**"Show me all issues blocking ENG-123"** → Claude uses relationship patterns to query and visualize dependencies
 
-**"Create a project with milestones for Q1"**
-→ Claude uses project template with milestone structure
+**"Create a project with milestones for Q1"** → Claude uses project template with milestone structure
 
 ## 🔄 Skill Updates
 
@@ -357,6 +362,7 @@ The skill is designed to be customized:
 ### Skill Not Triggering
 
 If Claude doesn't automatically use the skill:
+
 1. Verify installation: `ls ~/.claude/skills/linear-cli-expert/SKILL.md`
 2. Explicitly mention "Linear" in your request
 3. Be specific: "Create a Linear issue" vs "Create an issue"
@@ -364,6 +370,7 @@ If Claude doesn't automatically use the skill:
 ### Scripts Not Executing
 
 If scripts fail to execute:
+
 1. Make scripts executable: `chmod +x scripts/*.sh`
 2. Ensure Python 3 is available: `python3 --version`
 3. Check script paths are relative to skill directory
@@ -371,6 +378,7 @@ If scripts fail to execute:
 ### Templates Not Found
 
 If templates aren't working:
+
 1. Verify template paths in `preferences.json`
 2. Check templates exist: `ls assets/templates/`
 3. Ensure JSON templates are valid: `jq . assets/templates/issue-bug.json`

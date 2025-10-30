@@ -52,7 +52,8 @@ await snapshotTest({
                   id: "doc-2",
                   title: "Database Migration Plan",
                   slugId: "database-migration-plan",
-                  url: "https://linear.app/test/document/database-migration-plan",
+                  url:
+                    "https://linear.app/test/document/database-migration-plan",
                   project: {
                     id: "project-2",
                     name: "Infrastructure",

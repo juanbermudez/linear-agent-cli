@@ -8,16 +8,19 @@
 ## Installing Deno
 
 ### macOS / Linux
+
 ```bash
 curl -fsSL https://deno.land/install.sh | sh
 ```
 
 ### Windows
+
 ```powershell
 irm https://deno.land/install.ps1 | iex
 ```
 
 ### Using Homebrew (macOS)
+
 ```bash
 brew install deno
 ```
@@ -61,6 +64,7 @@ linear config setup
 ```
 
 This will:
+
 - Prompt you to enter your API key
 - Let you select a default team
 - Create a `.linear.toml` configuration file in your project directory
@@ -155,6 +159,7 @@ Add this to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.) to make it perman
 ### "Permission denied" errors
 
 The CLI needs the following permissions:
+
 - `--allow-env` - Read environment variables
 - `--allow-read` - Read config files
 - `--allow-write` - Write config files

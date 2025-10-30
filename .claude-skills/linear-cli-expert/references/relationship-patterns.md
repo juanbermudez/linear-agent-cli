@@ -5,9 +5,11 @@ Guide to effectively using issue relationships in Linear for dependency manageme
 ## Relationship Types
 
 ### 1. Blocks (`--blocks`)
+
 **Use when**: An issue must be completed before other issues can proceed.
 
 **Pattern**: "This issue blocks other issues"
+
 ```bash
 # ENG-100 blocks ENG-101 and ENG-102
 linear issue create \
@@ -20,15 +22,18 @@ linear issue create \
 **Inverse**: When you view ENG-101, it shows "Blocked by: ENG-100"
 
 **Common Scenarios**:
+
 - Infrastructure work blocking feature development
 - API changes blocking frontend implementation
 - Database schema changes blocking data operations
 - Authentication setup blocking feature development
 
 ### 2. Related To (`--related-to`)
+
 **Use when**: Issues are connected but don't have hard dependencies.
 
 **Pattern**: "This issue is related to other issues"
+
 ```bash
 # Link related features
 linear issue create \
@@ -41,15 +46,18 @@ linear issue create \
 **Bidirectional**: Shows as "Related" on all connected issues
 
 **Common Scenarios**:
+
 - Features in the same epic or project
 - Issues affecting the same component
 - Bugs with similar root causes
 - Tasks in the same sprint/milestone
 
 ### 3. Duplicate Of (`--duplicate-of`)
+
 **Use when**: An issue is a duplicate of another issue.
 
 **Pattern**: "This issue duplicates another issue"
+
 ```bash
 # Mark as duplicate
 linear issue create \
@@ -65,14 +73,17 @@ linear issue relate ENG-456 ENG-123 --duplicate-of
 **Inverse**: ENG-123 shows "Duplicated by: ENG-456"
 
 **Best Practices**:
+
 - Close the duplicate issue
 - Add comment explaining why it's a duplicate
 - Copy relevant information to the main issue
 
 ### 4. Similar To (`--similar-to`)
+
 **Use when**: Issues are similar but not duplicates.
 
 **Pattern**: "This issue is similar to other issues"
+
 ```bash
 # Link similar issues
 linear issue relate ENG-456 ENG-789 --similar-to
@@ -81,6 +92,7 @@ linear issue relate ENG-456 ENG-789 --similar-to
 **Bidirectional**: Shows as "Similar" on both issues
 
 **Common Scenarios**:
+
 - Issues with similar symptoms but different causes
 - Related bugs in different components
 - Feature requests for similar functionality
@@ -88,6 +100,7 @@ linear issue relate ENG-456 ENG-789 --similar-to
 ## Workflow Patterns
 
 ### Pattern 1: Epic with Dependencies
+
 ```bash
 # 1. Create epic (parent issue)
 EPIC=$(linear issue create \
@@ -123,6 +136,7 @@ linear issue create \
 ```
 
 ### Pattern 2: Feature with Sequential Steps
+
 ```bash
 # Step 1: Backend
 BE=$(linear issue create \
@@ -147,6 +161,7 @@ linear issue create \
 ```
 
 ### Pattern 3: Cross-Team Dependencies
+
 ```bash
 # Backend team creates infrastructure
 BE=$(linear issue create \
@@ -165,6 +180,7 @@ linear issue create \
 ```
 
 ### Pattern 4: Bug Investigation
+
 ```bash
 # Original bug
 BUG=$(linear issue create \
@@ -191,6 +207,7 @@ linear issue create \
 ```
 
 ### Pattern 5: Refactoring Chain
+
 ```bash
 # Main refactor
 REFACTOR=$(linear issue create \
@@ -218,6 +235,7 @@ linear issue create \
 ## Managing Relationships
 
 ### Create Relationships
+
 ```bash
 # During issue creation
 linear issue create \
@@ -232,11 +250,13 @@ linear issue relate ENG-123 ENG-789 --related-to
 ```
 
 ### Remove Relationships
+
 ```bash
 linear issue unrelate ENG-123 ENG-456
 ```
 
 ### View Relationships
+
 ```bash
 # View all relationships for an issue
 linear issue relations ENG-123 --json
@@ -247,6 +267,7 @@ linear issue relations ENG-123 --json
 ```
 
 ### Update with Relationships
+
 ```bash
 # Add relationships when updating
 linear issue update ENG-123 \
@@ -258,12 +279,14 @@ linear issue update ENG-123 \
 ## Best Practices
 
 ### 1. Use Appropriate Relationship Types
+
 - **Blocks**: For hard dependencies only
 - **Related**: For loose connections
 - **Duplicate**: Only when truly duplicate
 - **Similar**: For issues worth comparing
 
 ### 2. Document Dependencies in Descriptions
+
 ```bash
 linear issue create \
   --title "Implement feature X" \
@@ -284,11 +307,13 @@ EOF
 ```
 
 ### 3. Keep Relationship Graphs Manageable
+
 - Avoid creating too many relationships (< 10 per issue)
 - Use parent/child for hierarchies instead of blocks
 - Group related work into projects/milestones
 
 ### 4. Review Relationships Regularly
+
 ```bash
 # Check what's blocking an issue
 linear issue relations ENG-123 --json | jq '.inverseRelations.nodes[] | select(.type == "blocks")'
@@ -298,6 +323,7 @@ linear issue relations ENG-123 --json | jq '.relations.nodes[] | select(.type ==
 ```
 
 ### 5. Use with Milestones and Projects
+
 ```bash
 # Create milestone-based dependencies
 linear issue create \
@@ -317,6 +343,7 @@ linear issue create \
 ## Relationship Query Patterns
 
 ### Find All Blocking Issues
+
 ```bash
 # Issues blocking work (need to be resolved first)
 linear issue list --json | jq '
@@ -327,6 +354,7 @@ linear issue list --json | jq '
 ```
 
 ### Find Blocked Issues
+
 ```bash
 # Issues that are blocked (waiting on others)
 linear issue list --json | jq '
@@ -337,6 +365,7 @@ linear issue list --json | jq '
 ```
 
 ### Find Related Issues
+
 ```bash
 # All issues related to a specific issue
 linear issue relations ENG-123 --json | jq '
@@ -348,6 +377,7 @@ linear issue relations ENG-123 --json | jq '
 ## Anti-Patterns to Avoid
 
 ### ❌ Don't Create Circular Dependencies
+
 ```bash
 # BAD: A blocks B, B blocks A
 linear issue relate ENG-100 ENG-101 --blocks
@@ -355,6 +385,7 @@ linear issue relate ENG-101 ENG-100 --blocks  # This creates a deadlock
 ```
 
 ### ❌ Don't Overuse Blocks
+
 ```bash
 # BAD: Everything blocks everything
 linear issue create --title "Task" --blocks ENG-1 ENG-2 ENG-3 ENG-4 ENG-5 ENG-6
@@ -363,6 +394,7 @@ linear issue create --title "Task" --parent ENG-EPIC --related-to ENG-1 ENG-2
 ```
 
 ### ❌ Don't Mix Duplicate with Other Relationships
+
 ```bash
 # BAD: Marking as duplicate but also blocks
 linear issue relate ENG-100 ENG-101 --duplicate-of
@@ -374,6 +406,7 @@ linear issue update ENG-100 --state "Done"
 ```
 
 ### ❌ Don't Forget to Update Relationships
+
 ```bash
 # BAD: Relationships become stale
 # Issue ENG-100 is complete but still shows as blocking ENG-101
@@ -385,6 +418,7 @@ linear issue unrelate ENG-101 ENG-100
 ## Integration with Workflows
 
 ### Sprint Planning
+
 ```bash
 # Create sprint epic
 SPRINT=$(linear issue create \
@@ -398,6 +432,7 @@ linear issue create --title "Add tests" --parent $SPRINT --cycle "Sprint 5" --bl
 ```
 
 ### Release Planning
+
 ```bash
 # Create release milestone
 linear project milestone create $PROJECT_ID \

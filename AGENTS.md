@@ -115,6 +115,7 @@ Or on error:
 ### Issues
 
 #### Create
+
 ```bash
 linear issue create \
   --title "string" \
@@ -138,6 +139,7 @@ linear issue create \
 ```
 
 #### Update
+
 ```bash
 linear issue update TEAM-NUM \
   [same options as create] \
@@ -145,16 +147,19 @@ linear issue update TEAM-NUM \
 ```
 
 #### View
+
 ```bash
 linear issue view TEAM-NUM --json
 ```
 
 #### List
+
 ```bash
 linear issue list --team TEAM --json
 ```
 
 #### Relationships
+
 ```bash
 # Create relationships
 linear issue relate TEAM-NUM1 TEAM-NUM2 --blocks
@@ -172,6 +177,7 @@ linear issue relations TEAM-NUM --json
 ### Projects
 
 #### Create
+
 ```bash
 linear project create \
   --name "string" \
@@ -188,6 +194,7 @@ linear project create \
 ```
 
 #### Update
+
 ```bash
 linear project update PROJECT-SLUG \
   --name "string" \
@@ -199,6 +206,7 @@ linear project update PROJECT-SLUG \
 ```
 
 #### Milestones
+
 ```bash
 # Create (requires UUID)
 PROJECT_ID=$(linear project view SLUG --json | jq -r '.project.id')
@@ -212,6 +220,7 @@ linear project milestone list --project SLUG --json
 ```
 
 #### Status Updates
+
 ```bash
 linear project update-create PROJECT-SLUG \
   --body "$(cat update.md)" \
@@ -222,6 +231,7 @@ linear project update-create PROJECT-SLUG \
 ### Labels
 
 #### Create
+
 ```bash
 # Simple label
 linear label create \
@@ -453,33 +463,34 @@ print(f"Created: {issue_id}")
 ```
 
 ```javascript
-const { exec } = require('child_process');
-const util = require('util');
-const execAsync = util.promisify(exec);
+const { exec } = require("child_process")
+const util = require("util")
+const execAsync = util.promisify(exec)
 
 async function createIssue(title, team) {
   const { stdout } = await execAsync(
-    `linear issue create --title "${title}" --team ${team} --json`
-  );
+    `linear issue create --title "${title}" --team ${team} --json`,
+  )
 
-  const result = JSON.parse(stdout);
+  const result = JSON.parse(stdout)
 
   if (result.success) {
-    return result.issue.identifier;
+    return result.issue.identifier
   } else {
-    throw new Error(result.error.message);
+    throw new Error(result.error.message)
   }
 }
 
 // Usage
 createIssue("Fix bug", "ENG")
-  .then(id => console.log(`Created: ${id}`))
-  .catch(err => console.error(err));
+  .then((id) => console.log(`Created: ${id}`))
+  .catch((err) => console.error(err))
 ```
 
 ### Response Schemas
 
 #### Issue Create/Update Response
+
 ```json
 {
   "success": true,
@@ -499,6 +510,7 @@ createIssue("Fix bug", "ENG")
 ```
 
 #### Issue View Response
+
 ```json
 {
   "issue": {
@@ -534,12 +546,12 @@ createIssue("Fix bug", "ENG")
 
 ### Error Codes
 
-| Code | Meaning | Action |
-|------|---------|--------|
-| `MISSING_REQUIRED_FIELD` | Required field missing | Provide the missing field |
-| `NOT_FOUND` | Resource not found | Check identifier/name |
-| `API_ERROR` | Linear API error | Check API key and permissions |
-| `INVALID_VALUE` | Invalid field value | Check field format/constraints |
+| Code                     | Meaning                | Action                         |
+| ------------------------ | ---------------------- | ------------------------------ |
+| `MISSING_REQUIRED_FIELD` | Required field missing | Provide the missing field      |
+| `NOT_FOUND`              | Resource not found     | Check identifier/name          |
+| `API_ERROR`              | Linear API error       | Check API key and permissions  |
+| `INVALID_VALUE`          | Invalid field value    | Check field format/constraints |
 
 ### Handling Errors
 
@@ -782,9 +794,9 @@ if __name__ == '__main__':
 
 ```javascript
 #!/usr/bin/env node
-const { exec } = require('child_process');
-const util = require('util');
-const execAsync = util.promisify(exec);
+const { exec } = require("child_process")
+const util = require("util")
+const execAsync = util.promisify(exec)
 
 class LinearCLI {
   /**
@@ -792,9 +804,9 @@ class LinearCLI {
    */
   static async exec(command) {
     const { stdout } = await execAsync(
-      `linear ${command.join(' ')} --json`
-    );
-    return JSON.parse(stdout);
+      `linear ${command.join(" ")} --json`,
+    )
+    return JSON.parse(stdout)
   }
 
   /**
@@ -806,21 +818,21 @@ class LinearCLI {
     description,
     priority,
     assignee,
-    labels
+    labels,
   }) {
-    const cmd = ['issue', 'create', '--title', `"${title}"`, '--team', team];
+    const cmd = ["issue", "create", "--title", `"${title}"`, "--team", team]
 
-    if (description) cmd.push('--description', `"${description}"`);
-    if (priority) cmd.push('--priority', priority);
-    if (assignee) cmd.push('--assignee', assignee);
-    if (labels) cmd.push('--label', ...labels);
+    if (description) cmd.push("--description", `"${description}"`)
+    if (priority) cmd.push("--priority", priority)
+    if (assignee) cmd.push("--assignee", assignee)
+    if (labels) cmd.push("--label", ...labels)
 
-    const result = await this.exec(cmd);
+    const result = await this.exec(cmd)
 
     if (result.success) {
-      return result.issue.identifier;
+      return result.issue.identifier
     } else {
-      throw new Error(result.error.message);
+      throw new Error(result.error.message)
     }
   }
 
@@ -828,21 +840,21 @@ class LinearCLI {
    * Get issue
    */
   static async getIssue(identifier) {
-    const result = await this.exec(['issue', 'view', identifier]);
-    return result.issue;
+    const result = await this.exec(["issue", "view", identifier])
+    return result.issue
   }
 
   /**
    * Update issue
    */
   static async updateIssue(identifier, { state, priority }) {
-    const cmd = ['issue', 'update', identifier];
+    const cmd = ["issue", "update", identifier]
 
-    if (state) cmd.push('--state', `"${state}"`);
-    if (priority) cmd.push('--priority', priority);
+    if (state) cmd.push("--state", `"${state}"`)
+    if (priority) cmd.push("--priority", priority)
 
-    const result = await this.exec(cmd);
-    return result.success;
+    const result = await this.exec(cmd)
+    return result.success
   }
 }
 
@@ -851,30 +863,29 @@ async function main() {
   try {
     // Create issue
     const issueId = await LinearCLI.createIssue({
-      title: 'Fix login bug',
-      team: 'ENG',
+      title: "Fix login bug",
+      team: "ENG",
       priority: 1,
-      assignee: '@me',
-      labels: ['bug', 'security']
-    });
-    console.log(`Created: ${issueId}`);
+      assignee: "@me",
+      labels: ["bug", "security"],
+    })
+    console.log(`Created: ${issueId}`)
 
     // Get issue
-    const issue = await LinearCLI.getIssue(issueId);
-    console.log(`Title: ${issue.title}`);
-    console.log(`State: ${issue.state.name}`);
+    const issue = await LinearCLI.getIssue(issueId)
+    console.log(`Title: ${issue.title}`)
+    console.log(`State: ${issue.state.name}`)
 
     // Update issue
-    await LinearCLI.updateIssue(issueId, { state: 'In Progress' });
-    console.log('Updated to In Progress');
-
+    await LinearCLI.updateIssue(issueId, { state: "In Progress" })
+    console.log("Updated to In Progress")
   } catch (error) {
-    console.error('Error:', error.message);
-    process.exit(1);
+    console.error("Error:", error.message)
+    process.exit(1)
   }
 }
 
-main();
+main()
 ```
 
 ---
@@ -882,39 +893,47 @@ main();
 ## Important Notes
 
 ### 1. User References
+
 - Use `@me` for yourself, not `self`
 - Use username or email for others
 
 ### 2. Labels
+
 - Space-separated: `--label A B C`
 - NOT repeated: `--label A --label B`
 
 ### 3. Label Groups
+
 - Parent must have `--is-group` flag
 - Children use `--parent "ParentName"`
 - Display as `parent/child`
 
 ### 4. Milestones
+
 - Require project UUID (not slug)
 - Get UUID: `linear project view SLUG --json | jq -r '.project.id'`
 
 ### 5. Cross-References
+
 - Use markdown links with full URLs
 - Format: `[Text](https://linear.app/...)`
 - Plain text like `ENG-123` won't link
 
 ### 6. Content Fields
+
 - Project description: Max 255 chars
 - Project content: ~200KB
 - Issue description: ~200KB
 - Use files for long content: `--content "$(cat file.md)"`
 
 ### 7. Relationships
+
 - All types are bidirectional
 - View both directions with `issue relations`
 - Types: blocks, related, duplicate, similar
 
 ### 8. VCS Context
+
 - CLI auto-detects issue from git branch
 - Format: `feature/ENG-123-description`
 - Use `issue view` without ID to see current
@@ -924,23 +943,27 @@ main();
 ## Quick Reference
 
 ### Priority Values
+
 - `1` = Urgent
 - `2` = High
 - `3` = Normal
 - `4` = Low
 
 ### Health Values (Projects)
+
 - `onTrack`
 - `atRisk`
 - `offTrack`
 
 ### Relationship Types
+
 - `--blocks` = This blocks other issues
 - `--related-to` = General relation
 - `--duplicate-of` = Mark as duplicate
 - `--similar-to` = Similar issues
 
 ### Common Flags
+
 - `--json` = JSON output (always use)
 - `--team TEAM` = Team key
 - `--project "Name"` = Project name

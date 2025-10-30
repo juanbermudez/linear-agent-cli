@@ -86,13 +86,13 @@ export class ConfigManager {
 
   get(key: string): unknown {
     const parts = key.split(".")
-    let current: any = this.config
+    let current: unknown = this.config
 
     for (const part of parts) {
       if (current == null || typeof current !== "object") {
         return undefined
       }
-      current = current[part]
+      current = (current as Record<string, unknown>)[part]
     }
 
     return current
@@ -100,14 +100,14 @@ export class ConfigManager {
 
   set(key: string, value: unknown): void {
     const parts = key.split(".")
-    let current: any = this.config
+    let current = this.config as Record<string, unknown>
 
     for (let i = 0; i < parts.length - 1; i++) {
       const part = parts[i]
       if (current[part] == null || typeof current[part] !== "object") {
         current[part] = {}
       }
-      current = current[part]
+      current = current[part] as Record<string, unknown>
     }
 
     const lastPart = parts[parts.length - 1]

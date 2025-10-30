@@ -47,7 +47,8 @@ await snapshotTest({
                 title: "API Design Document",
                 slugId: "api-design-document",
                 url: "https://linear.app/test/document/api-design-document",
-                content: "# API Design\n\nThis document describes the API design.",
+                content:
+                  "# API Design\n\nThis document describes the API design.",
                 project: {
                   id: "project-123",
                   name: "Backend Redesign",

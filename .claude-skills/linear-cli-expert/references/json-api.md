@@ -7,6 +7,7 @@ Complete guide to parsing and working with JSON responses from the Linear CLI.
 All Linear CLI commands with `--json` flag return structured JSON responses.
 
 ### Success Response Format
+
 ```json
 {
   "success": true,
@@ -19,6 +20,7 @@ All Linear CLI commands with `--json` flag return structured JSON responses.
 ```
 
 ### Error Response Format
+
 ```json
 {
   "success": false,
@@ -31,17 +33,18 @@ All Linear CLI commands with `--json` flag return structured JSON responses.
 
 ## Error Codes
 
-| Code | Meaning | Common Causes |
-|------|---------|---------------|
-| `MISSING_REQUIRED_FIELD` | Required field not provided | Missing `--title`, `--team`, etc. |
-| `NOT_FOUND` | Resource not found | Invalid team key, issue ID, or project slug |
-| `INVALID_VALUE` | Field value is invalid | Invalid priority (not 1-4), malformed date |
-| `API_ERROR` | Linear API error | Network issues, API key issues, rate limits |
-| `PERMISSION_DENIED` | Insufficient permissions | User lacks permission for operation |
+| Code                     | Meaning                     | Common Causes                               |
+| ------------------------ | --------------------------- | ------------------------------------------- |
+| `MISSING_REQUIRED_FIELD` | Required field not provided | Missing `--title`, `--team`, etc.           |
+| `NOT_FOUND`              | Resource not found          | Invalid team key, issue ID, or project slug |
+| `INVALID_VALUE`          | Field value is invalid      | Invalid priority (not 1-4), malformed date  |
+| `API_ERROR`              | Linear API error            | Network issues, API key issues, rate limits |
+| `PERMISSION_DENIED`      | Insufficient permissions    | User lacks permission for operation         |
 
 ## Resource Response Schemas
 
 ### Issue Create/Update Response
+
 ```json
 {
   "success": true,
@@ -77,6 +80,7 @@ All Linear CLI commands with `--json` flag return structured JSON responses.
 ```
 
 ### Issue View Response
+
 ```json
 {
   "issue": {
@@ -196,6 +200,7 @@ All Linear CLI commands with `--json` flag return structured JSON responses.
 ```
 
 ### Issue List Response
+
 ```json
 {
   "issues": [
@@ -212,6 +217,7 @@ All Linear CLI commands with `--json` flag return structured JSON responses.
 ```
 
 ### Project Create/Update Response
+
 ```json
 {
   "success": true,
@@ -246,6 +252,7 @@ All Linear CLI commands with `--json` flag return structured JSON responses.
 ```
 
 ### Project View Response
+
 ```json
 {
   "project": {
@@ -292,6 +299,7 @@ All Linear CLI commands with `--json` flag return structured JSON responses.
 ```
 
 ### Label Create Response
+
 ```json
 {
   "success": true,
@@ -314,6 +322,7 @@ All Linear CLI commands with `--json` flag return structured JSON responses.
 ```
 
 ### Document Create Response
+
 ```json
 {
   "success": true,
@@ -424,49 +433,57 @@ for issue in result['issues']:
 ### JavaScript/Node.js
 
 ```javascript
-const { exec } = require('child_process');
-const util = require('util');
-const execAsync = util.promisify(exec);
+const { exec } = require("child_process")
+const util = require("util")
+const execAsync = util.promisify(exec)
 
 async function linearExec(command) {
-  const { stdout } = await execAsync(`linear ${command.join(' ')} --json`);
-  return JSON.parse(stdout);
+  const { stdout } = await execAsync(`linear ${command.join(" ")} --json`)
+  return JSON.parse(stdout)
 }
 
 // Create issue
-const result = await linearExec(['issue', 'create', '--title', 'Task', '--team', 'ENG']);
+const result = await linearExec([
+  "issue",
+  "create",
+  "--title",
+  "Task",
+  "--team",
+  "ENG",
+])
 if (result.success) {
-  console.log(`Created: ${result.issue.identifier}`);
+  console.log(`Created: ${result.issue.identifier}`)
 } else {
-  console.log(`Error: ${result.error.message}`);
+  console.log(`Error: ${result.error.message}`)
 }
 
 // View issue
-const issue = await linearExec(['issue', 'view', 'ENG-123']);
-console.log(`Title: ${issue.issue.title}`);
-console.log(`State: ${issue.issue.state.name}`);
-console.log(`Assignee: ${issue.issue.assignee.name}`);
+const issue = await linearExec(["issue", "view", "ENG-123"])
+console.log(`Title: ${issue.issue.title}`)
+console.log(`State: ${issue.issue.state.name}`)
+console.log(`Assignee: ${issue.issue.assignee.name}`)
 
 // Get relationships
-const relations = await linearExec(['issue', 'relations', 'ENG-123']);
-relations.relations.nodes.forEach(rel => {
-  console.log(`Blocks: ${rel.issue.identifier}`);
-});
-relations.inverseRelations.nodes.forEach(rel => {
-  console.log(`Blocked by: ${rel.issue.identifier}`);
-});
+const relations = await linearExec(["issue", "relations", "ENG-123"])
+relations.relations.nodes.forEach((rel) => {
+  console.log(`Blocks: ${rel.issue.identifier}`)
+})
+relations.inverseRelations.nodes.forEach((rel) => {
+  console.log(`Blocked by: ${rel.issue.identifier}`)
+})
 
 // List and filter issues
-const list = await linearExec(['issue', 'list', '--team', 'ENG']);
-const inProgress = list.issues.filter(i => i.state.name === 'In Progress');
-inProgress.forEach(issue => {
-  console.log(`${issue.identifier}: ${issue.title}`);
-});
+const list = await linearExec(["issue", "list", "--team", "ENG"])
+const inProgress = list.issues.filter((i) => i.state.name === "In Progress")
+inProgress.forEach((issue) => {
+  console.log(`${issue.identifier}: ${issue.title}`)
+})
 ```
 
 ## Common Parsing Patterns
 
 ### Extract Nested Fields
+
 ```bash
 # Get project UUID from slug
 PROJECT_ID=$(linear project view api-redesign --json | jq -r '.project.id')
@@ -482,6 +499,7 @@ linear issue view ENG-123 --json | jq -r '
 ```
 
 ### Handle Missing Fields
+
 ```bash
 # Safe extraction with default values
 ASSIGNEE=$(linear issue view ENG-123 --json | jq -r '.issue.assignee.name // "Unassigned"')
@@ -489,6 +507,7 @@ DUE_DATE=$(linear issue view ENG-123 --json | jq -r '.issue.dueDate // "No due d
 ```
 
 ### Batch Operations
+
 ```bash
 # Create multiple issues and collect IDs
 ISSUES=()
@@ -502,6 +521,7 @@ echo "Created: ${ISSUES[@]}"
 ```
 
 ### Error Handling
+
 ```bash
 create_issue() {
   local result=$(linear issue create "$@" --json)
@@ -528,39 +548,39 @@ fi
 
 ### Common Fields Across Resources
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string (UUID) | Unique identifier |
-| `url` | string | Linear web URL |
-| `createdAt` | string (ISO 8601) | Creation timestamp |
+| Field       | Type              | Description           |
+| ----------- | ----------------- | --------------------- |
+| `id`        | string (UUID)     | Unique identifier     |
+| `url`       | string            | Linear web URL        |
+| `createdAt` | string (ISO 8601) | Creation timestamp    |
 | `updatedAt` | string (ISO 8601) | Last update timestamp |
 
 ### Issue-Specific Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `identifier` | string | Team key + number (e.g., "ENG-123") |
-| `title` | string | Issue title |
-| `description` | string | Full description (markdown) |
-| `state` | object | Workflow state |
-| `priority` | number | 0=No priority, 1=Urgent, 2=High, 3=Normal, 4=Low |
-| `priorityLabel` | string | Human-readable priority |
-| `estimate` | number | Story points estimate |
-| `dueDate` | string | Due date (YYYY-MM-DD) |
-| `completedAt` | string\|null | Completion timestamp |
+| Field           | Type         | Description                                      |
+| --------------- | ------------ | ------------------------------------------------ |
+| `identifier`    | string       | Team key + number (e.g., "ENG-123")              |
+| `title`         | string       | Issue title                                      |
+| `description`   | string       | Full description (markdown)                      |
+| `state`         | object       | Workflow state                                   |
+| `priority`      | number       | 0=No priority, 1=Urgent, 2=High, 3=Normal, 4=Low |
+| `priorityLabel` | string       | Human-readable priority                          |
+| `estimate`      | number       | Story points estimate                            |
+| `dueDate`       | string       | Due date (YYYY-MM-DD)                            |
+| `completedAt`   | string\|null | Completion timestamp                             |
 
 ### Project-Specific Fields
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `slug` | string | URL-safe identifier |
-| `name` | string | Project name |
-| `description` | string | Short description (max 255 chars) |
-| `content` | string | Full content (markdown) |
-| `state` | string | "planned", "started", "paused", "completed", "canceled" |
-| `progress` | number | Progress percentage (0-1) |
-| `startDate` | string | Start date (YYYY-MM-DD) |
-| `targetDate` | string | Target completion date (YYYY-MM-DD) |
+| Field         | Type   | Description                                             |
+| ------------- | ------ | ------------------------------------------------------- |
+| `slug`        | string | URL-safe identifier                                     |
+| `name`        | string | Project name                                            |
+| `description` | string | Short description (max 255 chars)                       |
+| `content`     | string | Full content (markdown)                                 |
+| `state`       | string | "planned", "started", "paused", "completed", "canceled" |
+| `progress`    | number | Progress percentage (0-1)                               |
+| `startDate`   | string | Start date (YYYY-MM-DD)                                 |
+| `targetDate`  | string | Target completion date (YYYY-MM-DD)                     |
 
 ### Relationship Object Structure
 

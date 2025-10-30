@@ -137,12 +137,14 @@ export async function createIssue(options: any) {
 ### Command Structure
 
 Each command should:
+
 - Support both interactive and flag-based modes
 - Provide JSON output with `--json` flag
 - Include helpful error messages
 - Follow existing command patterns
 
 Example:
+
 ```typescript
 export const myCommand = new Command()
   .name("my-command")
@@ -183,6 +185,7 @@ export const myCommand = new Command()
 - Mirror command structure in test directory
 
 Example test structure:
+
 ```
 src/commands/issue/issue-create.ts
 test/commands/issue/issue-create.test.ts
@@ -240,6 +243,7 @@ Deno.test("command output matches snapshot", async (t) => {
 ### Integration Tests
 
 Test with real Linear API:
+
 ```bash
 # Set test API key
 export LINEAR_API_KEY="lin_api_test_..."
@@ -289,6 +293,7 @@ changelog add --type changed "rename --assignee self to --assignee @me"
 ```
 
 Types:
+
 - `added` - New features
 - `changed` - Changes in existing functionality
 - `deprecated` - Soon-to-be removed features
@@ -331,6 +336,7 @@ Feature requests should include:
 ## 🙏 Recognition
 
 Contributors will be:
+
 - Listed in release notes
 - Credited in documentation
 - Acknowledged in the project

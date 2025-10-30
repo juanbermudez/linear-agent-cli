@@ -63,7 +63,11 @@ await snapshotTest({
               nodes: [
                 { id: "status-planned", name: "Planned", type: "planned" },
                 { id: "status-active", name: "Active", type: "started" },
-                { id: "status-completed", name: "Completed", type: "completed" },
+                {
+                  id: "status-completed",
+                  name: "Completed",
+                  type: "completed",
+                },
               ],
             },
           },
@@ -80,7 +84,8 @@ await snapshotTest({
                 id: "init-123",
                 name: "Q1 2025 Platform Goals",
                 slugId: "q1-2025-platform-goals",
-                url: "https://linear.app/test/initiative/q1-2025-platform-goals",
+                url:
+                  "https://linear.app/test/initiative/q1-2025-platform-goals",
                 description: "Focus on platform stability and performance",
                 status: {
                   id: "status-planned",

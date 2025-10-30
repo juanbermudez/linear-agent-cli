@@ -64,14 +64,14 @@ This CLI follows the principles shared by [@dexhorthy](https://x.com/dexhorthy) 
 
 ```typescript
 // Get current issue from VCS context
-const result = execSync('linear issue view --json').toString();
-const issue = JSON.parse(result).issue;
+const result = execSync("linear issue view --json").toString()
+const issue = JSON.parse(result).issue
 
 // Create document for current issue's project
 execSync(`linear document create \
   --current-project \
   --title "Implementation Notes for ${issue.title}" \
-  --json`);
+  --json`)
 ```
 
 ### 2. Project Kickoff Automation
@@ -83,36 +83,37 @@ const result = execSync(`linear project create \
   --team ENG \
   --with-doc \
   --doc-title "Technical Specification" \
-  --json`).toString();
+  --json`).toString()
 
-const { project, document } = JSON.parse(result);
+const { project, document } = JSON.parse(result)
 
 // Create initial issues
 const issues = [
-  'Setup project structure',
-  'Implement core API',
-  'Add tests'
-].map(title => {
+  "Setup project structure",
+  "Implement core API",
+  "Add tests",
+].map((title) => {
   const res = execSync(`linear issue create \
     --title "${title}" \
     --project ${project.id} \
-    --json`).toString();
-  return JSON.parse(res).issue;
-});
+    --json`).toString()
+  return JSON.parse(res).issue
+})
 ```
 
 ### 3. Bulk Operations
 
 ```typescript
 // Get all issues for a project
-const result = execSync('linear issue list --project PROJ-123 --json').toString();
-const issues = JSON.parse(result).issues;
+const result = execSync("linear issue list --project PROJ-123 --json")
+  .toString()
+const issues = JSON.parse(result).issues
 
 // Update all issues to "In Review"
 for (const issue of issues) {
   execSync(`linear issue update ${issue.identifier} \
     --status "In Review" \
-    --json`);
+    --json`)
 }
 ```
 
@@ -123,19 +124,19 @@ for (const issue of issues) {
 const initResult = execSync(`linear initiative create \
   --name "Q1 2024 Goals" \
   --status active \
-  --json`).toString();
-const initiative = JSON.parse(initResult).initiative;
+  --json`).toString()
+const initiative = JSON.parse(initResult).initiative
 
 // Create and link projects
-const projects = ['Backend', 'Frontend', 'Mobile'];
+const projects = ["Backend", "Frontend", "Mobile"]
 for (const name of projects) {
   const projResult = execSync(`linear project create \
     --name "Q1 - ${name}" \
-    --json`).toString();
-  const project = JSON.parse(projResult).project;
-  
+    --json`).toString()
+  const project = JSON.parse(projResult).project
+
   execSync(`linear initiative link ${initiative.id} \
-    --project ${project.id}`);
+    --project ${project.id}`)
 }
 ```
 
@@ -240,11 +241,11 @@ linear issue create --title "Test"
 Always check the `success` field before accessing data:
 
 ```typescript
-const result = JSON.parse(output);
+const result = JSON.parse(output)
 if (result.success) {
-  processData(result.issue);
+  processData(result.issue)
 } else {
-  handleError(result.error);
+  handleError(result.error)
 }
 ```
 
@@ -275,75 +276,77 @@ linear issue list --json | \
 ```typescript
 #!/usr/bin/env ts-node
 
-import { execSync } from 'child_process';
+import { execSync } from "child_process"
 
 interface LinearResult {
-  success: boolean;
-  project?: any;
-  document?: any;
-  error?: { code: string; message: string };
+  success: boolean
+  project?: any
+  document?: any
+  error?: { code: string; message: string }
 }
 
 function runLinear(cmd: string): LinearResult {
   try {
-    const output = execSync(`linear ${cmd} --json`, { encoding: 'utf-8' });
-    return JSON.parse(output);
+    const output = execSync(`linear ${cmd} --json`, { encoding: "utf-8" })
+    return JSON.parse(output)
   } catch (error) {
-    const output = error.stdout || error.stderr;
-    return JSON.parse(output);
+    const output = error.stdout || error.stderr
+    return JSON.parse(output)
   }
 }
 
 async function setupProject(name: string, team: string) {
   // Create project with document
-  const result = runLinear(`project create --name "${name}" --team ${team} --with-doc`);
-  
+  const result = runLinear(
+    `project create --name "${name}" --team ${team} --with-doc`,
+  )
+
   if (!result.success) {
-    throw new Error(`Failed to create project: ${result.error?.message}`);
+    throw new Error(`Failed to create project: ${result.error?.message}`)
   }
-  
-  console.log(`Created project: ${result.project.name}`);
-  console.log(`Created document: ${result.document.title}`);
-  
+
+  console.log(`Created project: ${result.project.name}`)
+  console.log(`Created document: ${result.document.title}`)
+
   // Create milestones
   const milestones = [
-    { name: 'Alpha', date: '2024-06-30' },
-    { name: 'Beta', date: '2024-09-30' },
-    { name: 'GA', date: '2024-12-31' }
-  ];
-  
+    { name: "Alpha", date: "2024-06-30" },
+    { name: "Beta", date: "2024-09-30" },
+    { name: "GA", date: "2024-12-31" },
+  ]
+
   for (const milestone of milestones) {
     runLinear(`project milestone create ${result.project.id} \
       --name "${milestone.name}" \
-      --target-date ${milestone.date}`);
+      --target-date ${milestone.date}`)
   }
-  
+
   // Create initial issues
   const tasks = [
-    'Setup project structure',
-    'Implement core API',
-    'Add authentication',
-    'Write tests',
-    'Documentation'
-  ];
-  
+    "Setup project structure",
+    "Implement core API",
+    "Add authentication",
+    "Write tests",
+    "Documentation",
+  ]
+
   for (const task of tasks) {
     const issueResult = runLinear(`issue create \
       --title "${task}" \
-      --project ${result.project.id}`);
-      
+      --project ${result.project.id}`)
+
     if (issueResult.success) {
-      console.log(`Created issue: ${issueResult.issue.identifier}`);
+      console.log(`Created issue: ${issueResult.issue.identifier}`)
     }
   }
-  
-  return result.project;
+
+  return result.project
 }
 
 // Run
-setupProject('Mobile App v2', 'MOBILE')
-  .then(project => console.log(`\nProject ready: ${project.url}`))
-  .catch(error => console.error(error));
+setupProject("Mobile App v2", "MOBILE")
+  .then((project) => console.log(`\nProject ready: ${project.url}`))
+  .catch((error) => console.error(error))
 ```
 
 ## Testing with AI Agents
@@ -361,20 +364,20 @@ Example test setup:
 // Mock for testing
 class MockLinearCLI {
   exec(cmd: string): LinearResult {
-    if (cmd.includes('issue create')) {
+    if (cmd.includes("issue create")) {
       return {
         success: true,
-        issue: { id: 'test-123', identifier: 'TEST-123' }
-      };
+        issue: { id: "test-123", identifier: "TEST-123" },
+      }
     }
     // ... handle other commands
   }
 }
 
 // Use in tests
-const cli = new MockLinearCLI();
-const result = cli.exec('issue create --title "Test"');
-expect(result.success).toBe(true);
+const cli = new MockLinearCLI()
+const result = cli.exec('issue create --title "Test"')
+expect(result.success).toBe(true)
 ```
 
 ## Resources

@@ -9,16 +9,19 @@ This guide shows how to use the Linear CLI with any workspace and team. Configur
 ## Prerequisites
 
 1. **Install the CLI**:
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/install.sh | bash
 ```
 
 2. **Reload Your Shell**:
+
 ```bash
 source ~/.zshrc  # or ~/.bashrc for bash
 ```
 
 3. **Verify Installation**:
+
 ```bash
 linear --version
 ```
@@ -38,21 +41,25 @@ linear config setup  # or: linear config init
 The wizard will guide you through:
 
 **Step 1: API Key**
+
 - If you don't have an API key, get one at: https://linear.app/settings/api
 - The wizard prompts for your key (masked input)
 - Optionally saves to your shell profile automatically
 
 **Step 2: Workspace & Teams**
+
 - Automatically fetches your Linear workspace
 - Lists all available teams with search
 - Choose single team, multiple teams, or all teams
 
 **Step 3: Preferences**
+
 - Enable 24-hour caching (improves performance)
 - Auto-create git branches when starting issues
 - Set default issue sort order
 
 **Step 4: Complete**
+
 - Generates `.linear.toml` configuration file
 - Saves to git root (if in a repo) or current directory
 - Ready to use immediately!
@@ -431,6 +438,7 @@ echo "🔗 View project: https://linear.app/your-workspace/project/$PROJECT_ID"
 ```
 
 Usage:
+
 ```bash
 chmod +x create-feature.sh
 ./create-feature.sh "Portfolio Tracker" "Build a real-time portfolio tracking system"
@@ -443,6 +451,7 @@ chmod +x create-feature.sh
 The CLI accepts multiple formats for identifying resources:
 
 ### Issues
+
 ```bash
 # By identifier
 linear issue view TEAM-123
@@ -455,6 +464,7 @@ linear issue view "OpenAI integration"  # Searches and matches
 ```
 
 ### Projects
+
 ```bash
 # By UUID
 linear project view 550e8400-e29b-41d4-a716-446655440000
@@ -467,6 +477,7 @@ linear project view "AI Investment Tool"  # Searches
 ```
 
 ### Documents
+
 ```bash
 # By UUID
 linear document view a1b2c3d4-e5f6-7890-abcd-ef1234567890
@@ -608,6 +619,7 @@ done
 ## Troubleshooting
 
 ### API Key Issues
+
 ```bash
 # Verify API key is set
 echo $LINEAR_API_KEY
@@ -617,7 +629,8 @@ linear team list
 ```
 
 ### Cache Issues
-```bash
+
+````bash
 # Clear all cache
 rm -rf ~/.cache/linear-cli/
 
@@ -630,7 +643,7 @@ linear workflow list```
 # Verify deno permissions
 which linear
 # Should show: /Users/yourname/.deno/bin/linear
-```
+````
 
 ---
 

@@ -87,7 +87,7 @@ export const editCommand = new Command()
     if (options.project) {
       try {
         projectId = await getProjectIdByName(options.project)
-      } catch (err) {
+      } catch (_err) {
         const errorMsg = `Project '${options.project}' not found`
         if (useJson) {
           console.error(
@@ -152,7 +152,7 @@ export const editCommand = new Command()
         console.log(successColor(`✓ Updated document: ${document.title}`))
         console.log(document.url)
       }
-    } catch (err) {
+    } catch (_err) {
       spinner?.stop()
 
       const errorMsg = err.message.includes("not found")

@@ -103,7 +103,7 @@ async function interactiveCreate(options: CreateOptions) {
   if (leadInput.trim()) {
     try {
       leadId = await lookupUserId(leadInput.trim())
-    } catch (err) {
+    } catch (_err) {
       console.error(errorColor(`Warning: User '${leadInput}' not found, proceeding without lead`))
     }
   }
@@ -199,7 +199,7 @@ async function interactiveCreate(options: CreateOptions) {
       if (teamId) {
         teamIds.push(teamId)
       }
-    } catch (err) {
+    } catch (_err) {
       console.error(errorColor(`Error: Team '${teamKey}' not found`))
       Deno.exit(1)
     }
@@ -228,7 +228,7 @@ async function interactiveCreate(options: CreateOptions) {
     spinner.stop()
     console.log(successColor(`✓ Created project: ${project.name}`))
     console.log(project.url)
-  } catch (err) {
+  } catch (_err) {
     spinner.stop()
     console.error(errorColor(`Error: ${err.message}`))
     Deno.exit(1)
@@ -291,7 +291,7 @@ async function flagBasedCreate(options: CreateOptions) {
       if (teamId) {
         teamIds.push(teamId)
       }
-    } catch (err) {
+    } catch (_err) {
       const errorMsg = `Team '${teamKey}' not found`
       if (useJson) {
         console.error(
@@ -417,7 +417,7 @@ async function flagBasedCreate(options: CreateOptions) {
   if (options.lead) {
     try {
       leadId = await lookupUserId(options.lead)
-    } catch (err) {
+    } catch (_err) {
       const errorMsg = `User '${options.lead}' not found`
       if (useJson) {
         console.error(
@@ -489,7 +489,7 @@ async function flagBasedCreate(options: CreateOptions) {
           console.log(successColor(`✓ Created document: ${document.title} (linked to project)`))
           console.log(document.url)
         }
-      } catch (err) {
+      } catch (_err) {
         docSpinner?.stop()
         if (useJson) {
           console.error(
@@ -516,7 +516,7 @@ async function flagBasedCreate(options: CreateOptions) {
     }
 
     if (useJson) {
-      const response: any = {
+      const response = {
         success: true,
         operation: "create",
         project: {
@@ -559,7 +559,7 @@ async function flagBasedCreate(options: CreateOptions) {
       console.log(successColor(`✓ Created project: ${project.name}`))
       console.log(project.url)
     }
-  } catch (err) {
+  } catch (_err) {
     spinner?.stop()
 
     if (useJson) {

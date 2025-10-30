@@ -159,7 +159,7 @@ export const createCommand = new Command()
             throw new Error("Team not found")
           }
           teamId = resolvedTeamId
-        } catch (err) {
+        } catch (_err) {
           const errorMsg = `Team '${options.team}' not found`
           if (useJson) {
             console.error(
@@ -198,7 +198,7 @@ export const createCommand = new Command()
         if (!parentId) {
           throw new Error("Parent label not found")
         }
-      } catch (err) {
+      } catch (_err) {
         const errorMsg = `Parent label '${options.parent}' not found in team ${options.team}`
         if (useJson) {
           console.error(
@@ -253,7 +253,7 @@ export const createCommand = new Command()
           console.log(`Team: ${label.team.name} (${label.team.key})`)
         }
       }
-    } catch (err) {
+    } catch (_err) {
       spinner?.stop()
       if (useJson) {
         console.error(

@@ -43,6 +43,7 @@ linear label list             # List all labels
 ### Creating Issues
 
 **All Available Options:**
+
 ```bash
 linear issue create \
   --title "Fix login bug"                # Issue title (required without interactive)
@@ -114,6 +115,7 @@ linear issue create \
 ### Updating Issues
 
 **All Available Options:**
+
 ```bash
 linear issue update ENG-123 \
   --title "New title"                    # Change title
@@ -202,6 +204,7 @@ linear issue delete ENG-123
 ### Issue Relationships
 
 **Creating Relationships:**
+
 ```bash
 # Block other issues
 linear issue relate ENG-123 ENG-124 --blocks
@@ -218,12 +221,14 @@ linear issue relate ENG-123 ENG-129 --similar-to
 ```
 
 **Removing Relationships:**
+
 ```bash
 # Remove any type of relationship
 linear issue unrelate ENG-123 ENG-124
 ```
 
 **Viewing Relationships:**
+
 ```bash
 # List all relationships for an issue
 linear issue relations ENG-123
@@ -234,6 +239,7 @@ linear issue relations ENG-123
 ```
 
 **Common Examples:**
+
 ```bash
 # Create issue that blocks others
 linear issue create \
@@ -258,10 +264,12 @@ linear issue relations ENG-123
 ### Creating Projects
 
 Projects in Linear have **two separate text fields**:
+
 - **description**: Short summary (max 255 characters) - shown in project lists
 - **content**: Full project body with rich markdown - shown in project overview
 
 **All Available Options:**
+
 ```bash
 linear project create \
   --name "Mobile App"                    # Project name (required without interactive)
@@ -328,25 +336,25 @@ linear project create \
 # API Redesign Project
 
 ## Overview
+
 This project aims to modernize our API infrastructure with GraphQL.
 
 ## Goals
+
 - Migrate from REST to GraphQL
 - Improve response times by 50%
 - Reduce API calls by 30%
 
 ## Architecture
-\`\`\`mermaid
-graph TB
-    Client --> Gateway
-    Gateway --> GraphQL
-    GraphQL --> Services
-\`\`\`
+
+\`\`\`mermaid graph TB Client --> Gateway Gateway --> GraphQL GraphQL --> Services \`\`\`
 
 ## Timeline
+
 See [Phase 1](https://linear.app/workspace/project/api-redesign/overview#milestone-abc).
 
 ## Related Issues
+
 - [ENG-101](https://linear.app/workspace/issue/ENG-101) - GraphQL schema design
 - [ENG-102](https://linear.app/workspace/issue/ENG-102) - Migration plan
 ```
@@ -354,6 +362,7 @@ See [Phase 1](https://linear.app/workspace/project/api-redesign/overview#milesto
 ### Updating Projects
 
 **All Available Options:**
+
 ```bash
 linear project update PROJECT-123 \
   --name "New Name"                      # Change project name
@@ -444,6 +453,7 @@ linear project milestone delete MILESTONE-ID
 ### Creating Initiatives
 
 **All Available Options:**
+
 ```bash
 linear initiative create \
   --name "Q1 2025 Goals"                 # Initiative name (required without interactive)
@@ -454,6 +464,7 @@ linear initiative create \
 ```
 
 **Common Examples:**
+
 ```bash
 # Interactive mode
 linear initiative create
@@ -554,6 +565,7 @@ linear document restore DOC-123
 ### Creating Labels
 
 **All Available Options:**
+
 ```bash
 linear label create \
   --name "bug"                           # Label name (required without interactive)
@@ -566,6 +578,7 @@ linear label create \
 ```
 
 **Common Examples:**
+
 ```bash
 # Interactive mode
 linear label create
@@ -600,6 +613,7 @@ linear label create \
 ```
 
 **Label Group Hierarchy:**
+
 ```bash
 # Step 1: Create parent group
 linear label create --name "Work-Type" --is-group --team ENG
@@ -616,12 +630,13 @@ linear issue create --title "Fix bug" --label Bugfix --team ENG
 ```
 
 **Important Notes:**
+
 - Parent labels MUST be created with `--is-group` flag
 - Sub-labels reference parent by name using `--parent`
 - Label groups display as `parent/child` format
 - Team is required when using `--parent` option
-```
 
+````
 ### Working with Labels
 
 ```bash
@@ -636,7 +651,7 @@ linear label update "bug" --color "#CC0000"
 
 # Delete label
 linear label delete "old-label"
-```
+````
 
 ## Content Formatting
 
@@ -645,6 +660,7 @@ linear label delete "old-label"
 Linear supports GitHub Flavored Markdown (GFM) with additional features:
 
 **Supported Features:**
+
 - ✅ Headers (H1-H6)
 - ✅ Bold, italic, strikethrough
 - ✅ Inline code and code blocks with syntax highlighting
@@ -662,31 +678,16 @@ Linear supports various Mermaid diagram types:
 
 ```markdown
 ## Flowchart
-\`\`\`mermaid
-graph TB
-    Start --> Process
-    Process --> Decision{Is it ok?}
-    Decision -->|Yes| End
-    Decision -->|No| Process
-\`\`\`
+
+\`\`\`mermaid graph TB Start --> Process Process --> Decision{Is it ok?} Decision -->|Yes| End Decision -->|No| Process \`\`\`
 
 ## Sequence Diagram
-\`\`\`mermaid
-sequenceDiagram
-    Client->>API: Request
-    API->>Database: Query
-    Database-->>API: Data
-    API-->>Client: Response
-\`\`\`
+
+\`\`\`mermaid sequenceDiagram Client->>API: Request API->>Database: Query Database-->>API: Data API-->>Client: Response \`\`\`
 
 ## Gantt Chart
-\`\`\`mermaid
-gantt
-    title Project Timeline
-    section Phase 1
-    Design :a1, 2025-01-01, 30d
-    Development :a2, after a1, 60d
-\`\`\`
+
+\`\`\`mermaid gantt title Project Timeline section Phase 1 Design :a1, 2025-01-01, 30d Development :a2, after a1, 60d \`\`\`
 ```
 
 ### Cross-Reference Syntax
@@ -697,41 +698,43 @@ Linear requires **markdown link format with full URLs** for clickable cross-refe
 
 ```markdown
 # ✅ Works - Markdown link with full URL
+
 Related to [ENG-123](https://linear.app/workspace/issue/ENG-123/issue-slug)
 
 # ❌ Doesn't work
-Related to ENG-123
-Related to @ENG-123
-Related to #ENG-123
-Related to [ENG-123]
+
+Related to ENG-123 Related to @ENG-123 Related to #ENG-123 Related to [ENG-123]
 ```
 
 #### Document References
 
 ```markdown
 # ✅ Works
+
 See [Technical Spec](https://linear.app/workspace/document/tech-spec-123)
 
 # ❌ Doesn't work
-See Technical Spec
-See @Technical Spec
+
+See Technical Spec See @Technical Spec
 ```
 
 #### Project References
 
 ```markdown
 # ✅ Works
+
 Part of [API Redesign](https://linear.app/workspace/project/api-redesign-abc)
 
 # ❌ Doesn't work
-Part of API Redesign
-Part of @API Redesign
+
+Part of API Redesign Part of @API Redesign
 ```
 
 #### Milestone References
 
 ```markdown
 # ✅ Works - Project URL + #milestone-{id}
+
 Targeting [Phase 1](https://linear.app/workspace/project/api-redesign/overview#milestone-abc123)
 ```
 
@@ -739,21 +742,23 @@ Targeting [Phase 1](https://linear.app/workspace/project/api-redesign/overview#m
 
 ```markdown
 # ✅ Works - /issue-label/ URL
+
 Tagged: [backend](https://linear.app/workspace/issue-label/backend)
 
 # ❌ Doesn't work
-Tagged: #backend
-Tagged: @backend
+
+Tagged: #backend Tagged: @backend
 ```
 
 #### User Mentions
 
 ```markdown
 # ✅ Works - @ format (exception to URL rule)
-Assigned to @john
-CC: @John Doe
+
+Assigned to @john CC: @John Doe
 
 # ❌ Doesn't work
+
 Assigned to john
 ```
 
@@ -763,31 +768,30 @@ Assigned to john
 # Task: API Migration
 
 ## Overview
+
 This task migrates our REST API to GraphQL.
 
-**Assigned to:** @john
-**Project:** [API Redesign](https://linear.app/workspace/project/api-redesign-abc)
-**Milestone:** [Phase 1](https://linear.app/workspace/project/api-redesign/overview#milestone-xyz)
+**Assigned to:** @john **Project:** [API Redesign](https://linear.app/workspace/project/api-redesign-abc) **Milestone:** [Phase 1](https://linear.app/workspace/project/api-redesign/overview#milestone-xyz)
 
 ## Dependencies
+
 - Depends on: [ENG-101](https://linear.app/workspace/issue/ENG-101) (schema design)
 - Blocks: [ENG-103](https://linear.app/workspace/issue/ENG-103) (client updates)
 
 ## Documentation
+
 See the [Technical Specification](https://linear.app/workspace/document/tech-spec-456) for details.
 
 ## Labels
+
 Tagged: [backend](https://linear.app/workspace/issue-label/backend), [migration](https://linear.app/workspace/issue-label/migration)
 
 ## Architecture
-\`\`\`mermaid
-graph TB
-    REST[REST API] --> Gateway
-    Gateway --> GraphQL[GraphQL Layer]
-    GraphQL --> Services
-\`\`\`
+
+\`\`\`mermaid graph TB REST[REST API] --> Gateway Gateway --> GraphQL[GraphQL Layer] GraphQL --> Services \`\`\`
 
 ## Checklist
+
 - [ ] Design GraphQL schema
 - [ ] Implement resolvers
 - [ ] Add tests
@@ -796,15 +800,16 @@ graph TB
 
 ### Content Length Limits
 
-| Resource | Field | Maximum Length |
-|----------|-------|----------------|
-| Project | description | 255 characters |
-| Project | content | ~200KB |
-| Issue | description | ~200KB |
-| Document | content | ~200KB |
-| Comment | body | ~200KB |
+| Resource | Field       | Maximum Length |
+| -------- | ----------- | -------------- |
+| Project  | description | 255 characters |
+| Project  | content     | ~200KB         |
+| Issue    | description | ~200KB         |
+| Document | content     | ~200KB         |
+| Comment  | body        | ~200KB         |
 
 **Tips:**
+
 - Keep project descriptions under 255 chars
 - Use `--content` for full project details
 - Use `$(cat file.md)` to load content from files
@@ -816,14 +821,14 @@ The following features are supported by the Linear API but not yet implemented i
 
 ### ❌ Issue Milestones
 
-**Status**: Not yet supported
-**Priority**: 🔴 High
+**Status**: Not yet supported **Priority**: 🔴 High
 
 **What's Missing**: Cannot attach issues to project milestones via CLI
 
 **Workaround**: Use Linear UI to assign issues to milestones
 
 **Coming Soon**:
+
 ```bash
 # Planned syntax (not yet implemented)
 linear issue create --title "Task" --milestone "Phase 1"
@@ -832,12 +837,12 @@ linear issue update ENG-123 --milestone "Phase 2"
 
 ### ❌ Issue Relationships
 
-**Status**: Not yet supported
-**Priority**: 🔴 High
+**Status**: Not yet supported **Priority**: 🔴 High
 
 **What's Missing**: Cannot create issue relationships (blocks, related, duplicate) via CLI
 
 **Available Relationship Types**:
+
 - `blocks` - This issue blocks another
 - `related` - Related issues
 - `duplicate` - Mark as duplicate
@@ -846,6 +851,7 @@ linear issue update ENG-123 --milestone "Phase 2"
 **Workaround**: Use Linear UI to set relationships
 
 **Coming Soon**:
+
 ```bash
 # Planned syntax (not yet implemented)
 linear issue relate ENG-123 --blocks ENG-124
@@ -857,24 +863,23 @@ linear issue relations ENG-123
 
 ### ❌ Cycles (Sprints)
 
-**Status**: Not yet supported
-**Priority**: 🟡 Medium
+**Status**: Not yet supported **Priority**: 🟡 Medium
 
 **What's Missing**: Cannot assign issues to cycles/sprints via CLI
 
 **Workaround**: Use Linear UI to assign issues to cycles
 
 **Coming Soon**:
+
 ```bash
 # Planned syntax (not yet implemented)
 linear issue create --title "Task" --cycle "Sprint 5"
 linear issue update ENG-123 --cycle "Sprint 6"
 ```
 
-### ⚠️  Project Content Update
+### ⚠️ Project Content Update
 
-**Status**: Partially supported
-**Priority**: 🔴 High
+**Status**: Partially supported **Priority**: 🔴 High
 
 **What's Missing**: `project update` doesn't support `--content` flag (only `project create` does)
 
@@ -882,14 +887,14 @@ linear issue update ENG-123 --cycle "Sprint 6"
 
 **Quick Fix Needed**: Add `--content` option to `project-update.ts` command
 
-### ⚠️  Enhanced Issue View
+### ⚠️ Enhanced Issue View
 
-**Status**: Limited output
-**Priority**: 🟡 Medium
+**Status**: Limited output **Priority**: 🟡 Medium
 
 **What's Missing**: `issue view` only shows title, description, URL, and comments
 
 **Not Shown**:
+
 - Priority, estimate, due date
 - Assignee, state, team
 - Project, milestone
@@ -915,14 +920,14 @@ linear issue view ENG-123 --json | jq '{
 
 ### ❓ Label Groups
 
-**Status**: Unknown
-**Priority**: 🟢 Low
+**Status**: Unknown **Priority**: 🟢 Low
 
 **Question**: Does `label create` support parent labels (label groups)?
 
 **API Support**: Yes, via `parentId` in `IssueLabelCreateInput`
 
 **Needs Testing**:
+
 ```bash
 # Does this work? (needs verification)
 linear label create --name "Bug: Critical" --parent "Bug"

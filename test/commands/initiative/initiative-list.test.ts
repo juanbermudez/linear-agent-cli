@@ -36,7 +36,8 @@ await snapshotTest({
                   id: "init-1",
                   name: "Q1 2025 Platform Goals",
                   slugId: "q1-2025-platform-goals",
-                  url: "https://linear.app/test/initiative/q1-2025-platform-goals",
+                  url:
+                    "https://linear.app/test/initiative/q1-2025-platform-goals",
                   description: "Focus on platform stability and performance",
                   status: {
                     id: "status-active",
@@ -74,7 +75,8 @@ await snapshotTest({
                   id: "init-3",
                   name: "Customer Experience Improvements",
                   slugId: "customer-experience-improvements",
-                  url: "https://linear.app/test/initiative/customer-experience-improvements",
+                  url:
+                    "https://linear.app/test/initiative/customer-experience-improvements",
                   description: null,
                   status: null,
                   owner: null,
@@ -116,7 +118,8 @@ await snapshotTest({
                   id: "init-1",
                   name: "Q1 2025 Platform Goals",
                   slugId: "q1-2025-platform-goals",
-                  url: "https://linear.app/test/initiative/q1-2025-platform-goals",
+                  url:
+                    "https://linear.app/test/initiative/q1-2025-platform-goals",
                   description: "Focus on platform stability",
                   status: {
                     id: "status-active",
@@ -166,7 +169,8 @@ await snapshotTest({
                   id: "init-1",
                   name: "Q1 2025 Platform Goals",
                   slugId: "q1-2025-platform-goals",
-                  url: "https://linear.app/test/initiative/q1-2025-platform-goals",
+                  url:
+                    "https://linear.app/test/initiative/q1-2025-platform-goals",
                   description: "Focus on platform stability",
                   status: {
                     id: "status-active",

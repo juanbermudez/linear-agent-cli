@@ -16,7 +16,7 @@ function maskToken(value: unknown): unknown {
   return value
 }
 
-function formatConfig(obj: any, prefix = "", masked = true): string[] {
+function formatConfig(obj: unknown, prefix = "", masked = true): string[] {
   const lines: string[] = []
 
   for (const [key, value] of Object.entries(obj)) {

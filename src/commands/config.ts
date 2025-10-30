@@ -1,5 +1,5 @@
 import { Command } from "@cliffy/command"
-import { Checkbox, Confirm, Input, prompt, Secret, Select } from "@cliffy/prompt"
+import { Checkbox, Confirm, Secret, Select } from "@cliffy/prompt"
 import { join } from "@std/path"
 import { gql } from "../__codegen__/gql.ts"
 import { GraphQLClient } from "graphql-request"

@@ -4,12 +4,17 @@ import { commonDenoArgs } from "../../utils/test-helpers.ts"
 import { join } from "@std/path"
 
 // Helper to create a temporary directory with config file
-async function setupTempConfig(): Promise<{ tempDir: string; cleanup: () => Promise<void> }> {
+async function setupTempConfig(): Promise<
+  { tempDir: string; cleanup: () => Promise<void> }
+> {
   const tempDir = await Deno.makeTempDir()
   const configPath = join(tempDir, "linear.toml")
 
   // Create initial config
-  await Deno.writeTextFile(configPath, `workspace = "test-workspace"\nteam_id = "ENG"\n`)
+  await Deno.writeTextFile(
+    configPath,
+    `workspace = "test-workspace"\nteam_id = "ENG"\n`,
+  )
 
   // Change to temp directory so config is found
   const originalDir = Deno.cwd()

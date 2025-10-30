@@ -183,7 +183,8 @@ await snapshotTest({
                 id: "doc-789",
                 title: "Mobile Redesign Design Doc",
                 slugId: "mobile-redesign-design-doc",
-                url: "https://linear.app/test/document/mobile-redesign-design-doc",
+                url:
+                  "https://linear.app/test/document/mobile-redesign-design-doc",
                 content: null,
                 project: {
                   id: "project-456",
@@ -272,7 +273,8 @@ await snapshotTest({
                 id: "doc-default",
                 title: "Backend Platform Design Doc",
                 slugId: "backend-platform-design-doc",
-                url: "https://linear.app/test/document/backend-platform-design-doc",
+                url:
+                  "https://linear.app/test/document/backend-platform-design-doc",
                 content: null,
                 project: {
                   id: "project-default",

@@ -20,7 +20,7 @@ interface CreateOptions {
   noInteractive?: boolean
 }
 
-async function interactiveCreate(options: CreateOptions) {
+async function interactiveCreate(_options: CreateOptions) {
   console.log("Create a new Linear document\n")
 
   // Prompt for title (required)
@@ -84,7 +84,7 @@ async function interactiveCreate(options: CreateOptions) {
     if (projectInput.trim()) {
       try {
         projectId = await getProjectIdByName(projectInput.trim())
-      } catch (err) {
+      } catch (_err) {
         console.error(errorColor(`Error: Project '${projectInput}' not found`))
         Deno.exit(1)
       }
@@ -147,7 +147,7 @@ async function interactiveCreate(options: CreateOptions) {
     spinner.stop()
     console.log(successColor(`✓ Created document: ${document.title}`))
     console.log(document.url)
-  } catch (err) {
+  } catch (_err) {
     spinner.stop()
     console.error(errorColor(`Error: ${err.message}`))
     Deno.exit(1)
@@ -237,7 +237,7 @@ async function flagBasedCreate(options: CreateOptions) {
   } else if (options.project) {
     try {
       projectId = await getProjectIdByName(options.project)
-    } catch (err) {
+    } catch (_err) {
       const errorMsg = `Project '${options.project}' not found`
       if (useJson) {
         console.error(
@@ -293,7 +293,7 @@ async function flagBasedCreate(options: CreateOptions) {
       console.log(successColor(`✓ Created document: ${document.title}`))
       console.log(document.url)
     }
-  } catch (err) {
+  } catch (_err) {
     spinner?.stop()
 
     if (useJson) {
