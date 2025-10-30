@@ -255,9 +255,24 @@ await snapshotTest({
           data: {
             projectStatuses: {
               nodes: [
-                { id: "status-1", name: "Planned", type: "planned", position: 0 },
-                { id: "status-2", name: "In Progress", type: "started", position: 1 },
-                { id: "status-3", name: "Completed", type: "completed", position: 2 },
+                {
+                  id: "status-1",
+                  name: "Planned",
+                  type: "planned",
+                  position: 0,
+                },
+                {
+                  id: "status-2",
+                  name: "In Progress",
+                  type: "started",
+                  position: 1,
+                },
+                {
+                  id: "status-3",
+                  name: "Completed",
+                  type: "completed",
+                  position: 2,
+                },
               ],
             },
           },
@@ -360,9 +375,24 @@ await snapshotTest({
           data: {
             projectStatuses: {
               nodes: [
-                { id: "status-1", name: "Planned", type: "planned", position: 0 },
-                { id: "status-2", name: "In Progress", type: "started", position: 1 },
-                { id: "status-3", name: "Completed", type: "completed", position: 2 },
+                {
+                  id: "status-1",
+                  name: "Planned",
+                  type: "planned",
+                  position: 0,
+                },
+                {
+                  id: "status-2",
+                  name: "In Progress",
+                  type: "started",
+                  position: 1,
+                },
+                {
+                  id: "status-3",
+                  name: "Completed",
+                  type: "completed",
+                  position: 2,
+                },
               ],
             },
           },

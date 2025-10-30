@@ -34,7 +34,7 @@ await snapshotTest({
   ],
   denoArgs: commonDenoArgs,
   async fn() {
-    const { cleanup} = await setupMockLinearServer([
+    const { cleanup } = await setupMockLinearServer([
       // Mock response for getProjectIdByName
       {
         queryName: "GetProjectIdByName",
