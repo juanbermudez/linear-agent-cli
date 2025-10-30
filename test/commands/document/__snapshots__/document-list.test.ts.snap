@@ -29,3 +29,126 @@ Options:
 stderr:
 ""
 `;
+
+snapshot[`Document List Command - All Documents 1`] = `
+stdout:
+"    TITLE                                                PROJECT               CREATOR          UPDATED     
+📄  API Design Document                                  Backend Platform      Alice Smith      653 days ago
+📄  Database Migration Plan                              Infrastructure        Bob Jones        656 days ago
+📄  Meeting Notes                                        -                     Charlie Brown    654 days ago
+"
+stderr:
+""
+`;
+
+snapshot[`Document List Command - JSON Output 1`] = `
+stdout:
+'{
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "API Design Document",
+      "slugId": "api-design-document",
+      "url": "https://linear.app/test/document/api-design-document",
+      "project": {
+        "id": "project-1",
+        "name": "Backend Platform"
+      },
+      "creator": {
+        "name": "Alice Smith"
+      },
+      "createdAt": "2024-01-10T10:00:00Z",
+      "updatedAt": "2024-01-15T14:30:00Z"
+    }
+  ],
+  "count": 1,
+  "filters": {}
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Document List Command - Current Project (VCS) 1`] = `
+stdout:
+'{
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "API Design Document",
+      "slugId": "api-design-document",
+      "url": "https://linear.app/test/document/api-design-document",
+      "project": {
+        "id": "project-789",
+        "name": "Backend Platform"
+      },
+      "creator": {
+        "name": "Alice Smith"
+      },
+      "createdAt": "2024-01-10T10:00:00Z",
+      "updatedAt": "2024-01-15T14:30:00Z"
+    },
+    {
+      "id": "doc-2",
+      "title": "Implementation Notes",
+      "slugId": "implementation-notes",
+      "url": "https://linear.app/test/document/implementation-notes",
+      "project": {
+        "id": "project-789",
+        "name": "Backend Platform"
+      },
+      "creator": {
+        "name": "Bob Jones"
+      },
+      "createdAt": "2024-01-12T09:00:00Z",
+      "updatedAt": "2024-01-14T11:20:00Z"
+    }
+  ],
+  "count": 2,
+  "filters": {
+    "project": "Backend Platform",
+    "source": "vcs-context"
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Document List Command - Filter By Project 1`] = `
+stdout:
+'{
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "Project Specific Doc",
+      "slugId": "project-specific-doc",
+      "url": "https://linear.app/test/document/project-specific-doc",
+      "project": {
+        "id": "project-123",
+        "name": "Mobile App"
+      },
+      "creator": {
+        "name": "Alice Smith"
+      },
+      "createdAt": "2024-01-10T10:00:00Z",
+      "updatedAt": "2024-01-15T14:30:00Z"
+    }
+  ],
+  "count": 1,
+  "filters": {
+    "project": "project-123"
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Document List Command - No Documents Found 1`] = `
+stdout:
+"No documents found
+"
+stderr:
+""
+`;

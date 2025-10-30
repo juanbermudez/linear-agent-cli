@@ -146,3 +146,8 @@ export async function getConfigManager(): Promise<ConfigManager> {
   }
   return configManager
 }
+
+// For testing only - allows resetting the singleton
+export function resetConfigManager(): void {
+  configManager = null
+}

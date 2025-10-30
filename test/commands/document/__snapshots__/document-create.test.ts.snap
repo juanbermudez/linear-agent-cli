@@ -28,6 +28,23 @@ stderr:
 ""
 `;
 
+snapshot[`Document Create Command - Happy Path 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "document": {
+    "id": "doc-123",
+    "title": "API Design Document",
+    "slugId": "api-design-document",
+    "url": "https://linear.app/test/document/api-design-document"
+  }
+}
+'
+stderr:
+""
+`;
+
 snapshot[`Document Create Command - Minimal Flags 1`] = `
 stdout:
 '{
@@ -38,6 +55,23 @@ stdout:
     "title": "Quick Note",
     "slugId": "quick-note",
     "url": "https://linear.app/test/document/quick-note"
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Document Create Command - VCS Integration (Current Project) 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "document": {
+    "id": "doc-789",
+    "title": "Implementation Notes",
+    "slugId": "implementation-notes",
+    "url": "https://linear.app/test/document/implementation-notes"
   }
 }
 '

@@ -130,9 +130,9 @@ export class MockLinearServer {
         return true
       }
 
-      // Check if all mock variables match the request variables
+      // Check if all mock variables match the request variables (deep equality)
       return Object.entries(mock.variables).every(([key, value]) => {
-        return variables[key] === value
+        return JSON.stringify(variables[key]) === JSON.stringify(value)
       })
     })
   }

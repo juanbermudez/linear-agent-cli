@@ -1,6 +1,10 @@
 import { Command } from "@cliffy/command"
 import { Input, Select } from "@cliffy/prompt"
-import { createInitiative, listUsers } from "../../utils/linear.ts"
+import {
+  createInitiative,
+  listUsers,
+  lookupUserId,
+} from "../../utils/linear.ts"
 import {
   error as errorColor,
   success as successColor,
@@ -195,12 +199,9 @@ export const createCommand = new Command()
         ) {
           ownerId = options.owner
         } else {
-          const users = await listUsers()
-          const user = users.find((u) =>
-            u.displayName.toLowerCase() === options.owner!.toLowerCase()
-          )
-          if (user) {
-            ownerId = user.id
+          const userId = await lookupUserId(options.owner)
+          if (userId) {
+            ownerId = userId
           } else {
             const errorMsg = `User '${options.owner}' not found`
             if (useJson) {

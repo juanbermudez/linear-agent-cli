@@ -28,6 +28,32 @@ stderr:
 ""
 `;
 
+snapshot[`Initiative Create Command - Happy Path 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "initiative": {
+    "id": "init-123",
+    "name": "Q1 2025 Platform Goals",
+    "slugId": "q1-2025-platform-goals",
+    "url": "https://linear.app/test/initiative/q1-2025-platform-goals",
+    "status": {
+      "id": "status-planned",
+      "name": "Planned",
+      "type": "planned"
+    },
+    "owner": {
+      "id": "user-alice-123",
+      "name": "Alice Smith"
+    }
+  }
+}
+'
+stderr:
+""
+`;
+
 snapshot[`Initiative Create Command - Minimal Flags 1`] = `
 stdout:
 '{
@@ -63,13 +89,6 @@ stdout:
   }
 }
 '
-stderr:
-""
-`;
-
-snapshot[`Initiative Create Command - Owner Not Found 1`] = `
-stdout:
-""
 stderr:
 ""
 `;

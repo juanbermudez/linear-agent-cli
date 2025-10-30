@@ -22,12 +22,12 @@ await snapshotTest({
   name: "Initiative List Command - All Initiatives",
   meta: import.meta,
   colors: false,
-  args: ["--no-color"],
+  args: ["--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetInitiatives",
+        queryName: "ListInitiatives",
         response: {
           data: {
             initiatives: {
@@ -39,12 +39,9 @@ await snapshotTest({
                   url:
                     "https://linear.app/test/initiative/q1-2025-platform-goals",
                   description: "Focus on platform stability and performance",
-                  status: {
-                    id: "status-active",
-                    name: "Active",
-                    type: "started",
-                  },
+                  status: "started",
                   owner: {
+                    id: "user-alice",
                     name: "alice",
                     displayName: "Alice Smith",
                   },
@@ -58,12 +55,9 @@ await snapshotTest({
                   slugId: "api-modernization",
                   url: "https://linear.app/test/initiative/api-modernization",
                   description: "Modernize our API infrastructure",
-                  status: {
-                    id: "status-planned",
-                    name: "Planned",
-                    type: "planned",
-                  },
+                  status: "planned",
                   owner: {
+                    id: "user-bob",
                     name: "bob",
                     displayName: "Bob Jones",
                   },
@@ -109,7 +103,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetInitiatives",
+        queryName: "ListInitiatives",
         response: {
           data: {
             initiatives: {
@@ -121,12 +115,9 @@ await snapshotTest({
                   url:
                     "https://linear.app/test/initiative/q1-2025-platform-goals",
                   description: "Focus on platform stability",
-                  status: {
-                    id: "status-active",
-                    name: "Active",
-                    type: "started",
-                  },
+                  status: "started",
                   owner: {
+                    id: "user-alice",
                     name: "alice",
                     displayName: "Alice Smith",
                   },
@@ -154,13 +145,16 @@ await snapshotTest({
   name: "Initiative List Command - Filter By Status",
   meta: import.meta,
   colors: false,
-  args: ["--status", "started", "--json", "--no-color"],
+  args: ["--status", "started", "--json", "--no-color", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetInitiatives",
-        variables: { filter: { status: { type: { eq: "started" } } } },
+        queryName: "ListInitiatives",
+        variables: {
+          filter: { status: { eq: "started" } },
+          first: 50,
+        },
         response: {
           data: {
             initiatives: {
@@ -172,12 +166,9 @@ await snapshotTest({
                   url:
                     "https://linear.app/test/initiative/q1-2025-platform-goals",
                   description: "Focus on platform stability",
-                  status: {
-                    id: "status-active",
-                    name: "Active",
-                    type: "started",
-                  },
+                  status: "started",
                   owner: {
+                    id: "user-alice",
                     name: "alice",
                     displayName: "Alice Smith",
                   },
@@ -210,7 +201,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetInitiatives",
+        queryName: "ListInitiatives",
         response: {
           data: {
             initiatives: {

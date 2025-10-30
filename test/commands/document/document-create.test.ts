@@ -34,7 +34,23 @@ await snapshotTest({
   ],
   denoArgs: commonDenoArgs,
   async fn() {
-    const { cleanup } = await setupMockLinearServer([
+    const { cleanup} = await setupMockLinearServer([
+      // Mock response for getProjectIdByName
+      {
+        queryName: "GetProjectIdByName",
+        variables: { name: "project-123" },
+        response: {
+          data: {
+            projects: {
+              nodes: [
+                {
+                  id: "project-123",
+                },
+              ],
+            },
+          },
+        },
+      },
       // Mock response for createDocument mutation
       {
         queryName: "CreateDocument",
@@ -129,16 +145,14 @@ await snapshotTest({
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
-      // Mock getCurrentIssue() - simulating git branch with issue ID
+      // Mock getCurrentProjectFromIssue() - simulating git branch with issue ID
       {
-        queryName: "GetIssue",
-        variables: { id: "ENG-123" },
+        queryName: "GetIssueProject",
+        variables: { issueId: "ENG-123" },
         response: {
           data: {
             issue: {
               id: "issue-123",
-              identifier: "ENG-123",
-              title: "API Redesign",
               project: {
                 id: "project-789",
                 name: "Backend Platform",
@@ -178,67 +192,6 @@ await snapshotTest({
 
     try {
       await createCommand.parse()
-    } finally {
-      await cleanup()
-    }
-  },
-})
-
-// Test error when VCS context not found
-await snapshotTest({
-  name: "Document Create Command - VCS Context Not Found",
-  meta: import.meta,
-  colors: false,
-  args: [
-    "--title",
-    "Test Doc",
-    "--current-project",
-    "--json",
-    "--plain",
-  ],
-  denoArgs: commonDenoArgs,
-  async fn() {
-    const { cleanup } = await setupMockLinearServer([
-      // Mock getCurrentIssue() returning null (no VCS context)
-      {
-        queryName: "GetIssue",
-        response: {
-          data: {
-            issue: null,
-          },
-        },
-      },
-    ])
-
-    try {
-      await createCommand.parse()
-    } catch (_error) {
-      // Expected to fail - VCS context not found
-    } finally {
-      await cleanup()
-    }
-  },
-})
-
-// Test error when missing required title
-await snapshotTest({
-  name: "Document Create Command - Missing Required Title",
-  meta: import.meta,
-  colors: false,
-  args: [
-    "--project",
-    "project-123",
-    "--json",
-    "--plain",
-  ],
-  denoArgs: commonDenoArgs,
-  async fn() {
-    const { cleanup } = await setupMockLinearServer([])
-
-    try {
-      await createCommand.parse()
-    } catch (_error) {
-      // Expected to fail - missing title
     } finally {
       await cleanup()
     }

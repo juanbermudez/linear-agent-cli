@@ -24,3 +24,109 @@ Options:
 stderr:
 ""
 `;
+
+snapshot[`Document View Command - Markdown Rendering 1`] = `
+stdout:
+"API Design Document
+
+Created by Alice Smith 1/10/2024
+Updated 1/15/2024
+Project: Backend Platform
+
+https://linear.app/test/document/api-design-document
+
+# API Design
+
+This document describes the API design for the new backend service.
+
+## Overview
+
+The API will use REST principles with JSON payloads.
+"
+stderr:
+""
+`;
+
+snapshot[`Document View Command - JSON Output 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "view",
+  "document": {
+    "id": "doc-456",
+    "title": "Meeting Notes",
+    "slugId": "meeting-notes",
+    "url": "https://linear.app/test/document/meeting-notes",
+    "icon": null,
+    "color": null,
+    "content": "# Meeting Notes\\\\n\\\\n- Discussed API design\\\\n- Next steps: prototype",
+    "creator": {
+      "id": "user-bob",
+      "name": "Bob Jones"
+    },
+    "updatedBy": {
+      "id": "user-bob",
+      "name": "Bob Jones"
+    },
+    "project": null,
+    "initiative": null,
+    "createdAt": "2024-01-12T09:00:00Z",
+    "updatedAt": "2024-01-12T11:30:00Z",
+    "comments": []
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Document View Command - No Project Linked 1`] = `
+stdout:
+"Standalone Document
+
+Created by Charlie Brown 1/14/2024
+Updated 1/14/2024
+
+https://linear.app/test/document/standalone-document
+
+# Standalone
+
+This document is not linked to any project.
+"
+stderr:
+""
+`;
+
+snapshot[`Document View Command - Empty Content 1`] = `
+stdout:
+"New Document
+
+Created by Alice Smith 1/16/2024
+Updated 1/16/2024
+Project: Mobile App
+
+https://linear.app/test/document/new-document
+
+(No content)
+"
+stderr:
+""
+`;
+
+snapshot[`Document View Command - By Slug ID 1`] = `
+stdout:
+"API Design Document
+
+Created by Alice Smith 1/10/2024
+Updated 1/15/2024
+Project: Backend Services
+
+https://linear.app/test/document/api-design-document
+
+# API Design
+
+Detailed specifications for the new API.
+"
+stderr:
+""
+`;

@@ -1,6 +1,12 @@
 import { basename } from "@std/path"
 
 export async function getCurrentBranch(): Promise<string | null> {
+  // Check for test environment variable first
+  const gitBranchEnv = Deno.env.get("GIT_BRANCH")
+  if (gitBranchEnv) {
+    return gitBranchEnv
+  }
+
   const process = new Deno.Command("git", {
     args: ["symbolic-ref", "--short", "HEAD"],
   })

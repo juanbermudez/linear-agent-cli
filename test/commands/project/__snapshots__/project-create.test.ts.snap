@@ -35,6 +35,36 @@ stderr:
 ""
 `;
 
+snapshot[`Project Create Command - Happy Path 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "project": {
+    "id": "project-123",
+    "name": "API Redesign",
+    "slugId": "api-redesign",
+    "url": "https://linear.app/test/project/api-redesign",
+    "status": {
+      "id": "status-planned",
+      "name": "Planned",
+      "type": "planned"
+    },
+    "lead": null,
+    "teams": [
+      {
+        "id": "team-eng-id",
+        "key": "ENG",
+        "name": "Engineering"
+      }
+    ]
+  }
+}
+'
+stderr:
+""
+`;
+
 snapshot[`Project Create Command - With Document (Cross-Entity) 1`] = `
 stdout:
 '{
@@ -67,6 +97,75 @@ stdout:
   },
   "relationships": {
     "documentLinkedToProject": true
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Project Create Command - With Doc (Default Title) 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "project": {
+    "id": "project-default",
+    "name": "Backend Platform",
+    "slugId": "backend-platform",
+    "url": "https://linear.app/test/project/backend-platform",
+    "status": {
+      "id": "status-1",
+      "name": "Planned",
+      "type": "planned"
+    },
+    "lead": null,
+    "teams": [
+      {
+        "id": "team-eng-id",
+        "key": "ENG",
+        "name": "Engineering"
+      }
+    ]
+  },
+  "document": {
+    "id": "doc-default",
+    "title": "Backend Platform Design Doc",
+    "slugId": "backend-platform-design-doc",
+    "url": "https://linear.app/test/document/backend-platform-design-doc"
+  },
+  "relationships": {
+    "documentLinkedToProject": true
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Project Create Command - Minimal Flags 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "project": {
+    "id": "project-minimal",
+    "name": "Quick Project",
+    "slugId": "quick-project",
+    "url": "https://linear.app/test/project/quick-project",
+    "status": {
+      "id": "status-1",
+      "name": "Planned",
+      "type": "planned"
+    },
+    "lead": null,
+    "teams": [
+      {
+        "id": "team-eng-id",
+        "key": "ENG",
+        "name": "Engineering"
+      }
+    ]
   }
 }
 '

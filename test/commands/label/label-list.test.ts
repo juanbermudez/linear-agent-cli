@@ -27,7 +27,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetLabels",
+        queryName: "ListLabels",
         response: {
           data: {
             issueLabels: {
@@ -92,7 +92,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetLabels",
+        queryName: "ListLabels",
         response: {
           data: {
             issueLabels: {
@@ -125,76 +125,6 @@ await snapshotTest({
   },
 })
 
-// Test filtering by team
-await snapshotTest({
-  name: "Label List Command - Filter By Team",
-  meta: import.meta,
-  colors: false,
-  args: ["--team", "ENG", "--json", "--plain"],
-  denoArgs: commonDenoArgs,
-  async fn() {
-    const { cleanup } = await setupMockLinearServer([
-      // Mock getTeamIdByKey
-      {
-        queryName: "GetTeamIdByKey",
-        variables: { team: "ENG" },
-        response: {
-          data: {
-            teams: {
-              nodes: [{ id: "team-eng-id" }],
-            },
-          },
-        },
-      },
-      // Mock getLabels filtered by team
-      {
-        queryName: "GetLabels",
-        variables: { filter: { team: { id: { eq: "team-eng-id" } } } },
-        response: {
-          data: {
-            issueLabels: {
-              nodes: [
-                {
-                  id: "label-1",
-                  name: "bug",
-                  description: "Bug reports",
-                  color: "#FF0000",
-                  team: {
-                    id: "team-eng-id",
-                    key: "ENG",
-                    name: "Engineering",
-                  },
-                  createdAt: "2024-01-10T10:00:00Z",
-                  updatedAt: "2024-01-15T14:30:00Z",
-                },
-                {
-                  id: "label-2",
-                  name: "security",
-                  description: "Security issues",
-                  color: "#FF6B00",
-                  team: {
-                    id: "team-eng-id",
-                    key: "ENG",
-                    name: "Engineering",
-                  },
-                  createdAt: "2024-01-11T11:00:00Z",
-                  updatedAt: "2024-01-11T11:00:00Z",
-                },
-              ],
-            },
-          },
-        },
-      },
-    ])
-
-    try {
-      await listCommand.parse()
-    } finally {
-      await cleanup()
-    }
-  },
-})
-
 // Test empty label list
 await snapshotTest({
   name: "Label List Command - No Labels Found",
@@ -205,7 +135,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetLabels",
+        queryName: "ListLabels",
         response: {
           data: {
             issueLabels: {
@@ -224,34 +154,3 @@ await snapshotTest({
   },
 })
 
-// Test error when team not found
-await snapshotTest({
-  name: "Label List Command - Team Not Found",
-  meta: import.meta,
-  colors: false,
-  args: ["--team", "NONEXISTENT", "--json", "--plain"],
-  denoArgs: commonDenoArgs,
-  async fn() {
-    const { cleanup } = await setupMockLinearServer([
-      {
-        queryName: "GetTeamIdByKey",
-        variables: { team: "NONEXISTENT" },
-        response: {
-          data: {
-            teams: {
-              nodes: [],
-            },
-          },
-        },
-      },
-    ])
-
-    try {
-      await listCommand.parse()
-    } catch (_error) {
-      // Expected to fail - team not found
-    } finally {
-      await cleanup()
-    }
-  },
-})

@@ -15,10 +15,122 @@ Options:
   -s, --status  <status>  - Filter by status ID or name              
   -o, --owner   <owner>   - Filter by owner ID or display name       
   -l, --limit   <limit>   - Max number of initiatives (default: 50)  
+  --plain                 - Disable colored output                   
   --no-color              - Disable colored output                   
   -j, --json              - Output result as JSON                    
   --format      <format>  - Output format: text|json                 
 
+"
+stderr:
+""
+`;
+
+snapshot[`Initiative List Command - All Initiatives 1`] = `
+stdout:
+'{
+  "initiatives": [
+    {
+      "id": "init-1",
+      "name": "Q1 2025 Platform Goals",
+      "slugId": "q1-2025-platform-goals",
+      "url": "https://linear.app/test/initiative/q1-2025-platform-goals",
+      "status": "started",
+      "owner": {
+        "id": "user-alice",
+        "name": "Alice Smith"
+      },
+      "targetDate": "2025-03-31",
+      "createdAt": "2024-01-01T10:00:00Z",
+      "updatedAt": "2024-01-15T14:30:00Z"
+    },
+    {
+      "id": "init-2",
+      "name": "API Modernization",
+      "slugId": "api-modernization",
+      "url": "https://linear.app/test/initiative/api-modernization",
+      "status": "planned",
+      "owner": {
+        "id": "user-bob",
+        "name": "Bob Jones"
+      },
+      "targetDate": "2025-06-30",
+      "createdAt": "2024-01-05T09:00:00Z",
+      "updatedAt": "2024-01-10T11:20:00Z"
+    },
+    {
+      "id": "init-3",
+      "name": "Customer Experience Improvements",
+      "slugId": "customer-experience-improvements",
+      "url": "https://linear.app/test/initiative/customer-experience-improvements",
+      "status": null,
+      "owner": null,
+      "targetDate": null,
+      "createdAt": "2024-01-10T15:00:00Z",
+      "updatedAt": "2024-01-10T15:00:00Z"
+    }
+  ],
+  "count": 3
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Initiative List Command - JSON Output 1`] = `
+stdout:
+'{
+  "initiatives": [
+    {
+      "id": "init-1",
+      "name": "Q1 2025 Platform Goals",
+      "slugId": "q1-2025-platform-goals",
+      "url": "https://linear.app/test/initiative/q1-2025-platform-goals",
+      "status": "started",
+      "owner": {
+        "id": "user-alice",
+        "name": "Alice Smith"
+      },
+      "targetDate": "2025-03-31",
+      "createdAt": "2024-01-01T10:00:00Z",
+      "updatedAt": "2024-01-15T14:30:00Z"
+    }
+  ],
+  "count": 1
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Initiative List Command - Filter By Status 1`] = `
+stdout:
+'{
+  "initiatives": [
+    {
+      "id": "init-1",
+      "name": "Q1 2025 Platform Goals",
+      "slugId": "q1-2025-platform-goals",
+      "url": "https://linear.app/test/initiative/q1-2025-platform-goals",
+      "status": "started",
+      "owner": {
+        "id": "user-alice",
+        "name": "Alice Smith"
+      },
+      "targetDate": "2025-03-31",
+      "createdAt": "2024-01-01T10:00:00Z",
+      "updatedAt": "2024-01-15T14:30:00Z"
+    }
+  ],
+  "count": 1
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Initiative List Command - No Initiatives Found 1`] = `
+stdout:
+"No initiatives found
 "
 stderr:
 ""

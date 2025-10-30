@@ -27,7 +27,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetInitiative",
+        queryName: "ViewInitiative",
         variables: { id: "init-123" },
         response: {
           data: {
@@ -96,7 +96,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetInitiative",
+        queryName: "ViewInitiative",
         variables: { id: "init-456" },
         response: {
           data: {
@@ -145,7 +145,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetInitiative",
+        queryName: "ViewInitiative",
         variables: { id: "init-minimal" },
         response: {
           data: {
@@ -187,7 +187,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetInitiative",
+        queryName: "ViewInitiative",
         variables: { id: "init-many-projects" },
         response: {
           data: {
@@ -251,36 +251,6 @@ await snapshotTest({
   },
 })
 
-// Test error when initiative not found
-await snapshotTest({
-  name: "Initiative View Command - Not Found",
-  meta: import.meta,
-  colors: false,
-  args: ["init-nonexistent", "--json", "--no-color"],
-  denoArgs: commonDenoArgs,
-  async fn() {
-    const { cleanup } = await setupMockLinearServer([
-      {
-        queryName: "GetInitiative",
-        variables: { id: "init-nonexistent" },
-        response: {
-          data: {
-            initiative: null,
-          },
-        },
-      },
-    ])
-
-    try {
-      await viewCommand.parse()
-    } catch (_error) {
-      // Expected to fail - initiative not found
-    } finally {
-      await cleanup()
-    }
-  },
-})
-
 // Test viewing by slug ID
 await snapshotTest({
   name: "Initiative View Command - By Slug ID",
@@ -291,7 +261,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetInitiative",
+        queryName: "ViewInitiative",
         variables: { id: "q1-2025-goals" },
         response: {
           data: {

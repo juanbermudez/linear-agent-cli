@@ -308,8 +308,8 @@ Deno.test("ConfigManager - getConfigPath() returns config file path", async () =
 
 Deno.test("getConfigManager() returns singleton instance", async () => {
   // Clear singleton for test
-  const mod = await import("../../src/utils/config-manager.ts")
-  ;(mod as Record<string, unknown>).configManager = null
+  const { resetConfigManager } = await import("../../src/utils/config-manager.ts")
+  resetConfigManager()
 
   const instance1 = await getConfigManager()
   const instance2 = await getConfigManager()

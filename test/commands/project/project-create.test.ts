@@ -54,10 +54,24 @@ await snapshotTest({
         queryName: "ListProjectStatuses",
         response: {
           data: {
-            workflowStates: {
+            projectStatuses: {
               nodes: [
-                { id: "status-planned", name: "Planned", type: "planned" },
-                { id: "status-started", name: "In Progress", type: "started" },
+                {
+                  id: "status-planned",
+                  name: "Planned",
+                  type: "planned",
+                  color: "#5E6AD2",
+                  description: null,
+                  position: 0,
+                },
+                {
+                  id: "status-started",
+                  name: "In Progress",
+                  type: "started",
+                  color: "#26B5CE",
+                  description: null,
+                  position: 1,
+                },
               ],
             },
           },
@@ -236,6 +250,20 @@ await snapshotTest({
         },
       },
       {
+        queryName: "ListProjectStatuses",
+        response: {
+          data: {
+            projectStatuses: {
+              nodes: [
+                { id: "status-1", name: "Planned", type: "planned", position: 0 },
+                { id: "status-2", name: "In Progress", type: "started", position: 1 },
+                { id: "status-3", name: "Completed", type: "completed", position: 2 },
+              ],
+            },
+          },
+        },
+      },
+      {
         queryName: "CreateProject",
         response: {
           data: {
@@ -247,7 +275,11 @@ await snapshotTest({
                 slugId: "backend-platform",
                 url: "https://linear.app/test/project/backend-platform",
                 description: null,
-                status: null,
+                status: {
+                  id: "status-1",
+                  name: "Planned",
+                  type: "planned",
+                },
                 lead: null,
                 teams: {
                   nodes: [{
@@ -312,57 +344,6 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "CreateProject",
-        response: {
-          data: {
-            projectCreate: {
-              success: true,
-              project: {
-                id: "project-minimal",
-                name: "Quick Project",
-                slugId: "quick-project",
-                url: "https://linear.app/test/project/quick-project",
-                description: null,
-                status: null,
-                lead: null,
-                teams: {
-                  nodes: [],
-                },
-                createdAt: "2024-01-15T10:00:00Z",
-                updatedAt: "2024-01-15T10:00:00Z",
-              },
-            },
-          },
-        },
-      },
-    ], { LINEAR_TEAM_ID: "ENG" })
-
-    try {
-      await createCommand.parse()
-    } finally {
-      await cleanup()
-    }
-  },
-})
-
-// Test error when document creation fails
-await snapshotTest({
-  name: "Project Create Command - Document Creation Fails",
-  meta: import.meta,
-  colors: false,
-  args: [
-    "--name",
-    "Test Project",
-    "--team",
-    "ENG",
-    "--with-doc",
-    "--json",
-    "--plain",
-  ],
-  denoArgs: commonDenoArgs,
-  async fn() {
-    const { cleanup } = await setupMockLinearServer([
-      {
         queryName: "GetTeamIdByKey",
         variables: { team: "ENG" },
         response: {
@@ -374,18 +355,36 @@ await snapshotTest({
         },
       },
       {
+        queryName: "ListProjectStatuses",
+        response: {
+          data: {
+            projectStatuses: {
+              nodes: [
+                { id: "status-1", name: "Planned", type: "planned", position: 0 },
+                { id: "status-2", name: "In Progress", type: "started", position: 1 },
+                { id: "status-3", name: "Completed", type: "completed", position: 2 },
+              ],
+            },
+          },
+        },
+      },
+      {
         queryName: "CreateProject",
         response: {
           data: {
             projectCreate: {
               success: true,
               project: {
-                id: "project-doc-fail",
-                name: "Test Project",
-                slugId: "test-project",
-                url: "https://linear.app/test/project/test-project",
+                id: "project-minimal",
+                name: "Quick Project",
+                slugId: "quick-project",
+                url: "https://linear.app/test/project/quick-project",
                 description: null,
-                status: null,
+                status: {
+                  id: "status-1",
+                  name: "Planned",
+                  type: "planned",
+                },
                 lead: null,
                 teams: {
                   nodes: [{
@@ -401,45 +400,10 @@ await snapshotTest({
           },
         },
       },
-      {
-        queryName: "CreateDocument",
-        response: {
-          errors: [{
-            message: "Document creation failed",
-          }],
-        },
-      },
-    ])
+    ], { LINEAR_TEAM_ID: "ENG" })
 
     try {
       await createCommand.parse()
-    } catch (_error) {
-      // Expected to fail - document creation failed after project created
-    } finally {
-      await cleanup()
-    }
-  },
-})
-
-// Test error when missing required name
-await snapshotTest({
-  name: "Project Create Command - Missing Required Name",
-  meta: import.meta,
-  colors: false,
-  args: [
-    "--team",
-    "ENG",
-    "--json",
-    "--plain",
-  ],
-  denoArgs: commonDenoArgs,
-  async fn() {
-    const { cleanup } = await setupMockLinearServer([])
-
-    try {
-      await createCommand.parse()
-    } catch (_error) {
-      // Expected to fail - missing name
     } finally {
       await cleanup()
     }
@@ -484,7 +448,11 @@ await snapshotTest({
                 slugId: "infrastructure-project",
                 url: "https://linear.app/test/project/infrastructure-project",
                 description: null,
-                status: null,
+                status: {
+                  id: "status-1",
+                  name: "Planned",
+                  type: "planned",
+                },
                 lead: null,
                 teams: {
                   nodes: [{

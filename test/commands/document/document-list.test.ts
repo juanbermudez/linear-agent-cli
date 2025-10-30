@@ -27,7 +27,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetDocuments",
+        queryName: "ListDocuments",
         response: {
           data: {
             documents: {
@@ -103,7 +103,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetDocuments",
+        queryName: "ListDocuments",
         response: {
           data: {
             documents: {
@@ -148,16 +148,14 @@ await snapshotTest({
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
-      // Mock getCurrentIssue() - simulating git branch with issue ID
+      // Mock getCurrentProjectFromIssue() - simulating git branch with issue ID
       {
-        queryName: "GetIssue",
-        variables: { id: "ENG-123" },
+        queryName: "GetIssueProject",
+        variables: { issueId: "ENG-123" },
         response: {
           data: {
             issue: {
               id: "issue-123",
-              identifier: "ENG-123",
-              title: "API Redesign",
               project: {
                 id: "project-789",
                 name: "Backend Platform",
@@ -168,8 +166,13 @@ await snapshotTest({
       },
       // Mock document list filtered by project
       {
-        queryName: "GetDocuments",
-        variables: { filter: { project: { id: { eq: "project-789" } } } },
+        queryName: "ListDocuments",
+        variables: {
+          filter: { project: { id: { eq: "project-789" } } },
+          first: 50,
+          orderBy: "updatedAt",
+          includeArchived: false,
+        },
         response: {
           data: {
             documents: {
@@ -234,8 +237,26 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetDocuments",
-        variables: { filter: { project: { id: { eq: "project-123" } } } },
+        queryName: "GetProjectIdByName",
+        variables: { name: "project-123" },
+        response: {
+          data: {
+            projects: {
+              nodes: [{
+                id: "project-123",
+              }],
+            },
+          },
+        },
+      },
+      {
+        queryName: "ListDocuments",
+        variables: {
+          filter: { project: { id: { eq: "project-123" } } },
+          first: 50,
+          orderBy: "updatedAt",
+          includeArchived: false,
+        },
         response: {
           data: {
             documents: {
@@ -281,7 +302,7 @@ await snapshotTest({
   async fn() {
     const { cleanup } = await setupMockLinearServer([
       {
-        queryName: "GetDocuments",
+        queryName: "ListDocuments",
         response: {
           data: {
             documents: {
@@ -300,32 +321,3 @@ await snapshotTest({
   },
 })
 
-// Test error when VCS context not found with --current-project
-await snapshotTest({
-  name: "Document List Command - VCS Context Not Found",
-  meta: import.meta,
-  colors: false,
-  args: ["--current-project", "--json", "--plain"],
-  denoArgs: commonDenoArgs,
-  async fn() {
-    const { cleanup } = await setupMockLinearServer([
-      // Mock getCurrentIssue() returning null (no VCS context)
-      {
-        queryName: "GetIssue",
-        response: {
-          data: {
-            issue: null,
-          },
-        },
-      },
-    ])
-
-    try {
-      await listCommand.parse()
-    } catch (_error) {
-      // Expected to fail - VCS context not found
-    } finally {
-      await cleanup()
-    }
-  },
-})

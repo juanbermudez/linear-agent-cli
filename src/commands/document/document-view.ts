@@ -51,6 +51,28 @@ export const viewCommand = new Command()
 
       spinner?.stop()
 
+      // Check if document exists
+      if (!document) {
+        if (useJson) {
+          console.error(
+            JSON.stringify(
+              {
+                success: false,
+                error: {
+                  code: "NOT_FOUND",
+                  message: `Document '${docId}' not found`,
+                },
+              },
+              null,
+              2,
+            ),
+          )
+        } else {
+          console.error(`Document '${docId}' not found`)
+        }
+        Deno.exit(1)
+      }
+
       // Handle JSON output
       if (useJson) {
         console.log(
