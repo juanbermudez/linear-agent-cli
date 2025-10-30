@@ -43,31 +43,35 @@ export const whoamiCommand = new Command()
       const hasEnvTeam = !!Deno.env.get("LINEAR_TEAM_ID")
 
       if (json) {
-        console.log(JSON.stringify({
-          user: {
-            id: viewer.id,
-            name: viewer.name,
-            displayName: viewer.displayName,
-            email: viewer.email,
-            admin: viewer.admin,
-          },
-          organization: {
-            id: viewer.organization.id,
-            name: viewer.organization.name,
-            urlKey: viewer.organization.urlKey,
-          },
-          configuration: {
-            workspace: workspace || null,
-            teamId: teamId || null,
-            cacheEnabled: cacheEnabled !== false,
-            autoBranch: autoBranch !== false,
-            configSources: {
-              apiKey: hasEnvKey ? "environment" : "config_file",
-              workspace: hasEnvWorkspace ? "environment" : "config_file",
-              teamId: hasEnvTeam ? "environment" : "config_file",
+        console.log(JSON.stringify(
+          {
+            user: {
+              id: viewer.id,
+              name: viewer.name,
+              displayName: viewer.displayName,
+              email: viewer.email,
+              admin: viewer.admin,
+            },
+            organization: {
+              id: viewer.organization.id,
+              name: viewer.organization.name,
+              urlKey: viewer.organization.urlKey,
+            },
+            configuration: {
+              workspace: workspace || null,
+              teamId: teamId || null,
+              cacheEnabled: cacheEnabled !== false,
+              autoBranch: autoBranch !== false,
+              configSources: {
+                apiKey: hasEnvKey ? "environment" : "config_file",
+                workspace: hasEnvWorkspace ? "environment" : "config_file",
+                teamId: hasEnvTeam ? "environment" : "config_file",
+              },
             },
           },
-        }, null, 2))
+          null,
+          2,
+        ))
         return
       }
 
@@ -83,28 +87,57 @@ export const whoamiCommand = new Command()
       console.log(bold(cyan("Organization")))
       console.log(`  Name:         ${viewer.organization.name}`)
       console.log(`  Workspace:    ${viewer.organization.urlKey}`)
-      console.log(`  URL:          ${dim(`https://linear.app/${viewer.organization.urlKey}`)}`)
+      console.log(
+        `  URL:          ${
+          dim(`https://linear.app/${viewer.organization.urlKey}`)
+        }`,
+      )
       console.log("")
 
       console.log(bold(cyan("Configuration")))
       console.log(`  Workspace:    ${workspace || dim("(not set)")}`)
       console.log(`  Team ID:      ${teamId || dim("(not set)")}`)
-      console.log(`  Cache:        ${cacheEnabled !== false ? green("enabled") : "disabled"}`)
-      console.log(`  Auto-branch:  ${autoBranch !== false ? green("enabled") : "disabled"}`)
+      console.log(
+        `  Cache:        ${
+          cacheEnabled !== false ? green("enabled") : "disabled"
+        }`,
+      )
+      console.log(
+        `  Auto-branch:  ${
+          autoBranch !== false ? green("enabled") : "disabled"
+        }`,
+      )
       console.log("")
 
       console.log(bold(cyan("Config Sources")))
-      console.log(`  API Key:      ${hasEnvKey ? "environment" : "config file"}`)
-      console.log(`  Workspace:    ${hasEnvWorkspace ? "environment" : workspace ? "config file" : dim("(not set)")}`)
-      console.log(`  Team ID:      ${hasEnvTeam ? "environment" : teamId ? "config file" : dim("(not set)")}`)
+      console.log(
+        `  API Key:      ${hasEnvKey ? "environment" : "config file"}`,
+      )
+      console.log(
+        `  Workspace:    ${
+          hasEnvWorkspace
+            ? "environment"
+            : workspace
+            ? "config file"
+            : dim("(not set)")
+        }`,
+      )
+      console.log(
+        `  Team ID:      ${
+          hasEnvTeam ? "environment" : teamId ? "config file" : dim("(not set)")
+        }`,
+      )
       console.log("")
-
     } catch (error) {
       if (json) {
-        console.log(JSON.stringify({
-          error: "Failed to fetch user information",
-          message: error instanceof Error ? error.message : String(error),
-        }, null, 2))
+        console.log(JSON.stringify(
+          {
+            error: "Failed to fetch user information",
+            message: error instanceof Error ? error.message : String(error),
+          },
+          null,
+          2,
+        ))
       } else {
         console.error("Failed to fetch user information:", error)
       }
