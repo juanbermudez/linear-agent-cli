@@ -1,8 +1,8 @@
 # Linear CLI for AI Agents
 
-A command-line interface for Linear designed to enable **spec-driven software engineering** where AI agents and humans collaborate as a team. This tool allows AI coding assistants (Claude Code, Cursor, Codex, etc.) to fully participate in your development workflow—creating issues, managing projects, writing specs, and tracking work—just like human team members.
+A command-line interface for Linear designed to enable **spec-driven software engineering** where AI agents easily document project specifications, task breakdowns, and technical details that humans can review and refine. This tool allows AI coding assistants (Claude Code, Cursor, Codex, etc.) to take advantage of more Linear features—creating issues, managing projects, writing specs, and tracking work with full API access.
 
-**What this enables**: AI agents can now work with you in Linear to plan features, write technical specifications, create and organize issues, track dependencies, and manage project documentation. Instead of agents being external tools, they become collaborative team members who can read and write to your shared project context.
+**What this enables**: AI agents can now work with you in Linear to plan features, write technical specifications, create and organize issues, track dependencies, and manage project documentation. This makes it easier for AI agents to document project specs and create detailed task breakdowns that are easy to review and interact with, serving as clear prompts and context for iterative development.
 
 > **Originally created by [@schpet](https://github.com/schpet)**, this fork extends the CLI with enhanced AI agent capabilities for full-lifecycle development collaboration.
 
