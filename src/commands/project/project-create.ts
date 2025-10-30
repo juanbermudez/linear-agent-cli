@@ -334,7 +334,10 @@ async function flagBasedCreate(options: CreateOptions) {
   }
 
   // Validate color format if provided
-  if (options.color && typeof options.color === "string" && !/^#?[0-9A-Fa-f]{6}$/.test(options.color)) {
+  if (
+    options.color && typeof options.color === "string" &&
+    !/^#?[0-9A-Fa-f]{6}$/.test(options.color)
+  ) {
     const errorMsg = `Invalid color '${options.color}'. Use hex format: #RRGGBB`
     if (useJson) {
       console.error(
@@ -359,7 +362,8 @@ async function flagBasedCreate(options: CreateOptions) {
   }
 
   // Normalize color
-  const color = options.color && typeof options.color === "string" && !options.color.startsWith("#")
+  const color = options.color && typeof options.color === "string" &&
+      !options.color.startsWith("#")
     ? `#${options.color}`
     : (typeof options.color === "string" ? options.color : undefined)
 

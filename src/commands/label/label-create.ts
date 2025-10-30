@@ -149,7 +149,9 @@ export const createCommand = new Command()
       color = typeof options.color === "string" ? options.color : undefined
 
       // Validate color format if provided
-      if (color && typeof color === "string" && !/^#[0-9a-f]{6}$/i.test(color)) {
+      if (
+        color && typeof color === "string" && !/^#[0-9a-f]{6}$/i.test(color)
+      ) {
         const errorMsg = "Invalid hex color. Use format: #rrggbb"
         if (useJson) {
           console.error(
