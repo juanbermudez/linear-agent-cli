@@ -1,10 +1,12 @@
 # Linear CLI for AI Agents
 
-A comprehensive, AI-agent-optimized CLI for Linear that enables **spec-driven software engineering** through seamless collaboration between AI agents and humans. This CLI transforms Linear into a shared workspace where agents and developers work together on issues, projects, documentation, and specifications.
+A command-line interface for Linear designed to enable **spec-driven software engineering** where AI agents and humans collaborate as a team. This tool allows AI coding assistants (Claude Code, Cursor, Codex, etc.) to fully participate in your development workflow—creating issues, managing projects, writing specs, and tracking work—just like human team members.
 
-> **Originally created by [@schpet](https://github.com/schpet)**, this fork extends the CLI with enhanced AI agent capabilities, cross-entity operations, and comprehensive JSON output for all commands.
+**What this enables**: AI agents can now work with you in Linear to plan features, write technical specifications, create and organize issues, track dependencies, and manage project documentation. Instead of agents being external tools, they become collaborative team members who can read and write to your shared project context.
 
-**Inspired by** insights from [@dexhorthy](https://x.com/dexhorthy) and [@vaibcode](https://x.com/vaibcode) on leveraging Linear as a collaboration platform for AI-human teams. Their approach to spec-driven development and context engineering has shaped how this CLI enables agents to participate in the full software development lifecycle—from PRDs and technical specs to issue tracking and project management. Thank you for sharing your learnings and pioneering this approach to AI-human collaboration.
+> **Originally created by [@schpet](https://github.com/schpet)**, this fork extends the CLI with enhanced AI agent capabilities for full-lifecycle development collaboration.
+
+**Inspired by** insights from [@dexhorthy](https://x.com/dexhorthy) and [@vaibcode](https://x.com/vaibcode) on using Linear as a collaboration platform where AI agents and humans work together on specs, issues, and documentation. Thank you for sharing your learnings and pioneering this approach to AI-human collaboration.
 
 ## ⚡ Quick Start
 
