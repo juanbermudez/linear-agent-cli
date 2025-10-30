@@ -1,0 +1,23 @@
+export const snapshot = {};
+
+snapshot[`Label List Command - Help Text 1`] = `
+stdout:
+"
+Usage: list
+
+Description:
+
+  List labels
+
+Options:
+
+  -h, --help            - Show this help.           
+  -t, --team  <team>    - Filter by team ID or key  
+  --no-color            - Disable colored output    
+  -j, --json            - Output result as JSON     
+  --format    <format>  - Output format: text|json  
+
+"
+stderr:
+""
+`;

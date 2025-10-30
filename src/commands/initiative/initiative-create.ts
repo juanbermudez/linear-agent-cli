@@ -31,6 +31,7 @@ export const createCommand = new Command()
   .option("-o, --owner <owner:string>", "Owner user ID or display name")
   .option("-t, --target-date <date:string>", "Target date (YYYY-MM-DD)")
   .option("--no-interactive", "Disable interactive mode")
+  .option("--no-color", "Disable colored output")
   .option("-j, --json", "Output result as JSON")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {

@@ -1,0 +1,22 @@
+export const snapshot = {};
+
+snapshot[`Initiative View Command - Help Text 1`] = `
+stdout:
+"
+Usage: view <initiativeId>
+
+Description:
+
+  View initiative details
+
+Options:
+
+  -h, --help            - Show this help.           
+  --no-color            - Disable colored output    
+  -j, --json            - Output result as JSON     
+  --format    <format>  - Output format: text|json  
+
+"
+stderr:
+""
+`;

@@ -26,6 +26,7 @@ export const listCommand = new Command()
   .name("list")
   .description("List labels")
   .option("-t, --team <team:string>", "Filter by team ID or key")
+  .option("--no-color", "Disable colored output")
   .option("-j, --json", "Output result as JSON")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: ListOptions) => {

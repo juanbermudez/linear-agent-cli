@@ -14,7 +14,7 @@ import {
 interface CreateOptions {
   name?: string
   description?: string
-  color?: string
+  color?: string | false
   team?: string
   parent?: string
   isGroup?: boolean
@@ -47,6 +47,7 @@ export const createCommand = new Command()
   )
   .option("--is-group", "Mark this label as a group (container for sub-labels)")
   .option("--no-interactive", "Disable interactive mode")
+  .option("--no-color", "Disable colored output")
   .option("-j, --json", "Output result as JSON")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {
@@ -145,10 +146,10 @@ export const createCommand = new Command()
 
       name = options.name
       description = options.description
-      color = options.color
+      color = typeof options.color === "string" ? options.color : undefined
 
       // Validate color format if provided
-      if (color && !/^#[0-9a-f]{6}$/i.test(color)) {
+      if (color && typeof color === "string" && !/^#[0-9a-f]{6}$/i.test(color)) {
         const errorMsg = "Invalid hex color. Use format: #rrggbb"
         if (useJson) {
           console.error(

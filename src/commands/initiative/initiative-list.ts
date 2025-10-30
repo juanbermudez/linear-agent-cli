@@ -22,6 +22,7 @@ export const listCommand = new Command()
     "-l, --limit <limit:number>",
     "Max number of initiatives (default: 50)",
   )
+  .option("--no-color", "Disable colored output")
   .option("-j, --json", "Output result as JSON")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: ListOptions) => {

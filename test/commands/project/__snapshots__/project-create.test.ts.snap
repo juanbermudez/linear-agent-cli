@@ -1,0 +1,84 @@
+export const snapshot = {};
+
+snapshot[`Project Create Command - Help Text 1`] = `
+stdout:
+"
+Usage: create
+
+Description:
+
+  Create a new Linear project
+
+Options:
+
+  -h, --help                        - Show this help.                                    
+  -n, --name         <name>         - Project name                                       
+  -d, --description  <description>  - Project description (max 255 chars)                
+  -c, --content      <content>      - Project content/body (markdown, for full details)  
+  -t, --team         <team>         - Team key (can be repeated)                         
+  -s, --status       <status>       - Project status name or ID                          
+  -l, --lead         <lead>         - Project lead (username or email)                   
+  -i, --icon         <icon>         - Icon emoji                                         
+  --color            <color>        - Color (hex format: #RRGGBB)                        
+  --start-date       <date>         - Start date (YYYY-MM-DD)                            
+  --target-date      <date>         - Target date (YYYY-MM-DD)                           
+  -p, --priority     <priority>     - Priority (0-4: none, urgent, high, normal, low)    
+  --with-doc                        - Create a design document with the project          
+  --doc-title        <title>        - Document title (used with --with-doc)              
+  --no-interactive                  - Disable interactive mode                           
+  --no-color                        - Disable colored output                             
+  -j, --json                        - Output result as JSON (for AI agents)              
+  --format           <format>       - Output format: text|json                           
+
+"
+stderr:
+""
+`;
+
+snapshot[`Project Create Command - With Document (Cross-Entity) 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "project": {
+    "id": "project-456",
+    "name": "Mobile App Redesign",
+    "slugId": "mobile-app-redesign",
+    "url": "https://linear.app/test/project/mobile-app-redesign",
+    "status": {
+      "id": "status-planned",
+      "name": "Planned",
+      "type": "planned"
+    },
+    "lead": null,
+    "teams": [
+      {
+        "id": "team-design-id",
+        "key": "DESIGN",
+        "name": "Design"
+      }
+    ]
+  },
+  "document": {
+    "id": "doc-789",
+    "title": "Mobile Redesign Design Doc",
+    "slugId": "mobile-redesign-design-doc",
+    "url": "https://linear.app/test/document/mobile-redesign-design-doc"
+  },
+  "relationships": {
+    "documentLinkedToProject": true
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Project Create Command - Text Output 1`] = `
+stdout:
+"✓ Created project: Infrastructure Project
+https://linear.app/test/project/infrastructure-project
+"
+stderr:
+""
+`;

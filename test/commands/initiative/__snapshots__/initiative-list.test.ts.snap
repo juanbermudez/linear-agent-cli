@@ -1,0 +1,25 @@
+export const snapshot = {};
+
+snapshot[`Initiative List Command - Help Text 1`] = `
+stdout:
+"
+Usage: list
+
+Description:
+
+  List initiatives
+
+Options:
+
+  -h, --help              - Show this help.                          
+  -s, --status  <status>  - Filter by status ID or name              
+  -o, --owner   <owner>   - Filter by owner ID or display name       
+  -l, --limit   <limit>   - Max number of initiatives (default: 50)  
+  --no-color              - Disable colored output                   
+  -j, --json              - Output result as JSON                    
+  --format      <format>  - Output format: text|json                 
+
+"
+stderr:
+""
+`;

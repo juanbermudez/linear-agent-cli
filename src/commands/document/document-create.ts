@@ -17,7 +17,7 @@ interface CreateOptions {
   project?: string
   currentProject?: boolean
   icon?: string
-  color?: string
+  color?: string | false
   json?: boolean
   format?: string
   noInteractive?: boolean
@@ -184,7 +184,7 @@ async function flagBasedCreate(options: CreateOptions) {
   }
 
   // Validate color format if provided
-  if (options.color && !/^#?[0-9A-Fa-f]{6}$/.test(options.color)) {
+  if (options.color && typeof options.color === "string" && !/^#?[0-9A-Fa-f]{6}$/.test(options.color)) {
     const errorMsg =
       `Invalid color '${options.color}'. Use hex format: #RRGGBB (e.g., #FF0000)`
     if (useJson) {
@@ -210,9 +210,9 @@ async function flagBasedCreate(options: CreateOptions) {
   }
 
   // Normalize color to include # prefix
-  const color = options.color && !options.color.startsWith("#")
+  const color = options.color && typeof options.color === "string" && !options.color.startsWith("#")
     ? `#${options.color}`
-    : options.color
+    : (typeof options.color === "string" ? options.color : undefined)
 
   // Resolve project ID if provided
   let projectId: string | undefined
@@ -362,6 +362,7 @@ export const createCommand = new Command()
   .option("-i, --icon <icon:string>", "Icon emoji (e.g., 📄, 📋)")
   .option("--color <color:string>", "Icon color (hex format: #RRGGBB)")
   .option("--no-interactive", "Disable interactive mode")
+  .option("--no-color", "Disable colored output")
   .option("-j, --json", "Output result as JSON (for AI agents)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {

@@ -17,6 +17,8 @@ Options:
   --status     <status>  - Filter by status name         
   -w, --web              - Open in web browser           
   -a, --app              - Open in Linear.app            
+  -j, --json             - Output result as JSON         
+  --format     <format>  - Output format: text|json      
 
 "
 stderr:

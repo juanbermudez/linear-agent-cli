@@ -11,9 +11,11 @@ Description:
 
 Options:
 
-  -h, --help  - Show this help.      
-  -w, --web   - Open in web browser  
-  -a, --app   - Open in Linear.app   
+  -h, --help            - Show this help.           
+  -w, --web             - Open in web browser       
+  -a, --app             - Open in Linear.app        
+  -j, --json            - Output result as JSON     
+  --format    <format>  - Output format: text|json  
 
 "
 stderr:

@@ -21,7 +21,7 @@ interface CreateOptions {
   status?: string
   lead?: string
   icon?: string
-  color?: string
+  color?: string | false
   startDate?: string
   targetDate?: string
   priority?: number
@@ -334,7 +334,7 @@ async function flagBasedCreate(options: CreateOptions) {
   }
 
   // Validate color format if provided
-  if (options.color && !/^#?[0-9A-Fa-f]{6}$/.test(options.color)) {
+  if (options.color && typeof options.color === "string" && !/^#?[0-9A-Fa-f]{6}$/.test(options.color)) {
     const errorMsg = `Invalid color '${options.color}'. Use hex format: #RRGGBB`
     if (useJson) {
       console.error(
@@ -359,9 +359,9 @@ async function flagBasedCreate(options: CreateOptions) {
   }
 
   // Normalize color
-  const color = options.color && !options.color.startsWith("#")
+  const color = options.color && typeof options.color === "string" && !options.color.startsWith("#")
     ? `#${options.color}`
-    : options.color
+    : (typeof options.color === "string" ? options.color : undefined)
 
   // Validate date formats
   if (options.startDate && !/^\d{4}-\d{2}-\d{2}$/.test(options.startDate)) {
@@ -701,6 +701,7 @@ export const createCommand = new Command()
   .option("--with-doc", "Create a design document with the project")
   .option("--doc-title <title:string>", "Document title (used with --with-doc)")
   .option("--no-interactive", "Disable interactive mode")
+  .option("--no-color", "Disable colored output")
   .option("-j, --json", "Output result as JSON (for AI agents)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {

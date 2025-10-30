@@ -1,0 +1,31 @@
+export const snapshot = {};
+
+snapshot[`Document List Command - Help Text 1`] = `
+stdout:
+"
+Usage: list
+
+Description:
+
+  List documents
+
+Options:
+
+  -h, --help                        - Show this help.                                                
+  -p, --project       <project>     - Filter by project name or ID                                   
+  --current-project                 - Show documents for current issue's project (from VCS context)  
+  -i, --initiative    <initiative>  - Filter by initiative name or ID                                
+  -c, --creator       <creator>     - Filter by creator (username or 'self')                         
+  --include-archived                - Include trashed documents                                      
+  -l, --limit         <limit>       - Max number of documents (default: 50)                          
+  -w, --web                         - Open documents view in browser                                 
+  -a, --app                         - Open documents view in Linear.app                              
+  -j, --json                        - Output result as JSON (for AI agents)                          
+  --format            <format>      - Output format: text|json                                       
+  --no-color                        - Disable colored output                                         
+  --no-pager                        - Disable automatic paging                                       
+
+"
+stderr:
+""
+`;

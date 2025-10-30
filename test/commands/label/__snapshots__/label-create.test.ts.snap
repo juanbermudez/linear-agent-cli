@@ -1,0 +1,48 @@
+export const snapshot = {};
+
+snapshot[`Label Create Command - Help Text 1`] = `
+stdout:
+"
+Usage: create
+
+Description:
+
+  Create a new label
+
+Options:
+
+  -h, --help                        - Show this help.                                        
+  -n, --name         <name>         - Label name                                             
+  -d, --description  <description>  - Label description                                      
+  -c, --color        <color>        - Label color (hex code)                                 
+  -t, --team         <team>         - Team ID or key                                         
+  -p, --parent       <parent>       - Parent label name (for label groups/hierarchy)         
+  --is-group                        - Mark this label as a group (container for sub-labels)  
+  --no-interactive                  - Disable interactive mode                               
+  --no-color                        - Disable colored output                                 
+  -j, --json                        - Output result as JSON                                  
+  --format           <format>       - Output format: text|json                               
+
+"
+stderr:
+""
+`;
+
+snapshot[`Label Create Command - Minimal Flags 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "label": {
+    "id": "label-456",
+    "name": "feature",
+    "description": null,
+    "color": "#00FF00",
+    "team": null,
+    "parent": null
+  }
+}
+'
+stderr:
+""
+`;

@@ -14,6 +14,7 @@ export const viewCommand = new Command()
   .name("view")
   .description("View initiative details")
   .arguments("<initiativeId:string>")
+  .option("--no-color", "Disable colored output")
   .option("-j, --json", "Output result as JSON")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: ViewOptions, initiativeId: string) => {

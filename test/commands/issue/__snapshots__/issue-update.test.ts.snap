@@ -22,6 +22,12 @@ Options:
   --team             <team>         - Team associated with the issue (if not your default team)    
   --project          <project>      - Name of the project with the issue                           
   -s, --state        <state>        - Workflow state for the issue (by name or type)               
+  --cycle            <cycle>        - Cycle name or ID to assign the issue to                      
+  --milestone        <milestone>    - Project milestone name or ID to assign the issue to          
+  --blocks           [issues...]    - Issues that this issue blocks (can be repeated)              
+  --related-to       [issues...]    - Issues related to this issue (can be repeated)               
+  --duplicate-of     [issues...]    - Issues that this is a duplicate of (can be repeated)         
+  --similar-to       [issues...]    - Issues similar to this issue (can be repeated)               
   --no-color                        - Disable colored output                                       
   -t, --title        <title>        - Title of the issue                                           
 

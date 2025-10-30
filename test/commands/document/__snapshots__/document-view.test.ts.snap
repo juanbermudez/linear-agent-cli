@@ -1,0 +1,26 @@
+export const snapshot = {};
+
+snapshot[`Document View Command - Help Text 1`] = `
+stdout:
+"
+Usage: view <docId>
+
+Description:
+
+  View document details
+
+Options:
+
+  -h, --help               - Show this help.                        
+  -w, --web                - Open in web browser                    
+  -a, --app                - Open in Linear.app                     
+  --no-comments            - Exclude comments from output           
+  --no-color               - Disable colored output                 
+  --no-pager               - Disable automatic paging               
+  -j, --json               - Output result as JSON (for AI agents)  
+  --format       <format>  - Output format: text|json               
+
+"
+stderr:
+""
+`;

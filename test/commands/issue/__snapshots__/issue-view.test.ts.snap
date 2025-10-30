@@ -25,8 +25,8 @@ stderr:
 
 snapshot[`Issue View Command - With Issue ID 1`] = `
 stdout:
-"Error: error sending request for url (http://127.0.0.1:3000/graphql): client error (Connect): tcp connect error: Connection refused
-"
+'Error: GraphQL Error (Code: 401): {"response":{"status":401,"headers":{}},"request":{"query":"query GetIssueDetailsWithComments(\$id: String!) {\\\\n  issue(id: \$id) {\\\\n    title\\\\n    description\\\\n    url\\\\n    branchName\\\\n    identifier\\\\n    priority\\\\n    estimate\\\\n    dueDate\\\\n    createdAt\\\\n    updatedAt\\\\n    assignee {\\\\n      id\\\\n      name\\\\n      displayName\\\\n    }\\\\n    state {\\\\n      id\\\\n      name\\\\n      type\\\\n    }\\\\n    team {\\\\n      key\\\\n      name\\\\n    }\\\\n    project {\\\\n      id\\\\n      name\\\\n    }\\\\n    projectMilestone {\\\\n      id\\\\n      name\\\\n      targetDate\\\\n    }\\\\n    cycle {\\\\n      id\\\\n      name\\\\n      startsAt\\\\n      endsAt\\\\n    }\\\\n    parent {\\\\n      id\\\\n      identifier\\\\n      title\\\\n    }\\\\n    children {\\\\n      nodes {\\\\n        id\\\\n        identifier\\\\n        title\\\\n        state {\\\\n          name\\\\n        }\\\\n      }\\\\n    }\\\\n    relations {\\\\n      nodes {\\\\n        id\\\\n        type\\\\n        relatedIssue {\\\\n          id\\\\n          identifier\\\\n          title\\\\n          state {\\\\n            name\\\\n          }\\\\n        }\\\\n      }\\\\n    }\\\\n    inverseRelations {\\\\n      nodes {\\\\n        id\\\\n        type\\\\n        issue {\\\\n          id\\\\n          identifier\\\\n          title\\\\n          state {\\\\n            name\\\\n          }\\\\n        }\\\\n      }\\\\n    }\\\\n    labels {\\\\n      nodes {\\\\n        id\\\\n        name\\\\n        color\\\\n        parent {\\\\n          name\\\\n        }\\\\n      }\\\\n    }\\\\n    comments(first: 50, orderBy: createdAt) {\\\\n      nodes {\\\\n        id\\\\n        body\\\\n        createdAt\\\\n        user {\\\\n          name\\\\n          displayName\\\\n        }\\\\n        externalUser {\\\\n          name\\\\n          displayName\\\\n        }\\\\n        parent {\\\\n          id\\\\n        }\\\\n      }\\\\n    }\\\\n  }\\\\n}","variables":{"id":"TEST-123"}}}
+'
 stderr:
 "✗ Failed to fetch issue details
 "
@@ -35,6 +35,10 @@ stderr:
 snapshot[`Issue View Command - With Mock Server Terminal No Comments 1`] = `
 stdout:
 "# Fix authentication bug in login flow
+
+
+
+---
 
 Users are experiencing issues logging in when their session expires. This affects the main authentication flow and needs to be resolved quickly.
 
@@ -58,6 +62,10 @@ snapshot[`Issue View Command - With No Comments Flag 1`] = `
 stdout:
 "# Fix authentication bug in login flow
 
+
+
+---
+
 Users are experiencing issues logging in when their session expires.
 "
 stderr:
@@ -67,6 +75,10 @@ stderr:
 snapshot[`Issue View Command - With Comments Default 1`] = `
 stdout:
 "# Fix authentication bug in login flow
+
+
+
+---
 
 Users are experiencing issues logging in when their session expires.
 
@@ -96,7 +108,7 @@ stderr:
 
 snapshot[`Issue View Command - Issue Not Found 1`] = `
 stdout:
-'Error: Issue not found: TEST-999: {"response":{"errors":[{"message":"Issue not found: TEST-999","extensions":{"code":"NOT_FOUND"}}],"status":200,"headers":{}},"request":{"query":"query GetIssueDetailsWithComments(\$id: String!) {\\\\n  issue(id: \$id) {\\\\n    title\\\\n    description\\\\n    url\\\\n    branchName\\\\n    comments(first: 50, orderBy: createdAt) {\\\\n      nodes {\\\\n        id\\\\n        body\\\\n        createdAt\\\\n        user {\\\\n          name\\\\n          displayName\\\\n        }\\\\n        externalUser {\\\\n          name\\\\n          displayName\\\\n        }\\\\n        parent {\\\\n          id\\\\n        }\\\\n      }\\\\n    }\\\\n  }\\\\n}","variables":{"id":"TEST-999"}}}
+'Error: Issue not found: TEST-999: {"response":{"errors":[{"message":"Issue not found: TEST-999","extensions":{"code":"NOT_FOUND"}}],"status":200,"headers":{}},"request":{"query":"query GetIssueDetailsWithComments(\$id: String!) {\\\\n  issue(id: \$id) {\\\\n    title\\\\n    description\\\\n    url\\\\n    branchName\\\\n    identifier\\\\n    priority\\\\n    estimate\\\\n    dueDate\\\\n    createdAt\\\\n    updatedAt\\\\n    assignee {\\\\n      id\\\\n      name\\\\n      displayName\\\\n    }\\\\n    state {\\\\n      id\\\\n      name\\\\n      type\\\\n    }\\\\n    team {\\\\n      key\\\\n      name\\\\n    }\\\\n    project {\\\\n      id\\\\n      name\\\\n    }\\\\n    projectMilestone {\\\\n      id\\\\n      name\\\\n      targetDate\\\\n    }\\\\n    cycle {\\\\n      id\\\\n      name\\\\n      startsAt\\\\n      endsAt\\\\n    }\\\\n    parent {\\\\n      id\\\\n      identifier\\\\n      title\\\\n    }\\\\n    children {\\\\n      nodes {\\\\n        id\\\\n        identifier\\\\n        title\\\\n        state {\\\\n          name\\\\n        }\\\\n      }\\\\n    }\\\\n    relations {\\\\n      nodes {\\\\n        id\\\\n        type\\\\n        relatedIssue {\\\\n          id\\\\n          identifier\\\\n          title\\\\n          state {\\\\n            name\\\\n          }\\\\n        }\\\\n      }\\\\n    }\\\\n    inverseRelations {\\\\n      nodes {\\\\n        id\\\\n        type\\\\n        issue {\\\\n          id\\\\n          identifier\\\\n          title\\\\n          state {\\\\n            name\\\\n          }\\\\n        }\\\\n      }\\\\n    }\\\\n    labels {\\\\n      nodes {\\\\n        id\\\\n        name\\\\n        color\\\\n        parent {\\\\n          name\\\\n        }\\\\n      }\\\\n    }\\\\n    comments(first: 50, orderBy: createdAt) {\\\\n      nodes {\\\\n        id\\\\n        body\\\\n        createdAt\\\\n        user {\\\\n          name\\\\n          displayName\\\\n        }\\\\n        externalUser {\\\\n          name\\\\n          displayName\\\\n        }\\\\n        parent {\\\\n          id\\\\n        }\\\\n      }\\\\n    }\\\\n  }\\\\n}","variables":{"id":"TEST-999"}}}
 '
 stderr:
 "✗ Failed to fetch issue details
