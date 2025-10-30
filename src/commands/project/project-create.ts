@@ -13,6 +13,7 @@ import { error as errorColor, success as successColor } from "../../utils/stylin
 interface CreateOptions {
   name?: string
   description?: string
+  content?: string
   team?: string[]
   status?: string
   lead?: string
@@ -213,6 +214,7 @@ async function interactiveCreate(options: CreateOptions) {
     const project = await createProject({
       name,
       description,
+      content: options.content,
       teamIds,
       statusId,
       leadId,
@@ -447,6 +449,7 @@ async function flagBasedCreate(options: CreateOptions) {
     const project = await createProject({
       name: options.name,
       description: options.description,
+      content: options.content,
       teamIds,
       statusId,
       leadId,
@@ -530,11 +533,11 @@ async function flagBasedCreate(options: CreateOptions) {
             id: project.lead.id,
             name: project.lead.displayName,
           } : null,
-          teams: project.teams.map((team) => ({
+          teams: project.teams?.nodes?.map((team) => ({
             id: team.id,
             key: team.key,
             name: team.name,
-          })),
+          })) || [],
         },
       }
 
@@ -580,7 +583,8 @@ export const createCommand = new Command()
   .name("create")
   .description("Create a new Linear project")
   .option("-n, --name <name:string>", "Project name")
-  .option("-d, --description <description:string>", "Project description")
+  .option("-d, --description <description:string>", "Project description (max 255 chars)")
+  .option("-c, --content <content:string>", "Project content/body (markdown, for full details)")
   .option("-t, --team <team:string>", "Team key (can be repeated)", { collect: true })
   .option("-s, --status <status:string>", "Project status name or ID")
   .option("-l, --lead <lead:string>", "Project lead (username or email)")

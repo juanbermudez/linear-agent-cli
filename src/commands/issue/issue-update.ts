@@ -55,6 +55,30 @@ export const updateCommand = new Command()
     "-s, --state <state:string>",
     "Workflow state for the issue (by name or type)",
   )
+  .option(
+    "--cycle <cycle:string>",
+    "Cycle name or ID to assign the issue to",
+  )
+  .option(
+    "--milestone <milestone:string>",
+    "Project milestone name or ID to assign the issue to",
+  )
+  .option(
+    "--blocks [issues...:string]",
+    "Issues that this issue blocks (can be repeated)",
+  )
+  .option(
+    "--related-to [issues...:string]",
+    "Issues related to this issue (can be repeated)",
+  )
+  .option(
+    "--duplicate-of [issues...:string]",
+    "Issues that this is a duplicate of (can be repeated)",
+  )
+  .option(
+    "--similar-to [issues...:string]",
+    "Issues similar to this issue (can be repeated)",
+  )
   .option("--no-color", "Disable colored output")
   .option("-t, --title <title:string>", "Title of the issue")
   .action(
@@ -70,6 +94,12 @@ export const updateCommand = new Command()
         team,
         project,
         state,
+        cycle,
+        milestone,
+        blocks: blocksIssues,
+        relatedTo: relatedToIssues,
+        duplicateOf: duplicateOfIssues,
+        similarTo: similarToIssues,
         color,
         title,
       },
@@ -157,6 +187,36 @@ export const updateCommand = new Command()
           }
         }
 
+        // Resolve cycle ID if provided
+        let cycleId: string | undefined
+        if (cycle !== undefined) {
+          const { getCycleId } = await import("../../utils/linear.ts")
+          cycleId = await getCycleId(teamKey, cycle)
+          if (cycleId === undefined) {
+            console.error(`Could not find cycle '${cycle}' for team ${teamKey}`)
+            Deno.exit(1)
+          }
+        }
+
+        // Resolve milestone ID if provided
+        let projectMilestoneId: string | undefined
+        if (milestone !== undefined) {
+          if (projectId === undefined) {
+            console.error(
+              `Cannot set milestone without a project. Use --project to specify a project first.`,
+            )
+            Deno.exit(1)
+          }
+          const { getProjectMilestoneId } = await import("../../utils/linear.ts")
+          projectMilestoneId = await getProjectMilestoneId(projectId, milestone)
+          if (projectMilestoneId === undefined) {
+            console.error(
+              `Could not find milestone '${milestone}' for project ${project}`,
+            )
+            Deno.exit(1)
+          }
+        }
+
         // Build the update input object, only including fields that were provided
         const input: Record<string, string | number | string[] | undefined> = {}
 
@@ -187,6 +247,8 @@ export const updateCommand = new Command()
         if (teamId !== undefined) input.teamId = teamId
         if (projectId !== undefined) input.projectId = projectId
         if (stateId !== undefined) input.stateId = stateId
+        if (cycleId !== undefined) input.cycleId = cycleId
+        if (projectMilestoneId !== undefined) input.projectMilestoneId = projectMilestoneId
 
         spinner?.stop()
         console.log(`Updating issue ${issueId}`)
@@ -220,6 +282,82 @@ export const updateCommand = new Command()
         spinner?.stop()
         console.log(`✓ Updated issue ${issue.identifier}: ${issue.title}`)
         console.log(issue.url)
+
+        // Create relationships if provided
+        const relationshipsToCreate: Array<{ relatedIssueId: string; type: "blocks" | "related" | "duplicate" | "similar" }> = []
+
+        if (blocksIssues && Array.isArray(blocksIssues) && blocksIssues.length > 0) {
+          for (const relatedIssue of blocksIssues) {
+            const relatedIdentifier = await getIssueIdentifier(relatedIssue)
+            if (relatedIdentifier) {
+              const relatedId = await getIssueId(relatedIdentifier)
+              if (relatedId) {
+                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "blocks" })
+              }
+            }
+          }
+        }
+
+        if (relatedToIssues && Array.isArray(relatedToIssues) && relatedToIssues.length > 0) {
+          for (const relatedIssue of relatedToIssues) {
+            const relatedIdentifier = await getIssueIdentifier(relatedIssue)
+            if (relatedIdentifier) {
+              const relatedId = await getIssueId(relatedIdentifier)
+              if (relatedId) {
+                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "related" })
+              }
+            }
+          }
+        }
+
+        if (duplicateOfIssues && Array.isArray(duplicateOfIssues) && duplicateOfIssues.length > 0) {
+          for (const relatedIssue of duplicateOfIssues) {
+            const relatedIdentifier = await getIssueIdentifier(relatedIssue)
+            if (relatedIdentifier) {
+              const relatedId = await getIssueId(relatedIdentifier)
+              if (relatedId) {
+                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "duplicate" })
+              }
+            }
+          }
+        }
+
+        if (similarToIssues && Array.isArray(similarToIssues) && similarToIssues.length > 0) {
+          for (const relatedIssue of similarToIssues) {
+            const relatedIdentifier = await getIssueIdentifier(relatedIssue)
+            if (relatedIdentifier) {
+              const relatedId = await getIssueId(relatedIdentifier)
+              if (relatedId) {
+                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "similar" })
+              }
+            }
+          }
+        }
+
+        // Create all relationships
+        if (relationshipsToCreate.length > 0) {
+          const relationMutation = gql(`
+            mutation CreateIssueRelationInUpdate($input: IssueRelationCreateInput!) {
+              issueRelationCreate(input: $input) {
+                success
+              }
+            }
+          `)
+
+          for (const relation of relationshipsToCreate) {
+            try {
+              await client.request(relationMutation, {
+                input: {
+                  issueId: issue.id,
+                  relatedIssueId: relation.relatedIssueId,
+                  type: relation.type,
+                },
+              })
+            } catch (err) {
+              console.error(`Warning: Failed to create ${relation.type} relationship`)
+            }
+          }
+        }
       } catch (error) {
         console.error("✗ Failed to update issue", error)
         Deno.exit(1)

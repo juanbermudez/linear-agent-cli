@@ -1,0 +1,180 @@
+{
+  "_comment": "Customizable label hierarchy template",
+  "_usage": "Modify this structure to match your team's labeling conventions",
+
+  "label_groups": [
+    {
+      "name": "Work-Type",
+      "description": "Type of work being done",
+      "color": "#6366F1",
+      "children": [
+        {
+          "name": "Feature",
+          "description": "New feature development",
+          "color": "#10B981"
+        },
+        {
+          "name": "Bug",
+          "description": "Bug fixes",
+          "color": "#EF4444"
+        },
+        {
+          "name": "Enhancement",
+          "description": "Improvements to existing features",
+          "color": "#3B82F6"
+        },
+        {
+          "name": "Refactor",
+          "description": "Code refactoring",
+          "color": "#8B5CF6"
+        },
+        {
+          "name": "Documentation",
+          "description": "Documentation updates",
+          "color": "#6B7280"
+        },
+        {
+          "name": "Technical-Debt",
+          "description": "Technical debt cleanup",
+          "color": "#F59E0B"
+        }
+      ]
+    },
+    {
+      "name": "Scope",
+      "description": "Area of the codebase affected",
+      "color": "#F59E0B",
+      "children": [
+        {
+          "name": "Frontend",
+          "description": "Frontend/UI work",
+          "color": "#EC4899"
+        },
+        {
+          "name": "Backend",
+          "description": "Backend/API work",
+          "color": "#14B8A6"
+        },
+        {
+          "name": "API",
+          "description": "API development",
+          "color": "#06B6D4"
+        },
+        {
+          "name": "Database",
+          "description": "Database changes",
+          "color": "#8B5CF6"
+        },
+        {
+          "name": "Infrastructure",
+          "description": "Infrastructure/DevOps",
+          "color": "#64748B"
+        },
+        {
+          "name": "Mobile",
+          "description": "Mobile app work",
+          "color": "#F472B6"
+        },
+        {
+          "name": "Testing",
+          "description": "Testing and QA",
+          "color": "#A78BFA"
+        }
+      ]
+    },
+    {
+      "name": "Priority",
+      "description": "Priority level (optional - can use issue priority field instead)",
+      "color": "#DC2626",
+      "children": [
+        {
+          "name": "Critical",
+          "description": "Critical priority",
+          "color": "#991B1B"
+        },
+        {
+          "name": "High",
+          "description": "High priority",
+          "color": "#DC2626"
+        },
+        {
+          "name": "Medium",
+          "description": "Medium priority",
+          "color": "#F59E0B"
+        },
+        {
+          "name": "Low",
+          "description": "Low priority",
+          "color": "#84CC16"
+        }
+      ]
+    }
+  ],
+
+  "flat_labels": [
+    {
+      "name": "Blocked",
+      "description": "Blocked by dependencies",
+      "color": "#DC2626"
+    },
+    {
+      "name": "Needs-Review",
+      "description": "Needs code review",
+      "color": "#F59E0B"
+    },
+    {
+      "name": "In-Testing",
+      "description": "Currently being tested",
+      "color": "#3B82F6"
+    },
+    {
+      "name": "Ready-to-Deploy",
+      "description": "Ready for deployment",
+      "color": "#10B981"
+    },
+    {
+      "name": "Security",
+      "description": "Security-related",
+      "color": "#7C3AED"
+    },
+    {
+      "name": "Performance",
+      "description": "Performance-related",
+      "color": "#0891B2"
+    },
+    {
+      "name": "Accessibility",
+      "description": "Accessibility improvements",
+      "color": "#059669"
+    },
+    {
+      "name": "Breaking-Change",
+      "description": "Introduces breaking changes",
+      "color": "#DC2626"
+    }
+  ],
+
+  "team_specific": {
+    "engineering": {
+      "additional_labels": [
+        "Spike",
+        "Research",
+        "POC"
+      ]
+    },
+    "design": {
+      "additional_labels": [
+        "UX",
+        "Visual-Design",
+        "User-Research"
+      ]
+    },
+    "product": {
+      "additional_labels": [
+        "Discovery",
+        "User-Feedback",
+        "Analytics"
+      ]
+    }
+  }
+}

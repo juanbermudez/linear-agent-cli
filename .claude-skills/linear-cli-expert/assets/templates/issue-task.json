@@ -1,0 +1,13 @@
+{
+  "_comment": "Task issue template",
+  "_usage": "create_from_template.py issue assets/templates/issue-task.json",
+  "_variables": "Use {{VARIABLE}} syntax for substitution",
+
+  "title": "{{TITLE}}",
+  "team": "{{TEAM}}",
+  "description": "## Task Description\n{{DESCRIPTION}}\n\n## Implementation Steps\n1. {{STEP_1}}\n2. {{STEP_2}}\n3. {{STEP_3}}\n\n## Definition of Done\n- [ ] {{DONE_1}}\n- [ ] {{DONE_2}}\n- [ ] {{DONE_3}}\n\n## Notes\n{{NOTES}}",
+
+  "priority": 3,
+  "estimate": 3,
+  "assignee": "@me"
+}

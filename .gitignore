@@ -40,3 +40,16 @@ yarn-error.log*
 *.temp
 .tmp/
 .temp/
+
+# Test artifacts and summaries
+test-*.md
+test-*.ts
+test-*.txt
+final-test-*.md
+*_TEST*.md
+*_RESULTS.md
+*_SUMMARY.md
+*_FINDINGS.md
+*_ANALYSIS.md
+*_PLAN.md
+*_UPDATES.md

@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command"
 import { Input, Select } from "@cliffy/prompt"
-import { createLabel, getAllTeams, getTeamIdByKey } from "../../utils/linear.ts"
+import { createLabel, getAllTeams, getTeamIdByKey, getLabelIdByName } from "../../utils/linear.ts"
 import {
   error as errorColor,
   success as successColor,
@@ -11,6 +11,8 @@ interface CreateOptions {
   description?: string
   color?: string
   team?: string
+  parent?: string
+  isGroup?: boolean
   json?: boolean
   format?: string
   noInteractive?: boolean
@@ -34,6 +36,8 @@ export const createCommand = new Command()
   .option("-d, --description <description:string>", "Label description")
   .option("-c, --color <color:string>", "Label color (hex code)")
   .option("-t, --team <team:string>", "Team ID or key")
+  .option("-p, --parent <parent:string>", "Parent label name (for label groups/hierarchy)")
+  .option("--is-group", "Mark this label as a group (container for sub-labels)")
   .option("--no-interactive", "Disable interactive mode")
   .option("-j, --json", "Output result as JSON")
   .option("--format <format:string>", "Output format: text|json")
@@ -46,6 +50,8 @@ export const createCommand = new Command()
     let description: string | undefined
     let color: string | undefined
     let teamId: string | undefined
+    let parentId: string | undefined
+    const isGroup = options.isGroup || false
 
     if (interactive) {
       name = await Input.prompt({
@@ -170,6 +176,44 @@ export const createCommand = new Command()
       }
     }
 
+    // Resolve parent label if provided
+    if (options.parent) {
+      if (!options.team) {
+        const errorMsg = "Team is required when specifying a parent label"
+        if (useJson) {
+          console.error(
+            JSON.stringify({
+              success: false,
+              error: { code: "MISSING_REQUIRED_FIELD", message: errorMsg },
+            }, null, 2),
+          )
+        } else {
+          console.error(errorColor(`Error: ${errorMsg}`))
+        }
+        Deno.exit(1)
+      }
+
+      try {
+        parentId = await getLabelIdByName(options.parent, options.team)
+        if (!parentId) {
+          throw new Error("Parent label not found")
+        }
+      } catch (err) {
+        const errorMsg = `Parent label '${options.parent}' not found in team ${options.team}`
+        if (useJson) {
+          console.error(
+            JSON.stringify({
+              success: false,
+              error: { code: "NOT_FOUND", message: errorMsg },
+            }, null, 2),
+          )
+        } else {
+          console.error(errorColor(`Error: ${errorMsg}`))
+        }
+        Deno.exit(1)
+      }
+    }
+
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()
     const spinner = showSpinner
@@ -178,7 +222,7 @@ export const createCommand = new Command()
     spinner?.start()
 
     try {
-      const label = await createLabel({ name, description, color, teamId })
+      const label = await createLabel({ name, description, color, teamId, parentId, isGroup })
       spinner?.stop()
 
       if (useJson) {
@@ -194,11 +238,17 @@ export const createCommand = new Command()
               team: label.team
                 ? { id: label.team.id, key: label.team.key, name: label.team.name }
                 : null,
+              parent: label.parent
+                ? { id: label.parent.id, name: label.parent.name }
+                : null,
             },
           }, null, 2),
         )
       } else {
         console.log(successColor(`✓ Created label '${label.name}'`))
+        if (label.parent) {
+          console.log(`Parent: ${label.parent.name}`)
+        }
         if (label.team) {
           console.log(`Team: ${label.team.name} (${label.team.key})`)
         }

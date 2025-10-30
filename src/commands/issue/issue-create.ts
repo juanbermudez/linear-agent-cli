@@ -136,6 +136,58 @@ const ADDITIONAL_FIELDS: AdditionalField[] = [
       return isNaN(parsed) ? undefined : parsed
     },
   },
+  {
+    key: "cycle",
+    label: "Cycle",
+    handler: async (teamKey: string) => {
+      const { getCycles } = await import("../../utils/linear.ts")
+      const cycles = await getCycles(teamKey)
+      if (cycles.length === 0) return undefined
+
+      return await Select.prompt({
+        message: "Which cycle should this issue be in?",
+        options: [
+          { name: "None", value: "" },
+          ...cycles.map((cycle) => ({
+            name: `${cycle.name} (${cycle.startsAt} - ${cycle.endsAt})`,
+            value: cycle.id,
+          })),
+        ],
+        search: true,
+      })
+    },
+  },
+  {
+    key: "milestone",
+    label: "Project Milestone",
+    handler: async (_teamKey: string, _teamId: string) => {
+      // Get project from context or prompt
+      const projectInput = await Input.prompt({
+        message: "Project name or ID (leave blank to skip milestone)",
+        default: "",
+      })
+      if (!projectInput) return undefined
+
+      const { getProjectMilestones } = await import("../../utils/linear.ts")
+      const milestones = await getProjectMilestones(projectInput)
+      if (milestones.length === 0) {
+        console.log("No milestones found for this project")
+        return undefined
+      }
+
+      return await Select.prompt({
+        message: "Which milestone should this issue be in?",
+        options: [
+          { name: "None", value: "" },
+          ...milestones.map((m) => ({
+            name: `${m.name}${m.targetDate ? ` (${m.targetDate})` : ""}`,
+            value: m.id,
+          })),
+        ],
+        search: true,
+      })
+    },
+  },
 ]
 
 async function promptAdditionalFields(
@@ -150,6 +202,8 @@ async function promptAdditionalFields(
   estimate?: number
   labelIds: string[]
   stateId?: string
+  cycleId?: string
+  projectMilestoneId?: string
 }> {
   // Build options that display defaults in parentheses for workflow state and assignee
   let defaultStateName: string | null = null
@@ -178,6 +232,8 @@ async function promptAdditionalFields(
   let estimate: number | undefined
   let labelIds: string[] = []
   let stateId: string | undefined
+  let cycleId: string | undefined
+  let projectMilestoneId: string | undefined
 
   // Set assignee default based on user settings
   if (autoAssignToSelf) {
@@ -209,6 +265,12 @@ async function promptAdditionalFields(
         case "estimate":
           estimate = value as number | undefined
           break
+        case "cycle":
+          cycleId = value === "" ? undefined : (value as string | undefined)
+          break
+        case "milestone":
+          projectMilestoneId = value === "" ? undefined : (value as string | undefined)
+          break
       }
     }
   }
@@ -219,6 +281,8 @@ async function promptAdditionalFields(
     estimate,
     labelIds,
     stateId,
+    cycleId,
+    projectMilestoneId,
   }
 }
 
@@ -241,6 +305,8 @@ async function promptInteractiveIssueCreation(
   start: boolean
   parentId?: string
   projectId?: string | null
+  cycleId?: string
+  projectMilestoneId?: string
 }> {
   // Start user settings and team resolution in background while asking for title
   const userSettingsPromise = (async () => {
@@ -383,6 +449,8 @@ async function promptInteractiveIssueCreation(
   let estimate: number | undefined
   let labelIds: string[] = []
   let stateId: string | undefined
+  let cycleId: string | undefined
+  let projectMilestoneId: string | undefined
 
   // Set assignee default based on user settings
   if (autoAssignToSelf) {
@@ -409,6 +477,8 @@ async function promptInteractiveIssueCreation(
     estimate = additionalFieldsResult.estimate
     labelIds = additionalFieldsResult.labelIds
     stateId = additionalFieldsResult.stateId
+    cycleId = additionalFieldsResult.cycleId
+    projectMilestoneId = additionalFieldsResult.projectMilestoneId
   }
 
   // Ask about starting work (always show this)
@@ -434,6 +504,8 @@ async function promptInteractiveIssueCreation(
     start,
     parentId,
     projectId: parentData?.projectId || null,
+    cycleId,
+    projectMilestoneId,
   }
 }
 
@@ -485,6 +557,30 @@ export const createCommand = new Command()
     "Workflow state for the issue (by name or type)",
   )
   .option(
+    "--cycle <cycle:string>",
+    "Cycle name or ID to assign the issue to",
+  )
+  .option(
+    "--milestone <milestone:string>",
+    "Project milestone name or ID to assign the issue to",
+  )
+  .option(
+    "--blocks [issues...:string]",
+    "Issues that this issue blocks (can be repeated)",
+  )
+  .option(
+    "--related-to [issues...:string]",
+    "Issues related to this issue (can be repeated)",
+  )
+  .option(
+    "--duplicate-of [issues...:string]",
+    "Issues that this is a duplicate of (can be repeated)",
+  )
+  .option(
+    "--similar-to [issues...:string]",
+    "Issues similar to this issue (can be repeated)",
+  )
+  .option(
     "--no-use-default-template",
     "Do not use default template for the issue",
   )
@@ -506,6 +602,12 @@ export const createCommand = new Command()
         team,
         project,
         state,
+        cycle,
+        milestone,
+        blocks: blocksIssues,
+        relatedTo: relatedToIssues,
+        duplicateOf: duplicateOfIssues,
+        similarTo: similarToIssues,
         color,
         interactive,
         title,
@@ -583,6 +685,8 @@ export const createCommand = new Command()
               stateId: interactiveData.stateId,
               useDefaultTemplate,
               description: interactiveData.description,
+              cycleId: interactiveData.cycleId,
+              projectMilestoneId: interactiveData.projectMilestoneId,
             },
           })
 
@@ -715,6 +819,36 @@ export const createCommand = new Command()
           }
         }
 
+        // Resolve cycle ID if provided
+        let cycleId: string | undefined
+        if (cycle !== undefined) {
+          const { getCycleId } = await import("../../utils/linear.ts")
+          cycleId = await getCycleId(team, cycle)
+          if (cycleId === undefined) {
+            console.error(`Could not find cycle '${cycle}' for team ${team}`)
+            Deno.exit(1)
+          }
+        }
+
+        // Resolve milestone ID if provided
+        let projectMilestoneId: string | undefined
+        if (milestone !== undefined) {
+          if (projectId === undefined) {
+            console.error(
+              `Cannot set milestone without a project. Use --project to specify a project first.`,
+            )
+            Deno.exit(1)
+          }
+          const { getProjectMilestoneId } = await import("../../utils/linear.ts")
+          projectMilestoneId = await getProjectMilestoneId(projectId, milestone)
+          if (projectMilestoneId === undefined) {
+            console.error(
+              `Could not find milestone '${milestone}' for project ${project}`,
+            )
+            Deno.exit(1)
+          }
+        }
+
         // Date validation done at graphql level
 
         // Convert parent identifier if provided and fetch parent data
@@ -759,6 +893,8 @@ export const createCommand = new Command()
           stateId,
           useDefaultTemplate,
           description,
+          cycleId,
+          projectMilestoneId,
         }
         spinner?.stop()
         console.log(`Creating issue in ${team}`)
@@ -786,6 +922,82 @@ export const createCommand = new Command()
         const issueId = issue.id
         spinner?.stop()
         console.log(issue.url)
+
+        // Create relationships if provided
+        const relationshipsToCreate: Array<{ relatedIssueId: string; type: "blocks" | "related" | "duplicate" | "similar" }> = []
+
+        if (blocksIssues && Array.isArray(blocksIssues) && blocksIssues.length > 0) {
+          for (const relatedIssue of blocksIssues) {
+            const relatedIdentifier = await getIssueIdentifier(relatedIssue)
+            if (relatedIdentifier) {
+              const relatedId = await getIssueId(relatedIdentifier)
+              if (relatedId) {
+                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "blocks" })
+              }
+            }
+          }
+        }
+
+        if (relatedToIssues && Array.isArray(relatedToIssues) && relatedToIssues.length > 0) {
+          for (const relatedIssue of relatedToIssues) {
+            const relatedIdentifier = await getIssueIdentifier(relatedIssue)
+            if (relatedIdentifier) {
+              const relatedId = await getIssueId(relatedIdentifier)
+              if (relatedId) {
+                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "related" })
+              }
+            }
+          }
+        }
+
+        if (duplicateOfIssues && Array.isArray(duplicateOfIssues) && duplicateOfIssues.length > 0) {
+          for (const relatedIssue of duplicateOfIssues) {
+            const relatedIdentifier = await getIssueIdentifier(relatedIssue)
+            if (relatedIdentifier) {
+              const relatedId = await getIssueId(relatedIdentifier)
+              if (relatedId) {
+                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "duplicate" })
+              }
+            }
+          }
+        }
+
+        if (similarToIssues && Array.isArray(similarToIssues) && similarToIssues.length > 0) {
+          for (const relatedIssue of similarToIssues) {
+            const relatedIdentifier = await getIssueIdentifier(relatedIssue)
+            if (relatedIdentifier) {
+              const relatedId = await getIssueId(relatedIdentifier)
+              if (relatedId) {
+                relationshipsToCreate.push({ relatedIssueId: relatedId, type: "similar" })
+              }
+            }
+          }
+        }
+
+        // Create all relationships
+        if (relationshipsToCreate.length > 0) {
+          const relationMutation = gql(`
+            mutation CreateIssueRelationInCreate($input: IssueRelationCreateInput!) {
+              issueRelationCreate(input: $input) {
+                success
+              }
+            }
+          `)
+
+          for (const relation of relationshipsToCreate) {
+            try {
+              await client.request(relationMutation, {
+                input: {
+                  issueId,
+                  relatedIssueId: relation.relatedIssueId,
+                  type: relation.type,
+                },
+              })
+            } catch (err) {
+              console.error(`Warning: Failed to create ${relation.type} relationship`)
+            }
+          }
+        }
 
         if (start) {
           await startWorkOnIssue(issueId, issue.team.key)

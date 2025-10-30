@@ -188,20 +188,7 @@ export async function fetchIssueDetails(
   issueId: string,
   showSpinner = false,
   includeComments = false,
-): Promise<{
-  title: string
-  description?: string | null | undefined
-  url: string
-  branchName: string
-  comments?: Array<{
-    id: string
-    body: string
-    createdAt: string
-    user?: { name: string; displayName: string } | null
-    externalUser?: { name: string; displayName: string } | null
-    parent?: { id: string } | null
-  }>
-}> {
+): Promise<any> {
   const { Spinner } = await import("@std/cli/unstable-spinner")
   const spinner = showSpinner ? new Spinner() : null
   spinner?.start()
@@ -213,6 +200,94 @@ export async function fetchIssueDetails(
           description
           url
           branchName
+          identifier
+          priority
+          estimate
+          dueDate
+          createdAt
+          updatedAt
+          assignee {
+            id
+            name
+            displayName
+          }
+          state {
+            id
+            name
+            type
+          }
+          team {
+            key
+            name
+          }
+          project {
+            id
+            name
+          }
+          projectMilestone {
+            id
+            name
+            targetDate
+          }
+          cycle {
+            id
+            name
+            startsAt
+            endsAt
+          }
+          parent {
+            id
+            identifier
+            title
+          }
+          children {
+            nodes {
+              id
+              identifier
+              title
+              state {
+                name
+              }
+            }
+          }
+          relations {
+            nodes {
+              id
+              type
+              relatedIssue {
+                id
+                identifier
+                title
+                state {
+                  name
+                }
+              }
+            }
+          }
+          inverseRelations {
+            nodes {
+              id
+              type
+              issue {
+                id
+                identifier
+                title
+                state {
+                  name
+                }
+              }
+            }
+          }
+          labels {
+            nodes {
+              id
+              name
+              color
+              parent {
+                name
+              }
+            }
+          }
           comments(first: 50, orderBy: createdAt) {
             nodes {
               id
@@ -242,6 +317,94 @@ export async function fetchIssueDetails(
           description
           url
           branchName
+          identifier
+          priority
+          estimate
+          dueDate
+          createdAt
+          updatedAt
+          assignee {
+            id
+            name
+            displayName
+          }
+          state {
+            id
+            name
+            type
+          }
+          team {
+            key
+            name
+          }
+          project {
+            id
+            name
+          }
+          projectMilestone {
+            id
+            name
+            targetDate
+          }
+          cycle {
+            id
+            name
+            startsAt
+            endsAt
+          }
+          parent {
+            id
+            identifier
+            title
+          }
+          children {
+            nodes {
+              id
+              identifier
+              title
+              state {
+                name
+              }
+            }
+          }
+          relations {
+            nodes {
+              id
+              type
+              relatedIssue {
+                id
+                identifier
+                title
+                state {
+                  name
+                }
+              }
+            }
+          }
+          inverseRelations {
+            nodes {
+              id
+              type
+              issue {
+                id
+                identifier
+                title
+                state {
+                  name
+                }
+              }
+            }
+          }
+          labels {
+            nodes {
+              id
+              name
+              color
+              parent {
+                name
+              }
+            }
+          }
         }
       }
     `)
@@ -420,6 +583,12 @@ export async function fetchIssuesForState(
 export async function getProjectIdByName(
   name: string,
 ): Promise<string | undefined> {
+  // If input looks like a UUID, return it directly
+  const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  if (uuidPattern.test(name)) {
+    return name
+  }
+
   const client = getGraphQLClient()
   const query = gql(/* GraphQL */ `
     query GetProjectIdByName($name: String!) {
@@ -704,6 +873,101 @@ export async function getLabelsForTeam(
   return labels.sort((a, b) =>
     a.name.toLowerCase().localeCompare(b.name.toLowerCase())
   )
+}
+
+export async function getCycles(teamKey: string): Promise<Array<{
+  id: string
+  name: string
+  startsAt: string
+  endsAt: string
+}>> {
+  const teamId = await getTeamIdByKey(teamKey)
+  if (!teamId) return []
+
+  const client = getGraphQLClient()
+  const query = gql(/* GraphQL */ `
+    query GetCycles($teamId: String!) {
+      team(id: $teamId) {
+        cycles(first: 50, filter: { isActive: { eq: true } }) {
+          nodes {
+            id
+            name
+            startsAt
+            endsAt
+          }
+        }
+      }
+    }
+  `)
+
+  const data = await client.request(query, { teamId })
+  const cycles = data.team?.cycles?.nodes || []
+
+  // Filter out cycles with missing required fields and convert to expected type
+  return cycles
+    .filter((c): c is { id: string; name: string; startsAt: string; endsAt: string } =>
+      c != null && c.name != null
+    )
+    .map(c => ({
+      id: c.id,
+      name: c.name,
+      startsAt: String(c.startsAt),
+      endsAt: String(c.endsAt),
+    }))
+}
+
+export async function getCycleId(teamKey: string, cycleName: string): Promise<string | undefined> {
+  const cycles = await getCycles(teamKey)
+  const cycle = cycles.find(c =>
+    c.name.toLowerCase() === cycleName.toLowerCase() || c.id === cycleName
+  )
+  return cycle?.id
+}
+
+export async function getProjectMilestones(projectIdOrName: string): Promise<Array<{
+  id: string
+  name: string
+  targetDate?: string
+}>> {
+  const projectId = await getProjectIdByName(projectIdOrName)
+  if (!projectId) return []
+
+  const client = getGraphQLClient()
+  const query = gql(/* GraphQL */ `
+    query GetProjectMilestones($projectId: String!) {
+      project(id: $projectId) {
+        projectMilestones {
+          nodes {
+            id
+            name
+            targetDate
+          }
+        }
+      }
+    }
+  `)
+
+  const data = await client.request(query, { projectId })
+  const milestones = data.project?.projectMilestones?.nodes || []
+
+  // Filter out milestones with missing required fields and convert to expected type
+  return milestones
+    .filter((m): m is { id: string; name: string; targetDate?: string | null } =>
+      m != null && m.name != null
+    )
+    .map(m => ({
+      id: m.id,
+      name: m.name,
+      targetDate: m.targetDate ?? undefined,
+    }))
+}
+
+export async function getProjectMilestoneId(projectId: string, milestoneName: string): Promise<string | undefined> {
+  const milestones = await getProjectMilestones(projectId)
+  const milestone = milestones.find(m =>
+    m.name.toLowerCase() === milestoneName.toLowerCase() || m.id === milestoneName
+  )
+  return milestone?.id
 }
 
 export async function getTeamMembers(teamKey: string) {
@@ -1069,6 +1333,7 @@ export async function createProject(input: {
   name: string
   teamIds: string[]
   description?: string
+  content?: string
   statusId?: string
   leadId?: string
   icon?: string
@@ -1123,6 +1388,7 @@ export async function updateProject(
   input: {
     name?: string
     description?: string
+    content?: string
     statusId?: string
     leadId?: string
     icon?: string
@@ -1409,6 +1675,7 @@ export async function listInitiativeStatuses() {
 export async function createInitiative(input: {
   name: string
   description?: string
+  content?: string
   statusId?: string
   ownerId?: string
   targetDate?: string
@@ -1449,6 +1716,7 @@ export async function updateInitiative(
   input: {
     name?: string
     description?: string
+    content?: string
     statusId?: string
     ownerId?: string
     targetDate?: string
@@ -1739,6 +2007,8 @@ export async function createLabel(input: {
   description?: string
   color?: string
   teamId?: string
+  parentId?: string
+  isGroup?: boolean
 }) {
   const mutation = gql(/* GraphQL */ `
     mutation CreateLabel($input: IssueLabelCreateInput!) {
@@ -1750,6 +2020,7 @@ export async function createLabel(input: {
           description
           color
           team { id key name }
+          parent { id name }
         }
       }
     }
@@ -1820,6 +2091,36 @@ export async function listLabelsForTeam(teamId?: string) {
   const data = await client.request(query, { teamId, first: 100 })
 
   return data.issueLabels.nodes
+}
+
+export async function getLabelIdByName(labelName: string, teamKey: string): Promise<string | undefined> {
+  const teamId = await getTeamIdByKey(teamKey)
+  if (!teamId) {
+    return undefined
+  }
+
+  const query = gql(/* GraphQL */ `
+    query GetLabelByName($teamId: ID, $first: Int) {
+      issueLabels(
+        filter: { team: { id: { eq: $teamId } } }
+        first: $first
+      ) {
+        nodes {
+          id
+          name
+        }
+      }
+    }
+  `)
+
+  const client = getGraphQLClient()
+  const data = await client.request(query, { teamId, first: 100 })
+
+  const label = data.issueLabels.nodes.find((l: { name: string }) =>
+    l.name.toLowerCase() === labelName.toLowerCase()
+  )
+
+  return label?.id
 }
 
 export async function deleteLabel(labelId: string) {

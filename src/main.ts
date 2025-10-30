@@ -12,6 +12,7 @@ import { statusCommand } from "./commands/status/status.ts"
 import { configCommand } from "./commands/config.ts"
 import { whoamiCommand } from "./commands/whoami.ts"
 import { userCommand } from "./commands/user/user.ts"
+import { usageCommand } from "./commands/usage.ts"
 
 // Import config setup
 import "./config.ts"
@@ -39,6 +40,7 @@ await new Command()
   .command("user", userCommand)
   .alias("u")
   .command("whoami", whoamiCommand)
+  .command("usage", usageCommand)
   .command("completions", new CompletionsCommand())
   .command("config", configCommand)
   .parse(Deno.args)

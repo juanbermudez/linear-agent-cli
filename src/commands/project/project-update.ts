@@ -10,6 +10,7 @@ import { error as errorColor, success as successColor } from "../../utils/stylin
 interface UpdateOptions {
   name?: string
   description?: string
+  content?: string
   team?: string[]
   status?: string
   lead?: string
@@ -28,6 +29,7 @@ export const updateCommand = new Command()
   .arguments("<projectId:string>")
   .option("-n, --name <name:string>", "New project name")
   .option("-d, --description <description:string>", "New description")
+  .option("-c, --content <content:string>", "New project content/body (markdown)")
   .option("-t, --team <team:string>", "New team key(s) (can be repeated)", { collect: true })
   .option("-s, --status <status:string>", "New project status name or ID")
   .option("-l, --lead <lead:string>", "New project lead (username or email)")
@@ -45,6 +47,7 @@ export const updateCommand = new Command()
     if (
       !options.name &&
       !options.description &&
+      !options.content &&
       !options.team &&
       !options.status &&
       !options.lead &&
@@ -54,7 +57,7 @@ export const updateCommand = new Command()
       !options.targetDate &&
       options.priority == null
     ) {
-      const errorMsg = "No fields provided to update. Use --name, --description, --status, --lead, etc."
+      const errorMsg = "No fields provided to update. Use --name, --description, --content, --status, --lead, etc."
       if (useJson) {
         console.error(
           JSON.stringify({
@@ -233,6 +236,7 @@ export const updateCommand = new Command()
     const input: {
       name?: string
       description?: string
+      content?: string
       statusId?: string
       leadId?: string
       icon?: string
@@ -245,6 +249,7 @@ export const updateCommand = new Command()
 
     if (options.name) input.name = options.name
     if (options.description) input.description = options.description
+    if (options.content) input.content = options.content
     if (statusId) input.statusId = statusId
     if (leadId) input.leadId = leadId
     if (options.icon) input.icon = options.icon

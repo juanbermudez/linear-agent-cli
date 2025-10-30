@@ -13,6 +13,7 @@ import {
 interface CreateOptions {
   name?: string
   description?: string
+  content?: string
   status?: string
   owner?: string
   targetDate?: string
@@ -26,6 +27,7 @@ export const createCommand = new Command()
   .description("Create a new initiative")
   .option("-n, --name <name:string>", "Initiative name")
   .option("-d, --description <description:string>", "Initiative description")
+  .option("-c, --content <content:string>", "Initiative content/body (markdown)")
   .option("-s, --status <status:string>", "Status ID or name")
   .option("-o, --owner <owner:string>", "Owner user ID or display name")
   .option("-t, --target-date <date:string>", "Target date (YYYY-MM-DD)")
@@ -39,6 +41,7 @@ export const createCommand = new Command()
 
     let name: string
     let description: string | undefined
+    let content: string | undefined
     let statusId: string | undefined
     let ownerId: string | undefined
     let targetDate: string | undefined
@@ -130,6 +133,7 @@ export const createCommand = new Command()
 
       name = options.name
       description = options.description
+      content = options.content
       targetDate = options.targetDate
 
       // Validate date format if provided
@@ -222,6 +226,7 @@ export const createCommand = new Command()
       const initiative = await createInitiative({
         name,
         description,
+        content,
         statusId,
         ownerId,
         targetDate,

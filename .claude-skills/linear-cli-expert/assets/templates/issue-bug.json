@@ -1,0 +1,13 @@
+{
+  "_comment": "Bug report issue template",
+  "_usage": "create_from_template.py issue assets/templates/issue-bug.json",
+  "_variables": "Use {{VARIABLE}} syntax for substitution",
+
+  "title": "{{TITLE}}",
+  "team": "{{TEAM}}",
+  "description": "## Bug Description\n{{BUG_DESCRIPTION}}\n\n## Steps to Reproduce\n1. {{STEP_1}}\n2. {{STEP_2}}\n3. {{STEP_3}}\n\n## Expected Behavior\n{{EXPECTED}}\n\n## Actual Behavior\n{{ACTUAL}}\n\n## Environment\n- OS: {{OS}}\n- Browser: {{BROWSER}}\n- Version: {{VERSION}}\n\n## Additional Context\n{{CONTEXT}}\n\n## Screenshots\n{{SCREENSHOTS}}",
+
+  "priority": 1,
+  "labels": ["Bug"],
+  "assignee": "@me"
+}

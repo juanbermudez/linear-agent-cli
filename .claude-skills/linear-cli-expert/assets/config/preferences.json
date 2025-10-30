@@ -1,0 +1,75 @@
+{
+  "_comment": "User preferences for Linear CLI workflows",
+  "_usage": "Customize these preferences to match your organization's Linear workflow",
+
+  "team": {
+    "default_team": "ENG",
+    "team_keys": {
+      "engineering": "ENG",
+      "design": "DES",
+      "product": "PROD",
+      "marketing": "MKT"
+    }
+  },
+
+  "workflow": {
+    "type": "agile",
+    "sprint_length_weeks": 2,
+    "estimation_unit": "story_points",
+    "use_cycles": true,
+    "use_milestones": true
+  },
+
+  "issue_defaults": {
+    "assignee": "@me",
+    "priority": 3,
+    "auto_assign_on_start": true,
+    "default_labels": [],
+    "add_parent_to_subtasks": true
+  },
+
+  "project_defaults": {
+    "lead": "@me",
+    "color": "#6366F1",
+    "status": "In Progress",
+    "priority": 1,
+    "create_milestones": true,
+    "milestone_count": 3
+  },
+
+  "label_structure": {
+    "use_label_groups": true,
+    "required_groups": ["Work-Type", "Scope"],
+    "optional_groups": ["Priority"],
+    "flat_labels": ["Blocked", "Needs-Review"]
+  },
+
+  "templates": {
+    "bug_template": "assets/templates/issue-bug.json",
+    "feature_template": "assets/templates/issue-feature.json",
+    "task_template": "assets/templates/issue-task.json",
+    "project_template": "assets/templates/project-template.json",
+    "prd_template": "assets/templates/prd.md",
+    "tech_spec_template": "assets/templates/tech-spec.md",
+    "status_update_template": "assets/templates/status-update.md"
+  },
+
+  "automation": {
+    "auto_link_related_issues": true,
+    "auto_create_subtasks": false,
+    "notification_preferences": "mentions_only"
+  },
+
+  "naming_conventions": {
+    "issue_title_format": "imperative",
+    "project_naming": "descriptive",
+    "label_naming": "kebab-case"
+  },
+
+  "content_formatting": {
+    "use_markdown": true,
+    "include_checklists": true,
+    "cross_reference_format": "full_url",
+    "include_mermaid_diagrams": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "_comment": "Feature request issue template",
+  "_usage": "create_from_template.py issue assets/templates/issue-feature.json",
+  "_variables": "Use {{VARIABLE}} syntax for substitution",
+
+  "title": "{{TITLE}}",
+  "team": "{{TEAM}}",
+  "description": "## Feature Overview\n{{OVERVIEW}}\n\n## User Story\nAs a {{USER_TYPE}}, I want to {{ACTION}} so that {{BENEFIT}}.\n\n## Acceptance Criteria\n- [ ] {{CRITERIA_1}}\n- [ ] {{CRITERIA_2}}\n- [ ] {{CRITERIA_3}}\n\n## Technical Considerations\n{{TECHNICAL_NOTES}}\n\n## Design Requirements\n{{DESIGN_NOTES}}\n\n## Dependencies\n{{DEPENDENCIES}}\n\n## Success Metrics\n{{METRICS}}",
+
+  "priority": 2,
+  "estimate": 5,
+  "labels": ["Feature"],
+  "assignee": "@me"
+}

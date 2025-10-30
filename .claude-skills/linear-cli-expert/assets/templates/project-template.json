@@ -1,0 +1,35 @@
+{
+  "_comment": "Project template with milestones",
+  "_usage": "create_from_template.py project assets/templates/project-template.json",
+  "_variables": "Use {{VARIABLE}} syntax for substitution",
+
+  "name": "{{PROJECT_NAME}}",
+  "team": "{{TEAM}}",
+  "description": "{{SHORT_DESCRIPTION}}",
+  "content": "# {{PROJECT_NAME}}\n\n## Overview\n{{OVERVIEW}}\n\n## Goals\n{{GOALS}}\n\n## Timeline\n{{TIMELINE}}\n\n## Key Stakeholders\n{{STAKEHOLDERS}}\n\n## Success Metrics\n{{METRICS}}",
+
+  "lead": "@me",
+  "color": "#6366F1",
+  "start_date": "{{START_DATE}}",
+  "target_date": "{{TARGET_DATE}}",
+  "priority": 1,
+  "status": "In Progress",
+
+  "milestones": [
+    {
+      "name": "Phase 1: {{PHASE_1_NAME}}",
+      "target_date": "{{PHASE_1_DATE}}",
+      "description": "{{PHASE_1_DESC}}"
+    },
+    {
+      "name": "Phase 2: {{PHASE_2_NAME}}",
+      "target_date": "{{PHASE_2_DATE}}",
+      "description": "{{PHASE_2_DESC}}"
+    },
+    {
+      "name": "Phase 3: {{PHASE_3_NAME}}",
+      "target_date": "{{PHASE_3_DATE}}",
+      "description": "{{PHASE_3_DESC}}"
+    }
+  ]
+}
