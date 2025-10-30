@@ -53,16 +53,16 @@ export const restoreCommand = new Command()
       }
     } catch (err) {
       spinner?.stop()
-      const errorMsg = err.message.includes("not found")
+      const errorMsg = (err as Error).message.includes("not found")
         ? `Initiative '${initiativeId}' not found`
-        : `Failed to restore initiative: ${err.message}`
+        : `Failed to restore initiative: ${(err as Error).message}`
       if (useJson) {
         console.error(
           JSON.stringify(
             {
               success: false,
               error: {
-                code: err.message.includes("not found")
+                code: (err as Error).message.includes("not found")
                   ? "NOT_FOUND"
                   : "API_ERROR",
                 message: errorMsg,

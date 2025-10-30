@@ -106,7 +106,7 @@ async function interactiveCreate(options: CreateOptions) {
   if (leadInput.trim()) {
     try {
       leadId = await lookupUserId(leadInput.trim())
-    } catch (_err) {
+    } catch (err) {
       console.error(
         errorColor(
           `Warning: User '${leadInput}' not found, proceeding without lead`,
@@ -206,7 +206,7 @@ async function interactiveCreate(options: CreateOptions) {
       if (teamId) {
         teamIds.push(teamId)
       }
-    } catch (_err) {
+    } catch (err) {
       console.error(errorColor(`Error: Team '${teamKey}' not found`))
       Deno.exit(1)
     }
@@ -235,9 +235,9 @@ async function interactiveCreate(options: CreateOptions) {
     spinner.stop()
     console.log(successColor(`✓ Created project: ${project.name}`))
     console.log(project.url)
-  } catch (_err) {
+  } catch (err) {
     spinner.stop()
-    console.error(errorColor(`Error: ${err.message}`))
+    console.error(errorColor(`Error: ${(err as Error).message}`))
     Deno.exit(1)
   }
 }
@@ -308,7 +308,7 @@ async function flagBasedCreate(options: CreateOptions) {
       if (teamId) {
         teamIds.push(teamId)
       }
-    } catch (_err) {
+    } catch (err) {
       const errorMsg = `Team '${teamKey}' not found`
       if (useJson) {
         console.error(
@@ -462,7 +462,7 @@ async function flagBasedCreate(options: CreateOptions) {
   if (options.lead) {
     try {
       leadId = await lookupUserId(options.lead)
-    } catch (_err) {
+    } catch (err) {
       const errorMsg = `User '${options.lead}' not found`
       if (useJson) {
         console.error(
@@ -544,7 +544,7 @@ async function flagBasedCreate(options: CreateOptions) {
           )
           console.log(document.url)
         }
-      } catch (_err) {
+      } catch (err) {
         docSpinner?.stop()
         if (useJson) {
           console.error(
@@ -554,7 +554,7 @@ async function flagBasedCreate(options: CreateOptions) {
                 error: {
                   code: "API_ERROR",
                   message:
-                    `Project created but document creation failed: ${err.message}`,
+                    `Project created but document creation failed: ${(err as Error).message}`,
                 },
                 project: {
                   id: project.id,
@@ -568,7 +568,7 @@ async function flagBasedCreate(options: CreateOptions) {
           )
         } else {
           console.error(
-            errorColor(`Warning: Document creation failed: ${err.message}`),
+            errorColor(`Warning: Document creation failed: ${(err as Error).message}`),
           )
         }
         Deno.exit(1)
@@ -621,7 +621,7 @@ async function flagBasedCreate(options: CreateOptions) {
       console.log(successColor(`✓ Created project: ${project.name}`))
       console.log(project.url)
     }
-  } catch (_err) {
+  } catch (err) {
     spinner?.stop()
 
     if (useJson) {
@@ -631,7 +631,7 @@ async function flagBasedCreate(options: CreateOptions) {
             success: false,
             error: {
               code: "API_ERROR",
-              message: err.message,
+              message: (err as Error).message,
             },
           },
           null,
@@ -640,7 +640,7 @@ async function flagBasedCreate(options: CreateOptions) {
       )
     } else {
       console.error(
-        errorColor(`Error: Failed to create project: ${err.message}`),
+        errorColor(`Error: Failed to create project: ${(err as Error).message}`),
       )
     }
     Deno.exit(1)

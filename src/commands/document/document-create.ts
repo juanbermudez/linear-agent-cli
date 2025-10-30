@@ -87,7 +87,7 @@ async function interactiveCreate(_options: CreateOptions) {
     if (projectInput.trim()) {
       try {
         projectId = await getProjectIdByName(projectInput.trim())
-      } catch (_err) {
+      } catch (err) {
         console.error(errorColor(`Error: Project '${projectInput}' not found`))
         Deno.exit(1)
       }
@@ -148,9 +148,9 @@ async function interactiveCreate(_options: CreateOptions) {
     spinner.stop()
     console.log(successColor(`✓ Created document: ${document.title}`))
     console.log(document.url)
-  } catch (_err) {
+  } catch (err) {
     spinner.stop()
-    console.error(errorColor(`Error: ${err.message}`))
+    console.error(errorColor(`Error: ${(err as Error).message}`))
     Deno.exit(1)
   }
 }
@@ -252,7 +252,7 @@ async function flagBasedCreate(options: CreateOptions) {
   } else if (options.project) {
     try {
       projectId = await getProjectIdByName(options.project)
-    } catch (_err) {
+    } catch (err) {
       const errorMsg = `Project '${options.project}' not found`
       if (useJson) {
         console.error(
@@ -318,7 +318,7 @@ async function flagBasedCreate(options: CreateOptions) {
       console.log(successColor(`✓ Created document: ${document.title}`))
       console.log(document.url)
     }
-  } catch (_err) {
+  } catch (err) {
     spinner?.stop()
 
     if (useJson) {
@@ -328,7 +328,7 @@ async function flagBasedCreate(options: CreateOptions) {
             success: false,
             error: {
               code: "API_ERROR",
-              message: err.message,
+              message: (err as Error).message,
             },
           },
           null,
@@ -337,7 +337,7 @@ async function flagBasedCreate(options: CreateOptions) {
       )
     } else {
       console.error(
-        errorColor(`Error: Failed to create document: ${err.message}`),
+        errorColor(`Error: Failed to create document: ${(err as Error).message}`),
       )
     }
     Deno.exit(1)

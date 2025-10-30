@@ -91,9 +91,9 @@ export const listCommand = new Command()
     } catch (err) {
       spinner?.stop()
 
-      const errorMsg = err.message.includes("not found")
+      const errorMsg = (err as Error).message.includes("not found")
         ? `Project '${projectId}' not found`
-        : `Failed to fetch milestones: ${err.message}`
+        : `Failed to fetch milestones: ${(err as Error).message}`
 
       if (useJson) {
         console.error(
@@ -101,11 +101,11 @@ export const listCommand = new Command()
             {
               success: false,
               error: {
-                code: err.message.includes("not found")
+                code: (err as Error).message.includes("not found")
                   ? "NOT_FOUND"
                   : "API_ERROR",
                 message: errorMsg,
-                ...(err.message.includes("not found") && {
+                ...((err as Error).message.includes("not found") && {
                   resource: "project",
                   id: projectId,
                 }),

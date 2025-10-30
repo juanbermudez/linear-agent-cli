@@ -160,14 +160,14 @@ export const listCommand = new Command()
           JSON.stringify(
             {
               success: false,
-              error: { code: "API_ERROR", message: err.message },
+              error: { code: "API_ERROR", message: (err as Error).message },
             },
             null,
             2,
           ),
         )
       } else {
-        console.error(errorColor(`Error: ${err.message}`))
+        console.error(errorColor(`Error: ${(err as Error).message}`))
       }
       Deno.exit(1)
     }

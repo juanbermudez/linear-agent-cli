@@ -172,7 +172,7 @@ export const createCommand = new Command()
               success: false,
               error: {
                 code: "API_ERROR",
-                message: err.message,
+                message: (err as Error).message,
               },
             },
             null,
@@ -181,7 +181,7 @@ export const createCommand = new Command()
         )
       } else {
         console.error(
-          errorColor(`Error: Failed to create milestone: ${err.message}`),
+          errorColor(`Error: Failed to create milestone: ${(err as Error).message}`),
         )
       }
       Deno.exit(1)

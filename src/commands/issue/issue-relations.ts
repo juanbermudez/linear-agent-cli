@@ -177,7 +177,7 @@ export const relationsCommand = new Command()
         }
       }
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : String(err)
+      const errorMsg = err instanceof Error ? (err as Error).message : String(err)
       if (useJson) {
         console.error(JSON.stringify(
           {

@@ -385,7 +385,7 @@ export const updateCommand = new Command()
                   type: relation.type,
                 },
               })
-            } catch (_err) {
+            } catch (err) {
               console.error(
                 `Warning: Failed to create ${relation.type} relationship`,
               )

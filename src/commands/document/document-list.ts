@@ -95,7 +95,7 @@ export const listCommand = new Command()
     } else if (options.project) {
       try {
         projectId = await getProjectIdByName(options.project)
-      } catch (_err) {
+      } catch (err) {
         if (useJson) {
           console.error(
             JSON.stringify(
@@ -124,7 +124,7 @@ export const listCommand = new Command()
     if (options.creator) {
       try {
         creatorId = await lookupUserId(options.creator)
-      } catch (_err) {
+      } catch (err) {
         if (useJson) {
           console.error(
             JSON.stringify(
@@ -185,10 +185,12 @@ export const listCommand = new Command()
                     name: doc.project.name,
                   }
                   : null,
-                creator: {
-                  id: doc.creator.id,
-                  name: doc.creator.displayName,
-                },
+                creator: doc.creator
+                  ? {
+                    id: doc.creator.id,
+                    name: doc.creator.displayName,
+                  }
+                  : null,
                 createdAt: doc.createdAt,
                 updatedAt: doc.updatedAt,
               })),
@@ -255,7 +257,9 @@ export const listCommand = new Command()
         const project = doc.project
           ? truncateText(doc.project.name, PROJECT_WIDTH)
           : muted("-")
-        const creator = truncateText(doc.creator.displayName, CREATOR_WIDTH)
+        const creator = doc.creator
+          ? truncateText(doc.creator.displayName, CREATOR_WIDTH)
+          : muted("-")
         const updated = getTimeAgo(new Date(doc.updatedAt))
 
         const row = [
@@ -286,7 +290,7 @@ export const listCommand = new Command()
               success: false,
               error: {
                 code: "API_ERROR",
-                message: err.message,
+                message: (err as Error).message,
               },
             },
             null,
@@ -294,7 +298,7 @@ export const listCommand = new Command()
           ),
         )
       } else {
-        console.error(`Error: Failed to fetch documents: ${err.message}`)
+        console.error(`Error: Failed to fetch documents: ${(err as Error).message}`)
       }
       Deno.exit(1)
     }

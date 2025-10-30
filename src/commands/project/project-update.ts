@@ -179,7 +179,7 @@ export const updateCommand = new Command()
           if (teamId) {
             teamIds.push(teamId)
           }
-        } catch (_err) {
+        } catch (err) {
           const errorMsg = `Team '${teamKey}' not found`
           if (useJson) {
             console.error(
@@ -253,7 +253,7 @@ export const updateCommand = new Command()
     if (options.lead) {
       try {
         leadId = await lookupUserId(options.lead)
-      } catch (_err) {
+      } catch (err) {
         const errorMsg = `User '${options.lead}' not found`
         if (useJson) {
           console.error(
@@ -344,12 +344,12 @@ export const updateCommand = new Command()
         console.log(successColor(`✓ Updated project: ${project.name}`))
         console.log(project.url)
       }
-    } catch (_err) {
+    } catch (err) {
       spinner?.stop()
 
-      const errorMsg = err.message.includes("not found")
+      const errorMsg = (err as Error).message.includes("not found")
         ? `Project '${projectId}' not found`
-        : `Failed to update project: ${err.message}`
+        : `Failed to update project: ${(err as Error).message}`
 
       if (useJson) {
         console.error(
@@ -357,11 +357,11 @@ export const updateCommand = new Command()
             {
               success: false,
               error: {
-                code: err.message.includes("not found")
+                code: (err as Error).message.includes("not found")
                   ? "NOT_FOUND"
                   : "API_ERROR",
                 message: errorMsg,
-                ...(err.message.includes("not found") && {
+                ...((err as Error).message.includes("not found") && {
                   resource: "project",
                   id: projectId,
                 }),

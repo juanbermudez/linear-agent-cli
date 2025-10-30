@@ -106,7 +106,7 @@ export const editCommand = new Command()
     if (options.project) {
       try {
         projectId = await getProjectIdByName(options.project)
-      } catch (_err) {
+      } catch (err) {
         const errorMsg = `Project '${options.project}' not found`
         if (useJson) {
           console.error(
@@ -181,12 +181,12 @@ export const editCommand = new Command()
         console.log(successColor(`✓ Updated document: ${document.title}`))
         console.log(document.url)
       }
-    } catch (_err) {
+    } catch (err) {
       spinner?.stop()
 
-      const errorMsg = err.message.includes("not found")
+      const errorMsg = (err as Error).message.includes("not found")
         ? `Document '${docId}' not found`
-        : `Failed to update document: ${err.message}`
+        : `Failed to update document: ${(err as Error).message}`
 
       if (useJson) {
         console.error(
@@ -194,11 +194,11 @@ export const editCommand = new Command()
             {
               success: false,
               error: {
-                code: err.message.includes("not found")
+                code: (err as Error).message.includes("not found")
                   ? "NOT_FOUND"
                   : "API_ERROR",
                 message: errorMsg,
-                ...(err.message.includes("not found") && {
+                ...((err as Error).message.includes("not found") && {
                   resource: "document",
                   id: docId,
                 }),

@@ -175,7 +175,7 @@ export const createCommand = new Command()
             throw new Error("Team not found")
           }
           teamId = resolvedTeamId
-        } catch (_err) {
+        } catch (err) {
           const errorMsg = `Team '${options.team}' not found`
           if (useJson) {
             console.error(
@@ -222,7 +222,7 @@ export const createCommand = new Command()
         if (!parentId) {
           throw new Error("Parent label not found")
         }
-      } catch (_err) {
+      } catch (err) {
         const errorMsg =
           `Parent label '${options.parent}' not found in team ${options.team}`
         if (useJson) {
@@ -297,21 +297,21 @@ export const createCommand = new Command()
           console.log(`Team: ${label.team.name} (${label.team.key})`)
         }
       }
-    } catch (_err) {
+    } catch (err) {
       spinner?.stop()
       if (useJson) {
         console.error(
           JSON.stringify(
             {
               success: false,
-              error: { code: "API_ERROR", message: err.message },
+              error: { code: "API_ERROR", message: (err as Error).message },
             },
             null,
             2,
           ),
         )
       } else {
-        console.error(errorColor(`Error: ${err.message}`))
+        console.error(errorColor(`Error: ${(err as Error).message}`))
       }
       Deno.exit(1)
     }

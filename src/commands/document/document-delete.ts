@@ -73,9 +73,9 @@ export const deleteCommand = new Command()
     } catch (err) {
       spinner?.stop()
 
-      const errorMsg = err.message.includes("not found")
+      const errorMsg = (err as Error).message.includes("not found")
         ? `Document '${docId}' not found`
-        : `Failed to delete document: ${err.message}`
+        : `Failed to delete document: ${(err as Error).message}`
 
       if (useJson) {
         console.error(
@@ -83,11 +83,11 @@ export const deleteCommand = new Command()
             {
               success: false,
               error: {
-                code: err.message.includes("not found")
+                code: (err as Error).message.includes("not found")
                   ? "NOT_FOUND"
                   : "API_ERROR",
                 message: errorMsg,
-                ...(err.message.includes("not found") && {
+                ...((err as Error).message.includes("not found") && {
                   resource: "document",
                   id: docId,
                 }),
