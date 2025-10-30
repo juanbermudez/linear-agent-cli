@@ -2220,7 +2220,7 @@ export async function getCurrentProjectFromIssue(): Promise<
   const client = getGraphQLClient()
   try {
     const data = await client.request(query, { issueId })
-    return data.issue.project
+    return data.issue.project || null
   } catch {
     return null
   }

@@ -65,10 +65,12 @@ export const viewCommand = new Command()
                 icon: document.icon,
                 color: document.color,
                 content: document.content,
-                creator: {
-                  id: document.creator.id,
-                  name: document.creator.displayName,
-                },
+                creator: document.creator
+                  ? {
+                    id: document.creator.id,
+                    name: document.creator.displayName,
+                  }
+                  : null,
                 updatedBy: document.updatedBy
                   ? {
                     id: document.updatedBy.id,
@@ -96,10 +98,12 @@ export const viewCommand = new Command()
                     id: comment.id,
                     body: comment.body,
                     createdAt: comment.createdAt,
-                    user: {
-                      id: comment.user.id,
-                      name: comment.user.displayName,
-                    },
+                    user: comment.user
+                      ? {
+                        id: comment.user.id,
+                        name: comment.user.displayName,
+                      }
+                      : null,
                   }))
                   : undefined,
               },
@@ -124,12 +128,15 @@ export const viewCommand = new Command()
       // Metadata
       outputLines.push(
         muted(
-          `Created by ${document.creator.displayName} ${
+          `Created by ${document.creator?.displayName || "Unknown"} ${
             formatRelativeTime(document.createdAt)
           }`,
         ),
       )
-      if (document.updatedBy && document.updatedBy.id !== document.creator.id) {
+      if (
+        document.updatedBy && document.creator &&
+        document.updatedBy.id !== document.creator.id
+      ) {
         outputLines.push(
           muted(
             `Updated by ${document.updatedBy.displayName} ${
@@ -186,7 +193,7 @@ export const viewCommand = new Command()
         for (const comment of document.comments.nodes) {
           outputLines.push(
             bold(
-              `${comment.user.displayName} ${
+              `${comment.user?.displayName || "Unknown"} ${
                 muted(formatRelativeTime(comment.createdAt))
               }`,
             ),

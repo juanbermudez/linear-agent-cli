@@ -96,13 +96,7 @@ export const listCommand = new Command()
                 name: i.name,
                 slugId: i.slugId,
                 url: i.url,
-                status: i.status
-                  ? {
-                    id: i.status.id,
-                    name: i.status.name,
-                    type: i.status.type,
-                  }
-                  : null,
+                status: i.status,
                 owner: i.owner
                   ? { id: i.owner.id, name: i.owner.displayName }
                   : null,
@@ -125,7 +119,7 @@ export const listCommand = new Command()
       }
 
       const rows = initiatives.map((i) => {
-        const status = i.status ? i.status.name : "-"
+        const status = i.status || "-"
         const owner = i.owner ? i.owner.displayName : "-"
         const targetDate = i.targetDate ? formatRelativeTime(i.targetDate) : "-"
 

@@ -1,6 +1,5 @@
 import { Command } from "@cliffy/command"
 import {
-  listInitiativeStatuses,
   listUsers,
   updateInitiative,
 } from "../../utils/linear.ts"
@@ -83,37 +82,33 @@ export const updateCommand = new Command()
 
     // Resolve status if provided
     if (options.status) {
-      if (
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-          options.status,
-        )
-      ) {
-        statusId = options.status
+      // InitiativeStatus is an enum: "Planned" | "Active" | "Completed"
+      const validStatuses = ["Planned", "Active", "Completed"]
+      const matchedStatus = validStatuses.find((s) =>
+        s.toLowerCase() === options.status!.toLowerCase()
+      )
+      if (matchedStatus) {
+        statusId = matchedStatus
       } else {
-        const statuses = await listInitiativeStatuses()
-        const status = statuses.find((s) =>
-          s.name.toLowerCase() === options.status!.toLowerCase()
-        )
-        if (status) {
-          statusId = status.id
+        const errorMsg =
+          `Status '${options.status}' not found. Valid values: ${
+            validStatuses.join(", ")
+          }`
+        if (useJson) {
+          console.error(
+            JSON.stringify(
+              {
+                success: false,
+                error: { code: "NOT_FOUND", message: errorMsg },
+              },
+              null,
+              2,
+            ),
+          )
         } else {
-          const errorMsg = `Status '${options.status}' not found`
-          if (useJson) {
-            console.error(
-              JSON.stringify(
-                {
-                  success: false,
-                  error: { code: "NOT_FOUND", message: errorMsg },
-                },
-                null,
-                2,
-              ),
-            )
-          } else {
-            console.error(errorColor(`Error: ${errorMsg}`))
-          }
-          Deno.exit(1)
+          console.error(errorColor(`Error: ${errorMsg}`))
         }
+        Deno.exit(1)
       }
     }
 
@@ -183,7 +178,7 @@ export const updateCommand = new Command()
                 slugId: initiative.slugId,
                 url: initiative.url,
                 status: initiative.status
-                  ? { id: initiative.status.id, name: initiative.status.name }
+                  ? initiative.status
                   : null,
                 owner: initiative.owner
                   ? {
