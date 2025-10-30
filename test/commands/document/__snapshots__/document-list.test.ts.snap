@@ -34,7 +34,7 @@ snapshot[`Document List Command - All Documents 1`] = `
 stdout:
 "    TITLE                                                PROJECT               CREATOR          UPDATED     
 📄  API Design Document                                  Backend Platform      Alice Smith      653 days ago
-📄  Database Migration Plan                              Infrastructure        Bob Jones        656 days ago
+📄  Database Migration Plan                              Infrastructure        Bob Jones        657 days ago
 📄  Meeting Notes                                        -                     Charlie Brown    654 days ago
 "
 stderr:

@@ -95,3 +95,18 @@ export function formatRelativeTime(dateString: string): string {
     return commentDate.toLocaleDateString()
   }
 }
+
+/**
+ * Format a date string consistently regardless of timezone
+ * Uses UTC to avoid timezone-related test failures
+ * @param dateString ISO date string (e.g. "2025-03-31")
+ * @returns Formatted date string (e.g. "3/31/2025")
+ */
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString)
+  // Use UTC methods to avoid timezone issues
+  const month = date.getUTCMonth() + 1
+  const day = date.getUTCDate()
+  const year = date.getUTCFullYear()
+  return `${month}/${day}/${year}`
+}

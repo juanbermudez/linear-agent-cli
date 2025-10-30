@@ -1,7 +1,7 @@
 import { Command } from "@cliffy/command"
 import { Table } from "@cliffy/table"
 import { listInitiatives, listUsers } from "../../utils/linear.ts"
-import { formatRelativeTime, truncate } from "../../utils/display.ts"
+import { formatDate, truncate } from "../../utils/display.ts"
 import { muted } from "../../utils/styling.ts"
 import { error as errorColor } from "../../utils/styling.ts"
 
@@ -123,7 +123,7 @@ export const listCommand = new Command()
       const rows = initiatives.map((i) => {
         const status = i.status || "-"
         const owner = i.owner ? i.owner.displayName : "-"
-        const targetDate = i.targetDate ? formatRelativeTime(i.targetDate) : "-"
+        const targetDate = i.targetDate ? formatDate(i.targetDate) : "-"
 
         return [
           i.slugId,

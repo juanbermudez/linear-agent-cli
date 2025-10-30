@@ -1,19 +1,9 @@
 import { snapshotTest } from "@cliffy/testing"
 import { viewCommand } from "../../../src/commands/issue/issue-view.ts"
-import { MockLinearServer } from "../../utils/mock_linear_server.ts"
-
-// Mock the GraphQL endpoint for testing
-const TEST_ENDPOINT = "http://127.0.0.1:3000/graphql"
-
-// Common Deno args for permissions
-const denoArgs = [
-  "--allow-env=GITHUB_*,GH_*,LINEAR_*,NODE_ENV,EDITOR,SNAPSHOT_TEST_NAME",
-  "--allow-read",
-  "--allow-write",
-  "--allow-run",
-  "--allow-net",
-  "--quiet",
-]
+import {
+  commonDenoArgs,
+  setupMockLinearServer,
+} from "../../utils/test-helpers.ts"
 
 // Test help output
 await snapshotTest({
@@ -21,39 +11,82 @@ await snapshotTest({
   meta: import.meta,
   colors: false,
   args: ["--help"],
-  denoArgs,
+  denoArgs: commonDenoArgs,
   async fn() {
     await viewCommand.parse()
   },
 })
 
-// Test with mock GraphQL endpoint
+// Test viewing an issue with proper mock server
 await snapshotTest({
   name: "Issue View Command - With Issue ID",
   meta: import.meta,
   colors: false,
   args: ["TEST-123"],
-  denoArgs,
+  denoArgs: commonDenoArgs,
   async fn() {
-    // Set environment variables for testing
-    Deno.env.set("LINEAR_GRAPHQL_ENDPOINT", TEST_ENDPOINT)
-    Deno.env.set("LINEAR_API_KEY", "lin_api_test_key_123")
+    const { cleanup } = await setupMockLinearServer([
+      {
+        queryName: "GetIssueDetailsWithComments",
+        variables: { id: "TEST-123" },
+        response: {
+          data: {
+            issue: {
+              title: "Fix authentication bug in login flow",
+              description:
+                "Users are experiencing issues logging in when their session expires.",
+              url:
+                "https://linear.app/test-team/issue/TEST-123/fix-authentication-bug",
+              branchName: "fix/test-123-auth-bug",
+              identifier: "TEST-123",
+              priority: 1,
+              estimate: 3,
+              dueDate: null,
+              createdAt: "2024-01-10T10:00:00Z",
+              updatedAt: "2024-01-15T14:30:00Z",
+              assignee: {
+                id: "user-1",
+                name: "alice",
+                displayName: "Alice Smith",
+              },
+              state: {
+                id: "state-1",
+                name: "In Progress",
+                type: "started",
+              },
+              team: {
+                key: "TEST",
+                name: "Test Team",
+              },
+              project: null,
+              projectMilestone: null,
+              cycle: null,
+              parent: null,
+              children: {
+                nodes: [],
+              },
+              relations: {
+                nodes: [],
+              },
+              inverseRelations: {
+                nodes: [],
+              },
+              labels: {
+                nodes: [],
+              },
+              comments: {
+                nodes: [],
+              },
+            },
+          },
+        },
+      },
+    ])
 
     try {
       await viewCommand.parse()
-    } catch (error) {
-      // Expected to fail with mock endpoint, capture the error for snapshot
-      // Normalize error message to be consistent across platforms
-      const message = (error as Error).message
-      const normalizedMessage = message.replace(
-        /Connection refused \(os error \d+\)/g,
-        "Connection refused",
-      )
-      console.log(`Error: ${normalizedMessage}`)
     } finally {
-      // Clean up environment
-      Deno.env.delete("LINEAR_GRAPHQL_ENDPOINT")
-      Deno.env.delete("LINEAR_API_KEY")
+      await cleanup()
     }
   },
 })
@@ -64,9 +97,9 @@ await snapshotTest({
   meta: import.meta,
   colors: false,
   args: ["TEST-123"],
-  denoArgs,
+  denoArgs: commonDenoArgs,
   async fn() {
-    const server = new MockLinearServer([
+    const { cleanup } = await setupMockLinearServer([
       {
         queryName: "GetIssueDetailsWithComments",
         variables: { id: "TEST-123" },
@@ -89,15 +122,9 @@ await snapshotTest({
     ])
 
     try {
-      await server.start()
-      Deno.env.set("LINEAR_GRAPHQL_ENDPOINT", server.getEndpoint())
-      Deno.env.set("LINEAR_API_KEY", "Bearer test-token")
-
       await viewCommand.parse()
     } finally {
-      await server.stop()
-      Deno.env.delete("LINEAR_GRAPHQL_ENDPOINT")
-      Deno.env.delete("LINEAR_API_KEY")
+      await cleanup()
     }
   },
 })
@@ -108,9 +135,9 @@ await snapshotTest({
   meta: import.meta,
   colors: false,
   args: ["TEST-123", "--no-comments"],
-  denoArgs,
+  denoArgs: commonDenoArgs,
   async fn() {
-    const server = new MockLinearServer([
+    const { cleanup } = await setupMockLinearServer([
       {
         queryName: "GetIssueDetails",
         variables: { id: "TEST-123" },
@@ -130,15 +157,9 @@ await snapshotTest({
     ])
 
     try {
-      await server.start()
-      Deno.env.set("LINEAR_GRAPHQL_ENDPOINT", server.getEndpoint())
-      Deno.env.set("LINEAR_API_KEY", "Bearer test-token")
-
       await viewCommand.parse()
     } finally {
-      await server.stop()
-      Deno.env.delete("LINEAR_GRAPHQL_ENDPOINT")
-      Deno.env.delete("LINEAR_API_KEY")
+      await cleanup()
     }
   },
 })
@@ -149,9 +170,9 @@ await snapshotTest({
   meta: import.meta,
   colors: false,
   args: ["TEST-123"],
-  denoArgs,
+  denoArgs: commonDenoArgs,
   async fn() {
-    const server = new MockLinearServer([
+    const { cleanup } = await setupMockLinearServer([
       {
         queryName: "GetIssueDetailsWithComments",
         variables: { id: "TEST-123" },
@@ -227,15 +248,9 @@ await snapshotTest({
     ])
 
     try {
-      await server.start()
-      Deno.env.set("LINEAR_GRAPHQL_ENDPOINT", server.getEndpoint())
-      Deno.env.set("LINEAR_API_KEY", "Bearer test-token")
-
       await viewCommand.parse()
     } finally {
-      await server.stop()
-      Deno.env.delete("LINEAR_GRAPHQL_ENDPOINT")
-      Deno.env.delete("LINEAR_API_KEY")
+      await cleanup()
     }
   },
 })
@@ -246,9 +261,9 @@ await snapshotTest({
   meta: import.meta,
   colors: false,
   args: ["TEST-999"],
-  denoArgs,
+  denoArgs: commonDenoArgs,
   async fn() {
-    const server = new MockLinearServer([
+    const { cleanup } = await setupMockLinearServer([
       {
         queryName: "GetIssueDetailsWithComments",
         variables: { id: "TEST-999" },
@@ -262,19 +277,13 @@ await snapshotTest({
     ])
 
     try {
-      await server.start()
-      Deno.env.set("LINEAR_GRAPHQL_ENDPOINT", server.getEndpoint())
-      Deno.env.set("LINEAR_API_KEY", "Bearer test-token")
-
       try {
         await viewCommand.parse()
       } catch (error) {
         console.log(`Error: ${(error as Error).message}`)
       }
     } finally {
-      await server.stop()
-      Deno.env.delete("LINEAR_GRAPHQL_ENDPOINT")
-      Deno.env.delete("LINEAR_API_KEY")
+      await cleanup()
     }
   },
 })
@@ -285,9 +294,9 @@ await snapshotTest({
   meta: import.meta,
   colors: false,
   args: ["TEST-123", "--json", "--no-comments"],
-  denoArgs,
+  denoArgs: commonDenoArgs,
   async fn() {
-    const server = new MockLinearServer([
+    const { cleanup } = await setupMockLinearServer([
       {
         queryName: "GetIssueDetails",
         variables: { id: "TEST-123" },
@@ -307,15 +316,9 @@ await snapshotTest({
     ])
 
     try {
-      await server.start()
-      Deno.env.set("LINEAR_GRAPHQL_ENDPOINT", server.getEndpoint())
-      Deno.env.set("LINEAR_API_KEY", "Bearer test-token")
-
       await viewCommand.parse()
     } finally {
-      await server.stop()
-      Deno.env.delete("LINEAR_GRAPHQL_ENDPOINT")
-      Deno.env.delete("LINEAR_API_KEY")
+      await cleanup()
     }
   },
 })
@@ -326,9 +329,9 @@ await snapshotTest({
   meta: import.meta,
   colors: false,
   args: ["TEST-123", "--json"],
-  denoArgs,
+  denoArgs: commonDenoArgs,
   async fn() {
-    const server = new MockLinearServer([
+    const { cleanup } = await setupMockLinearServer([
       {
         queryName: "GetIssueDetailsWithComments",
         variables: { id: "TEST-123" },
@@ -378,15 +381,9 @@ await snapshotTest({
     ])
 
     try {
-      await server.start()
-      Deno.env.set("LINEAR_GRAPHQL_ENDPOINT", server.getEndpoint())
-      Deno.env.set("LINEAR_API_KEY", "Bearer test-token")
-
       await viewCommand.parse()
     } finally {
-      await server.stop()
-      Deno.env.delete("LINEAR_GRAPHQL_ENDPOINT")
-      Deno.env.delete("LINEAR_API_KEY")
+      await cleanup()
     }
   },
 })

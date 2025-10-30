@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command"
 import { viewInitiative } from "../../utils/linear.ts"
-import { formatRelativeTime } from "../../utils/display.ts"
+import { formatDate, formatRelativeTime } from "../../utils/display.ts"
 import { bold } from "@std/fmt/colors"
 import { header, muted } from "../../utils/styling.ts"
 import { error as errorColor } from "../../utils/styling.ts"
@@ -90,9 +90,7 @@ export const viewCommand = new Command()
       )
       console.log(
         bold("Target Date: ") +
-          (initiative.targetDate
-            ? formatRelativeTime(initiative.targetDate)
-            : "None"),
+          (initiative.targetDate ? formatDate(initiative.targetDate) : "None"),
       )
 
       console.log()
