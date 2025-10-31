@@ -49,17 +49,6 @@ This CLI is **specifically designed** to be used by AI coding agents:
 - **VCS-aware** to reduce context switching and manual parameter passing
 - **Composable** with standard CLI tools (jq, grep, awk)
 
-### Advantages Over Linear MCP
-
-| Feature                          | This CLI | Linear MCP |
-| -------------------------------- | -------- | ---------- |
-| Full CRUD operations             | ✅       | Partial    |
-| Cross-entity ops (project + doc) | ✅       | ❌         |
-| VCS integration (git/jj)         | ✅       | ❌         |
-| JSON output everywhere           | ✅       | ❌         |
-| Offline-first config             | ✅       | ❌         |
-| Composable with shell tools      | ✅       | Limited    |
-
 ## 🎓 Claude Code Plugin
 
 A comprehensive **Linear CLI Expert plugin** for Claude Code is available that includes this CLI, specialized AI agents (research, planning, engineering), and a complete spec-driven development workflow.
