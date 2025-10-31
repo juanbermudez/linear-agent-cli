@@ -1,985 +1,660 @@
-# Linear CLI Guide for AI Coding Agents
+# Linear CLI Development Guide for AI Coding Agents
 
-**Target Audience**: ChatGPT Code Interpreter, GitHub Copilot CLI, Codex, and other AI coding assistants
+**Target Audience**: ChatGPT, GitHub Copilot, Cursor, Cody, and other AI coding assistants working on the Linear CLI source code.
 
-This comprehensive guide helps AI agents effectively use the Linear CLI for issue tracking, project management, and team collaboration.
+**For using the CLI** (not developing it), see `EXAMPLE_AGENTS.md`.
 
 ---
 
 ## Table of Contents
 
+- [Project Overview](#project-overview)
 - [Quick Start](#quick-start)
-- [Core Concepts](#core-concepts)
-- [Command Patterns](#command-patterns)
-- [Common Workflows](#common-workflows)
-- [JSON API](#json-api)
-- [Error Handling](#error-handling)
-- [Best Practices](#best-practices)
-- [Examples](#examples)
+- [Architecture](#architecture)
+- [Development Workflow](#development-workflow)
+- [Adding Features](#adding-features)
+- [Testing](#testing)
+- [Common Tasks](#common-tasks)
+- [Troubleshooting](#troubleshooting)
+
+---
+
+## Project Overview
+
+### What is This?
+
+A Deno-based CLI tool for Linear API that's optimized for AI agent automation:
+- JSON output for all commands
+- Non-interactive (no prompts required)
+- VCS-aware (detects issues from git branches)
+- Type-safe with TypeScript and Linear SDK
+
+### Tech Stack
+
+- **Runtime**: Deno (not Node.js)
+- **Language**: TypeScript
+- **API Client**: `@linear/sdk`
+- **CLI Parsing**: `@std/cli/parse-args`
+- **Testing**: Deno's built-in test runner
+
+### Key Files
+
+```
+src/main.ts           - Entry point and command router
+src/api/client.ts     - Linear API client setup
+src/commands/         - All command implementations
+src/utils/vcs.ts      - Git integration
+src/utils/output.ts   - JSON/human output formatting
+deno.json             - Project configuration
+```
 
 ---
 
 ## Quick Start
 
-### Installation Check
+### Setup Development Environment
 
 ```bash
-# Verify installation
-linear --version
+# Install Deno if needed
+curl -fsSL https://deno.land/install.sh | sh
 
-# Check configuration
-linear whoami --json
+# Clone and navigate
+git clone https://github.com/juanbermudez/linear-agent-cli
+cd linear-agent-cli
+
+# Run without installing
+deno run --allow-all src/main.ts --version
+
+# Test a command
+deno run --allow-all src/main.ts issue list --json
 ```
 
-### First Commands
+### Test Your Changes
 
 ```bash
-# List issues
-linear issue list --json
+# Format code (do this before committing)
+deno fmt
 
-# Create issue
-linear issue create --title "Fix bug" --team ENG --json
+# Lint code
+deno lint
 
-# View issue
-linear issue view ENG-123 --json
+# Run tests
+deno test --allow-all
+
+# Install locally for testing
+deno install --global --allow-all --name linear-dev src/main.ts
+linear-dev issue list --json
 ```
 
 ---
 
-## Core Concepts
+## Architecture
 
-### 1. JSON-First Design
+### Command Pattern
 
-**ALWAYS use `--json` flag for programmatic operations:**
+Every command follows this structure:
 
-```bash
-linear issue list --json
-linear project create --name "Project" --json
-linear issue view ENG-123 --json
-```
+```typescript
+// src/commands/resource/action.ts
+import { parseArgs } from "@std/cli/parse-args"
+import { getClient } from "../../api/client.ts"
 
-### 2. Non-Interactive Mode
+export async function resourceAction(args: string[]) {
+  // 1. Parse arguments
+  const parsed = parseArgs(args, {
+    string: ["required-field", "optional-field"],
+    boolean: ["json"],
+    default: { json: false },
+  })
 
-**Provide all required options to avoid prompts:**
+  // 2. Validate input
+  if (!parsed["required-field"]) {
+    throw new Error("--required-field is required")
+  }
 
-```bash
-# ✓ Correct: Fully specified
-linear issue create \
-  --title "Task" \
-  --team ENG \
-  --priority 1 \
-  --json
+  // 3. Call Linear API
+  const client = getClient()
+  const result = await client.doSomething({
+    requiredField: parsed["required-field"],
+  })
 
-# ✗ Incorrect: Will wait for user input
-linear issue create --json
-```
-
-### 3. Response Structure
-
-All commands return consistent JSON:
-
-```json
-{
-  "success": true,
-  "operation": "create",
-  "resource": {
-    "id": "...",
-    "...": "..."
+  // 4. Format output
+  if (parsed.json) {
+    console.log(JSON.stringify({ success: true, data: result }))
+  } else {
+    console.log(`✓ Success: ${result.name}`)
   }
 }
 ```
 
-Or on error:
+### File Organization
 
-```json
-{
-  "success": false,
-  "error": {
-    "code": "ERROR_CODE",
-    "message": "Human readable message"
+```
+src/commands/
+├── issue/
+│   ├── issue-create.ts       # linear issue create
+│   ├── issue-update.ts       # linear issue update
+│   ├── issue-list.ts         # linear issue list
+│   └── issue-view.ts         # linear issue view
+├── project/
+│   ├── project-create.ts     # linear project create
+│   └── ...
+└── ...
+```
+
+Each resource gets its own directory. Each action gets its own file.
+
+### API Integration
+
+```typescript
+// src/api/client.ts
+import { LinearClient } from "@linear/sdk"
+import { getConfig } from "../config/manager.ts"
+
+export function getClient(): LinearClient {
+  const config = getConfig()
+  if (!config.api_key) {
+    throw new Error("No API key configured. Run: linear whoami")
+  }
+  return new LinearClient({ apiKey: config.api_key })
+}
+```
+
+Use this in commands:
+```typescript
+const client = getClient()
+const issue = await client.issue("ENG-123")
+```
+
+---
+
+## Development Workflow
+
+### 1. Understand the Task
+
+```bash
+# Read existing similar command
+cat src/commands/issue/issue-create.ts
+
+# Check types available from Linear SDK
+# Browse: https://developers.linear.app/docs/sdk/getting-started
+```
+
+### 2. Implement
+
+Follow the command pattern shown in [Architecture](#architecture).
+
+Key points:
+- Use `parseArgs` from `@std/cli/parse-args`
+- Always support `--json` flag
+- Validate required fields
+- Use `getClient()` for API access
+- Handle errors with clear messages
+
+### 3. Test
+
+```bash
+# Test command locally
+deno run --allow-all src/main.ts your-command --json
+
+# Run test suite
+deno test --allow-all
+
+# Format code
+deno fmt
+```
+
+### 4. Document
+
+Update `docs/USAGE.md` with:
+- Command syntax
+- Available options
+- Example usage
+- JSON response format
+
+---
+
+## Adding Features
+
+### Adding a New Command
+
+**Step 1: Create command file**
+
+```typescript
+// src/commands/comment/comment-create.ts
+import { parseArgs } from "@std/cli/parse-args"
+import { getClient } from "../../api/client.ts"
+
+export async function commentCreate(args: string[]) {
+  const parsed = parseArgs(args, {
+    string: ["issue", "body"],
+    boolean: ["json"],
+    default: { json: false },
+  })
+
+  if (!parsed.issue || !parsed.body) {
+    throw new Error("--issue and --body are required")
+  }
+
+  const client = getClient()
+  const comment = await client.createComment({
+    issueId: parsed.issue,
+    body: parsed.body,
+  })
+
+  if (parsed.json) {
+    console.log(JSON.stringify({ success: true, comment }))
+  } else {
+    console.log(`✓ Comment added to ${parsed.issue}`)
   }
 }
 ```
 
-### 4. Resource Identifiers
+**Step 2: Register in router**
 
-- **Issues**: Team key + number (e.g., `ENG-123`)
-- **Projects**: Slug or UUID
-- **Teams**: Key (e.g., `ENG`, `DESIGN`)
-- **Users**: Username, email, or `@me` for self
+```typescript
+// src/main.ts
+import { commentCreate } from "./commands/comment/comment-create.ts"
 
----
-
-## Command Patterns
-
-### Issues
-
-#### Create
-
-```bash
-linear issue create \
-  --title "string" \
-  --description "string or $(cat file.md)" \
-  --team "TEAM" \
-  --assignee "@me|username" \
-  --priority 1-4 \
-  --estimate number \
-  --label "label1 label2" \
-  --project "Project Name" \
-  --milestone "Milestone Name" \
-  --cycle "Cycle Name" \
-  --parent TEAM-NUM \
-  --state "State Name" \
-  --due-date YYYY-MM-DD \
-  --blocks TEAM-NUM1 TEAM-NUM2 \
-  --related-to TEAM-NUM \
-  --duplicate-of TEAM-NUM \
-  --similar-to TEAM-NUM \
-  --json
+// In command routing logic (find similar pattern)
+if (command === "comment" && subcommand === "create") {
+  await commentCreate(remainingArgs)
+}
 ```
 
-#### Update
+**Step 3: Add tests**
 
-```bash
-linear issue update TEAM-NUM \
-  [same options as create] \
-  --json
+```typescript
+// test/commands/comment/comment-create.test.ts
+import { assertEquals } from "@std/assert"
+
+Deno.test("comment create - success", async () => {
+  // Add test implementation
+})
 ```
 
-#### View
+**Step 4: Update docs**
 
-```bash
-linear issue view TEAM-NUM --json
+Add to `docs/USAGE.md`:
+```markdown
+### Create Comment
+
+\`\`\`bash
+linear comment create \
+  --issue ENG-123 \
+  --body "Great work!" \
+  --json
+\`\`\`
 ```
 
-#### List
+### Adding an Option to Existing Command
 
-```bash
-linear issue list --team TEAM --json
-```
+```typescript
+// In src/commands/issue/issue-create.ts
 
-#### Relationships
+// 1. Add to parseArgs
+const parsed = parseArgs(args, {
+  string: ["title", "new-option"], // <-- Add here
+  boolean: ["json"],
+})
 
-```bash
-# Create relationships
-linear issue relate TEAM-NUM1 TEAM-NUM2 --blocks
-linear issue relate TEAM-NUM1 TEAM-NUM2 --related-to
-linear issue relate TEAM-NUM1 TEAM-NUM2 --duplicate-of
-linear issue relate TEAM-NUM1 TEAM-NUM2 --similar-to
-
-# Remove relationship
-linear issue unrelate TEAM-NUM1 TEAM-NUM2
-
-# List relationships
-linear issue relations TEAM-NUM --json
-```
-
-### Projects
-
-#### Create
-
-```bash
-linear project create \
-  --name "string" \
-  --description "string (max 255 chars)" \
-  --content "$(cat markdown-file.md)" \
-  --team TEAM \
-  --lead "@me|username" \
-  --color "#RRGGBB" \
-  --start-date YYYY-MM-DD \
-  --target-date YYYY-MM-DD \
-  --priority 0-4 \
-  --status "Status Name" \
-  --json
-```
-
-#### Update
-
-```bash
-linear project update PROJECT-SLUG \
-  --name "string" \
-  --content "$(cat updated.md)" \
-  --lead username \
-  --priority number \
-  --status "Status Name" \
-  --json
-```
-
-#### Milestones
-
-```bash
-# Create (requires UUID)
-PROJECT_ID=$(linear project view SLUG --json | jq -r '.project.id')
-linear project milestone create $PROJECT_ID \
-  --name "Phase 1" \
-  --target-date YYYY-MM-DD \
-  --json
-
-# List
-linear project milestone list --project SLUG --json
-```
-
-#### Status Updates
-
-```bash
-linear project update-create PROJECT-SLUG \
-  --body "$(cat update.md)" \
-  --health onTrack|atRisk|offTrack \
-  --json
-```
-
-### Labels
-
-#### Create
-
-```bash
-# Simple label
-linear label create \
-  --name "bug" \
-  --color "#FF0000" \
-  --team TEAM \
-  --json
-
-# Label group (parent)
-linear label create \
-  --name "Priority" \
-  --color "#COLOR" \
-  --team TEAM \
-  --is-group \
-  --json
-
-# Sub-label (child)
-linear label create \
-  --name "Critical" \
-  --color "#COLOR" \
-  --team TEAM \
-  --parent "Priority" \
-  --json
-```
-
-**Note**: Label groups display as `parent/child` on issues.
-
-### Initiatives
-
-```bash
-linear initiative create \
-  --name "Q1 Goals" \
-  --description "string" \
-  --content "$(cat initiative.md)" \
-  --owner "@me|username" \
-  --json
-```
-
-### Documents
-
-```bash
-# Create
-linear document create \
-  --title "string" \
-  --content "$(cat doc.md)" \
-  --project "Project Name" \
-  --json
-
-# VCS-aware (auto-detects current project)
-linear document create \
-  --current-project \
-  --title "Notes" \
-  --content "$(cat notes.md)" \
-  --json
-```
-
-### Workflow & Users
-
-```bash
-# List workflow states
-linear workflow list --team TEAM --json
-
-# List users
-linear user list --json
-
-# Search users
-linear user search "name" --json
+// 2. Pass to API
+const issue = await client.createIssue({
+  title: parsed.title,
+  newField: parsed["new-option"], // <-- Add here
+})
 ```
 
 ---
 
-## Common Workflows
+## Testing
 
-### Workflow 1: Create Issue with Full Metadata
+### Test Structure
+
+```typescript
+// test/commands/issue/issue-create.test.ts
+import { assertEquals, assertExists, assertRejects } from "@std/assert"
+import { issueCreate } from "../../../src/commands/issue/issue-create.ts"
+
+Deno.test("issue create - minimal options", async () => {
+  const args = ["--title", "Test", "--team", "ENG", "--json"]
+  const result = await issueCreate(args)
+  assertExists(result)
+})
+
+Deno.test("issue create - missing title", async () => {
+  const args = ["--team", "ENG", "--json"]
+  await assertRejects(
+    async () => await issueCreate(args),
+    Error,
+    "--title is required",
+  )
+})
+```
+
+### Running Tests
 
 ```bash
-#!/bin/bash
+# All tests
+deno test --allow-all
 
-# Read spec from file
-SPEC=$(cat specification.md)
+# Specific test file
+deno test --allow-all test/commands/issue/issue-create.test.ts
 
-# Create issue
-RESULT=$(linear issue create \
-  --title "Implement OAuth 2.0" \
-  --description "$SPEC" \
-  --team ENG \
-  --project "Auth System" \
-  --milestone "Phase 1" \
-  --cycle "Sprint 5" \
-  --priority 1 \
-  --estimate 8 \
-  --label backend security \
-  --assignee @me \
-  --blocks ENG-100 ENG-101 \
-  --json)
-
-# Check success
-if echo "$RESULT" | jq -e '.success' > /dev/null; then
-  ISSUE_ID=$(echo "$RESULT" | jq -r '.issue.identifier')
-  echo "Created issue: $ISSUE_ID"
-else
-  echo "Error: $(echo "$RESULT" | jq -r '.error.message')"
-  exit 1
-fi
+# With coverage
+deno test --allow-all --coverage=coverage
+deno coverage coverage
 ```
 
-### Workflow 2: Project with Milestones
+### Mocking API Calls
 
-```bash
-#!/bin/bash
+For tests that shouldn't hit real API:
 
-# 1. Create project
-PROJECT=$(linear project create \
-  --name "Mobile App" \
-  --description "iOS and Android" \
-  --content "$(cat project-spec.md)" \
-  --team MOBILE \
-  --lead @me \
-  --priority 1 \
-  --start-date 2026-01-01 \
-  --target-date 2026-06-30 \
-  --json)
+```typescript
+// Mock the client
+import { stub } from "@std/testing/mock"
 
-PROJECT_ID=$(echo "$PROJECT" | jq -r '.project.id')
-PROJECT_SLUG=$(echo "$PROJECT" | jq -r '.project.slug')
-
-# 2. Create milestones
-linear project milestone create $PROJECT_ID \
-  --name "Phase 1" \
-  --target-date 2026-03-31 \
-  --json
-
-# 3. Create issues
-linear issue create \
-  --title "Setup auth" \
-  --team MOBILE \
-  --project "$PROJECT_SLUG" \
-  --milestone "Phase 1" \
-  --priority 1 \
-  --assignee @me \
-  --json
-
-# 4. Status update
-linear project update-create $PROJECT_SLUG \
-  --body "Week 1: Kickoff complete" \
-  --health onTrack \
-  --json
-```
-
-### Workflow 3: Label Hierarchy
-
-```bash
-#!/bin/bash
-
-TEAM="ENG"
-
-# 1. Create parent labels
-linear label create --name "Work-Type" --is-group --team $TEAM --json
-linear label create --name "Scope" --is-group --team $TEAM --json
-
-# 2. Create children
-linear label create --name "Bugfix" --parent "Work-Type" --team $TEAM --json
-linear label create --name "Feature" --parent "Work-Type" --team $TEAM --json
-linear label create --name "Backend" --parent "Scope" --team $TEAM --json
-linear label create --name "Frontend" --parent "Scope" --team $TEAM --json
-
-# 3. Use on issue
-linear issue create \
-  --title "Fix API bug" \
-  --label Bugfix Backend \
-  --team $TEAM \
-  --json
-```
-
-### Workflow 4: Issue Dependencies
-
-```bash
-#!/bin/bash
-
-# Create parent
-PARENT=$(linear issue create \
-  --title "Database migration" \
-  --team ENG \
-  --priority 1 \
-  --json | jq -r '.issue.identifier')
-
-# Create dependents
-linear issue create \
-  --title "Update API" \
-  --team ENG \
-  --parent $PARENT \
-  --blocks ENG-200 ENG-201 \
-  --json
-
-# View relationships
-linear issue relations $PARENT --json
-```
-
----
-
-## JSON API
-
-### Parsing Responses
-
-```python
-import json
-import subprocess
-
-def create_issue(title, team):
-    result = subprocess.run(
-        ['linear', 'issue', 'create',
-         '--title', title,
-         '--team', team,
-         '--json'],
-        capture_output=True,
-        text=True
-    )
-
-    data = json.loads(result.stdout)
-
-    if data['success']:
-        return data['issue']['identifier']
-    else:
-        raise Exception(data['error']['message'])
-
-# Usage
-issue_id = create_issue("Fix bug", "ENG")
-print(f"Created: {issue_id}")
-```
-
-```javascript
-const { exec } = require("child_process")
-const util = require("util")
-const execAsync = util.promisify(exec)
-
-async function createIssue(title, team) {
-  const { stdout } = await execAsync(
-    `linear issue create --title "${title}" --team ${team} --json`,
+Deno.test("mocked API call", async () => {
+  // Create stub
+  const createStub = stub(
+    client,
+    "createIssue",
+    () => Promise.resolve({ id: "123", identifier: "ENG-123" }),
   )
 
-  const result = JSON.parse(stdout)
+  // Test your command
+  await issueCreate(["--title", "Test", "--json"])
 
-  if (result.success) {
-    return result.issue.identifier
-  } else {
-    throw new Error(result.error.message)
-  }
-}
+  // Verify
+  assertEquals(createStub.calls.length, 1)
 
-// Usage
-createIssue("Fix bug", "ENG")
-  .then((id) => console.log(`Created: ${id}`))
-  .catch((err) => console.error(err))
+  // Cleanup
+  createStub.restore()
+})
 ```
 
-### Response Schemas
+---
 
-#### Issue Create/Update Response
+## Common Tasks
+
+### Task: Add JSON Output to Command
+
+```typescript
+// Before: Human-readable only
+console.log(`Created issue ${result.identifier}`)
+
+// After: Support both modes
+if (parsed.json) {
+  console.log(JSON.stringify({ success: true, issue: result }))
+} else {
+  console.log(`✓ Created issue ${result.identifier}`)
+}
+```
+
+### Task: Add VCS Context Detection
+
+```typescript
+import { detectIssueFromBranch } from "../../utils/vcs.ts"
+
+// In your command
+if (!parsed.issue) {
+  parsed.issue = detectIssueFromBranch()
+  if (!parsed.issue) {
+    throw new Error("--issue required or run from git branch with issue ID")
+  }
+}
+```
+
+### Task: Add New Linear Resource Support
+
+1. Check Linear SDK for available methods:
+   - Visit: https://developers.linear.app/docs/sdk/getting-started
+   - Search for resource (e.g., "roadmap", "initiative")
+
+2. Create command directory:
+   ```bash
+   mkdir -p src/commands/resource
+   ```
+
+3. Implement CRUD operations:
+   - `resource-create.ts`
+   - `resource-list.ts`
+   - `resource-view.ts`
+   - `resource-update.ts`
+   - `resource-delete.ts`
+
+4. Register commands in `src/main.ts`
+
+5. Add tests in `test/commands/resource/`
+
+6. Document in `docs/USAGE.md`
+
+### Task: Update Linear SDK Version
 
 ```json
+// deno.json
 {
-  "success": true,
-  "operation": "create",
-  "issue": {
-    "id": "uuid",
-    "identifier": "ENG-123",
-    "title": "string",
-    "url": "https://linear.app/...",
-    "state": { "name": "Todo" },
-    "team": { "key": "ENG", "name": "Engineering" },
-    "assignee": { "name": "string", "email": "string" },
-    "priority": 1,
-    "estimate": 5
+  "imports": {
+    "@linear/sdk": "npm:@linear/sdk@^30.0.0"
   }
 }
 ```
 
-#### Issue View Response
+Types update automatically from npm package.
 
-```json
-{
-  "issue": {
-    "identifier": "ENG-123",
-    "title": "string",
-    "description": "string",
-    "state": { "name": "In Progress" },
-    "team": { "key": "ENG", "name": "Engineering" },
-    "assignee": { "name": "string" },
-    "priority": 1,
-    "estimate": 5,
-    "dueDate": "2025-12-31",
-    "project": { "name": "string", "slug": "string" },
-    "milestone": { "name": "string", "targetDate": "2026-03-31" },
-    "parent": { "identifier": "ENG-100" },
-    "children": [{ "identifier": "ENG-124" }],
-    "relations": {
-      "nodes": [{ "type": "blocks", "issue": { "identifier": "ENG-125" } }]
-    },
-    "inverseRelations": {
-      "nodes": [{ "type": "blocks", "issue": { "identifier": "ENG-122" } }]
-    },
-    "labels": {
-      "nodes": [{ "name": "Bugfix", "parent": { "name": "Work-Type" } }]
-    }
-  }
+---
+
+## Troubleshooting
+
+### Error: `command not found: deno`
+
+```bash
+# Install Deno
+curl -fsSL https://deno.land/install.sh | sh
+
+# Add to PATH
+export PATH="$HOME/.deno/bin:$PATH"
+```
+
+### Error: `No API key configured`
+
+This is expected during development. To test:
+
+```bash
+# Run whoami flow to set up API key
+deno run --allow-all src/main.ts whoami
+```
+
+Or mock the API client in tests.
+
+### Error: Type errors from @linear/sdk
+
+```bash
+# Clear Deno cache
+deno cache --reload src/main.ts
+
+# Or update SDK version in deno.json
+```
+
+### Error: Tests failing after changes
+
+```bash
+# Check what broke
+deno test --allow-all --fail-fast
+
+# Run specific failing test
+deno test --allow-all test/commands/issue/issue-create.test.ts
+
+# Add debug logging
+console.error("DEBUG:", parsed)
+```
+
+### Debugging API Calls
+
+```typescript
+// Add before API call
+console.error("API Request:", JSON.stringify(variables, null, 2))
+
+// Add after API call
+console.error("API Response:", JSON.stringify(result, null, 2))
+```
+
+---
+
+## Code Style Guidelines
+
+### Naming Conventions
+
+- **Files**: `kebab-case.ts` (e.g., `issue-create.ts`)
+- **Functions**: `camelCase` (e.g., `issueCreate()`)
+- **Constants**: `UPPER_SNAKE_CASE` (e.g., `API_VERSION`)
+- **Types**: `PascalCase` (e.g., `IssueCreateOptions`)
+
+### TypeScript Usage
+
+```typescript
+// ✅ Good: Explicit types
+function issueCreate(args: string[]): Promise<void>
+
+// ❌ Avoid: Implicit any
+function issueCreate(args)
+
+// ✅ Good: Use Linear SDK types
+const issue: Issue = await client.issue("ENG-123")
+
+// ❌ Avoid: Custom types for SDK data
+interface MyIssue { id: string }
+```
+
+### Error Handling
+
+```typescript
+// ✅ Good: Clear error messages
+if (!parsed.title) {
+  throw new Error("--title is required. Example: --title \"Fix bug\"")
+}
+
+// ❌ Avoid: Vague errors
+if (!parsed.title) {
+  throw new Error("Missing field")
+}
+```
+
+### Command Validation
+
+```typescript
+// ✅ Good: Validate early
+if (!parsed.title || parsed.title.length > 255) {
+  throw new Error("Title must be 1-255 characters")
+}
+const result = await client.createIssue(...)
+
+// ❌ Avoid: Validation after API call
+const result = await client.createIssue(...)
+if (!parsed.title) {
+  throw new Error("Title required")
 }
 ```
 
 ---
 
-## Error Handling
+## Important Reminders
 
-### Error Codes
-
-| Code                     | Meaning                | Action                         |
-| ------------------------ | ---------------------- | ------------------------------ |
-| `MISSING_REQUIRED_FIELD` | Required field missing | Provide the missing field      |
-| `NOT_FOUND`              | Resource not found     | Check identifier/name          |
-| `API_ERROR`              | Linear API error       | Check API key and permissions  |
-| `INVALID_VALUE`          | Invalid field value    | Check field format/constraints |
-
-### Handling Errors
-
-```python
-import json
-import subprocess
-
-def safe_create_issue(title, team):
-    try:
-        result = subprocess.run(
-            ['linear', 'issue', 'create',
-             '--title', title,
-             '--team', team,
-             '--json'],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-
-        data = json.loads(result.stdout)
-
-        if not data['success']:
-            error_code = data['error']['code']
-            error_msg = data['error']['message']
-
-            if error_code == 'NOT_FOUND':
-                print(f"Team '{team}' not found")
-            elif error_code == 'MISSING_REQUIRED_FIELD':
-                print(f"Missing required field: {error_msg}")
-            else:
-                print(f"Error ({error_code}): {error_msg}")
-
-            return None
-
-        return data['issue']['identifier']
-
-    except subprocess.CalledProcessError as e:
-        print(f"Command failed: {e}")
-        return None
-    except json.JSONDecodeError as e:
-        print(f"Invalid JSON response: {e}")
-        return None
-```
-
----
-
-## Best Practices
-
-### 1. Always Use JSON Output
+### Before Committing
 
 ```bash
-# ✓ Correct
-linear issue list --json | jq '.issues[].title'
+# 1. Format code
+deno fmt
 
-# ✗ Incorrect
-linear issue list  # Human-readable, hard to parse
+# 2. Lint code
+deno lint
+
+# 3. Run tests
+deno test --allow-all
+
+# 4. Test command manually
+deno run --allow-all src/main.ts your-command --json
 ```
 
-### 2. Check Success Before Proceeding
-
-```bash
-RESULT=$(linear issue create --title "Task" --team ENG --json)
-
-if echo "$RESULT" | jq -e '.success' > /dev/null; then
-  # Success - continue
-  ISSUE_ID=$(echo "$RESULT" | jq -r '.issue.identifier')
-else
-  # Error - handle
-  echo "Error: $(echo "$RESULT" | jq -r '.error.message')"
-  exit 1
-fi
-```
-
-### 3. Store Content in Files
-
-```bash
-# ✓ Correct: Content in files
-cat > spec.md << 'EOF'
-# Specification
-...
-EOF
-
-linear issue create \
-  --title "Task" \
-  --description "$(cat spec.md)" \
-  --json
-
-# ✗ Incorrect: Inline long content
-linear issue create \
-  --title "Task" \
-  --description "Very long text..." \
-  --json
-```
-
-### 4. Use Descriptive Titles
-
-```bash
-# ✓ Correct: Clear, actionable
-"Fix authentication timeout on mobile devices"
-"Implement OAuth 2.0 provider integration"
-"Add Redis caching to API endpoints"
-
-# ✗ Incorrect: Vague
-"Fix bug"
-"Update code"
-"Changes"
-```
-
-### 5. Link Related Work
-
-```bash
-# Create relationships
-linear issue create \
-  --title "Add tests" \
-  --blocks ENG-123 \
-  --json
-
-linear issue update ENG-124 \
-  --related-to ENG-123 \
-  --json
-```
-
-### 6. Use Label Hierarchy
-
-```bash
-# Create organized label structure
-linear label create --name "Type" --is-group --team ENG --json
-linear label create --name "Bug" --parent "Type" --team ENG --json
-linear label create --name "Feature" --parent "Type" --team ENG --json
-
-# Use on issues
-linear issue create \
-  --title "Task" \
-  --label Bug \
-  --team ENG \
-  --json
-```
-
----
-
-## Examples
-
-### Python Integration
-
-```python
-#!/usr/bin/env python3
-import json
-import subprocess
-from typing import Optional, Dict, Any
-
-class LinearCLI:
-    """Wrapper for Linear CLI"""
-
-    @staticmethod
-    def _exec(command: list[str]) -> Dict[str, Any]:
-        """Execute Linear CLI command"""
-        result = subprocess.run(
-            ['linear'] + command + ['--json'],
-            capture_output=True,
-            text=True
-        )
-        return json.loads(result.stdout)
-
-    @staticmethod
-    def create_issue(
-        title: str,
-        team: str,
-        description: Optional[str] = None,
-        priority: Optional[int] = None,
-        assignee: Optional[str] = None,
-        labels: Optional[list[str]] = None
-    ) -> Optional[str]:
-        """Create issue and return identifier"""
-
-        cmd = ['issue', 'create', '--title', title, '--team', team]
-
-        if description:
-            cmd.extend(['--description', description])
-        if priority:
-            cmd.extend(['--priority', str(priority)])
-        if assignee:
-            cmd.extend(['--assignee', assignee])
-        if labels:
-            cmd.extend(['--label'] + labels)
-
-        result = LinearCLI._exec(cmd)
-
-        if result['success']:
-            return result['issue']['identifier']
-        else:
-            raise Exception(result['error']['message'])
-
-    @staticmethod
-    def get_issue(identifier: str) -> Dict[str, Any]:
-        """Get issue details"""
-        result = LinearCLI._exec(['issue', 'view', identifier])
-        return result['issue']
-
-    @staticmethod
-    def update_issue(
-        identifier: str,
-        state: Optional[str] = None,
-        priority: Optional[int] = None
-    ) -> bool:
-        """Update issue"""
-
-        cmd = ['issue', 'update', identifier]
-
-        if state:
-            cmd.extend(['--state', state])
-        if priority:
-            cmd.extend(['--priority', str(priority)])
-
-        result = LinearCLI._exec(cmd)
-        return result['success']
-
-# Usage example
-if __name__ == '__main__':
-    # Create issue
-    issue_id = LinearCLI.create_issue(
-        title="Fix login bug",
-        team="ENG",
-        priority=1,
-        assignee="@me",
-        labels=["bug", "security"]
-    )
-    print(f"Created: {issue_id}")
-
-    # Get issue
-    issue = LinearCLI.get_issue(issue_id)
-    print(f"Title: {issue['title']}")
-    print(f"State: {issue['state']['name']}")
-
-    # Update issue
-    LinearCLI.update_issue(issue_id, state="In Progress")
-    print("Updated to In Progress")
-```
-
-### Node.js Integration
-
-```javascript
-#!/usr/bin/env node
-const { exec } = require("child_process")
-const util = require("util")
-const execAsync = util.promisify(exec)
-
-class LinearCLI {
-  /**
-   * Execute Linear CLI command
-   */
-  static async exec(command) {
-    const { stdout } = await execAsync(
-      `linear ${command.join(" ")} --json`,
-    )
-    return JSON.parse(stdout)
-  }
-
-  /**
-   * Create issue
-   */
-  static async createIssue({
-    title,
-    team,
-    description,
-    priority,
-    assignee,
-    labels,
-  }) {
-    const cmd = ["issue", "create", "--title", `"${title}"`, "--team", team]
-
-    if (description) cmd.push("--description", `"${description}"`)
-    if (priority) cmd.push("--priority", priority)
-    if (assignee) cmd.push("--assignee", assignee)
-    if (labels) cmd.push("--label", ...labels)
-
-    const result = await this.exec(cmd)
-
-    if (result.success) {
-      return result.issue.identifier
-    } else {
-      throw new Error(result.error.message)
-    }
-  }
-
-  /**
-   * Get issue
-   */
-  static async getIssue(identifier) {
-    const result = await this.exec(["issue", "view", identifier])
-    return result.issue
-  }
-
-  /**
-   * Update issue
-   */
-  static async updateIssue(identifier, { state, priority }) {
-    const cmd = ["issue", "update", identifier]
-
-    if (state) cmd.push("--state", `"${state}"`)
-    if (priority) cmd.push("--priority", priority)
-
-    const result = await this.exec(cmd)
-    return result.success
-  }
-}
-
-// Usage example
-async function main() {
-  try {
-    // Create issue
-    const issueId = await LinearCLI.createIssue({
-      title: "Fix login bug",
-      team: "ENG",
-      priority: 1,
-      assignee: "@me",
-      labels: ["bug", "security"],
-    })
-    console.log(`Created: ${issueId}`)
-
-    // Get issue
-    const issue = await LinearCLI.getIssue(issueId)
-    console.log(`Title: ${issue.title}`)
-    console.log(`State: ${issue.state.name}`)
-
-    // Update issue
-    await LinearCLI.updateIssue(issueId, { state: "In Progress" })
-    console.log("Updated to In Progress")
-  } catch (error) {
-    console.error("Error:", error.message)
-    process.exit(1)
-  }
-}
-
-main()
-```
-
----
-
-## Important Notes
-
-### 1. User References
-
-- Use `@me` for yourself, not `self`
-- Use username or email for others
-
-### 2. Labels
-
-- Space-separated: `--label A B C`
-- NOT repeated: `--label A --label B`
-
-### 3. Label Groups
-
-- Parent must have `--is-group` flag
-- Children use `--parent "ParentName"`
-- Display as `parent/child`
-
-### 4. Milestones
-
-- Require project UUID (not slug)
-- Get UUID: `linear project view SLUG --json | jq -r '.project.id'`
-
-### 5. Cross-References
-
-- Use markdown links with full URLs
-- Format: `[Text](https://linear.app/...)`
-- Plain text like `ENG-123` won't link
-
-### 6. Content Fields
-
-- Project description: Max 255 chars
-- Project content: ~200KB
-- Issue description: ~200KB
-- Use files for long content: `--content "$(cat file.md)"`
-
-### 7. Relationships
-
-- All types are bidirectional
-- View both directions with `issue relations`
-- Types: blocks, related, duplicate, similar
-
-### 8. VCS Context
-
-- CLI auto-detects issue from git branch
-- Format: `feature/ENG-123-description`
-- Use `issue view` without ID to see current
-
----
-
-## Quick Reference
-
-### Priority Values
-
-- `1` = Urgent
-- `2` = High
-- `3` = Normal
-- `4` = Low
-
-### Health Values (Projects)
-
-- `onTrack`
-- `atRisk`
-- `offTrack`
-
-### Relationship Types
-
-- `--blocks` = This blocks other issues
-- `--related-to` = General relation
-- `--duplicate-of` = Mark as duplicate
-- `--similar-to` = Similar issues
-
-### Common Flags
-
-- `--json` = JSON output (always use)
-- `--team TEAM` = Team key
-- `--project "Name"` = Project name
-- `--assignee @me` = Self-assign
-- `--priority 1-4` = Priority level
-- `--estimate N` = Story points
+### Development Principles
+
+1. **AI-Agent First**: Design for programmatic use
+2. **JSON Everything**: All commands must support `--json`
+3. **No Prompts**: Never require interactive input
+4. **Type Safety**: Use Linear SDK types
+5. **Clear Errors**: Actionable error messages
+6. **Test Coverage**: Test new functionality
+
+### Security
+
+- Never commit API keys
+- Never log sensitive data
+- Validate all user input
+- Use Linear SDK (don't build raw GraphQL)
 
 ---
 
 ## Resources
 
-- **Full Documentation**: `docs/USAGE.md`
-- **AI Agent Guide**: `docs/AI_AGENT_GUIDE.md`
-- **Examples**: `examples/` directory
-- **Installation**: `docs/INSTALLATION.md`
+### Documentation
+
+- **Deno Manual**: https://docs.deno.com/runtime/manual
+- **Linear SDK**: https://developers.linear.app/docs/sdk/getting-started
+- **Linear GraphQL API**: https://developers.linear.app/docs/graphql/working-with-the-graphql-api
+
+### Related
+
+- **Usage Guide**: See `EXAMPLE_AGENTS.md`
+- **Claude Code Guide**: See `EXAMPLE_CLAUDE.md`
+- **Plugin**: https://github.com/juanbermudez/hyper-engineering-tools
 
 ---
 
-**This CLI is optimized for AI agents. Follow these patterns for best results.**
+## Quick Reference
+
+### Command Template
+
+```typescript
+import { parseArgs } from "@std/cli/parse-args"
+import { getClient } from "../../api/client.ts"
+
+export async function myCommand(args: string[]) {
+  const parsed = parseArgs(args, {
+    string: ["field"],
+    boolean: ["json"],
+    default: { json: false },
+  })
+
+  if (!parsed.field) throw new Error("--field is required")
+
+  const client = getClient()
+  const result = await client.doSomething({ field: parsed.field })
+
+  if (parsed.json) {
+    console.log(JSON.stringify({ success: true, data: result }))
+  } else {
+    console.log(`✓ ${result.name}`)
+  }
+}
+```
+
+### Test Template
+
+```typescript
+import { assertEquals } from "@std/assert"
+
+Deno.test("my command - success case", async () => {
+  // Setup
+  const args = ["--field", "value", "--json"]
+
+  // Execute
+  const result = await myCommand(args)
+
+  // Assert
+  assertEquals(result.success, true)
+})
+```
+
+---
+
+**Ready to contribute? Check `CONTRIBUTING.md` for guidelines.**

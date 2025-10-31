@@ -60,98 +60,52 @@ This CLI is **specifically designed** to be used by AI coding agents:
 | Offline-first config             | ✅       | ❌         |
 | Composable with shell tools      | ✅       | Limited    |
 
-## 🎓 Claude Code Skill
+## 🎓 Claude Code Plugin
 
-A comprehensive **Linear CLI Expert skill** is included for Claude and Claude Code users. This skill transforms Claude into an expert at using the Linear CLI with template-based workflows, automated team setup, and customizable preferences.
+A comprehensive **Linear CLI Expert plugin** for Claude Code is available that includes this CLI, specialized AI agents (research, planning, engineering), and a complete spec-driven development workflow.
 
-### What's Included
+### Plugin Repository
 
-The skill package (`.claude-skills/linear-cli-expert/`) provides:
+Visit the [Hyper-Engineering Tools](https://github.com/juanbermudez/hyper-engineering-tools) repository to:
+- Install the complete Claude Code plugin with sub-agents
+- Access the plugin marketplace
+- Get documentation on spec-driven workflows
+- Learn about AI agent orchestration patterns
 
-- **7 Core Capabilities**: Issue management, templates, label hierarchies, project management, relationship tracking, documentation creation, and workflow automation
-- **3 Executable Scripts**: Python API wrapper, label setup automation, template-based creation
-- **3 Reference Guides**: Complete command syntax, relationship patterns, JSON API documentation
-- **7 Ready-to-Use Templates**: Bug reports, feature requests, tasks, projects, PRDs, tech specs, status updates
-- **2 Customizable Configs**: Workflow preferences and label structure templates
-
-### Installation & Setup
-
-#### For Claude Code Users
-
-1. **Install the Skill**:
-   ```bash
-   # The skill is already in the repository
-   cd linear-cli-main/.claude-skills/linear-cli-expert
-
-   # Install to your Claude Code skills directory
-   cp -r . ~/.claude/skills/linear-cli-expert
-   ```
-
-2. **Or Install from Package**:
-   ```bash
-   # Unzip the packaged skill
-   unzip .claude-skills/linear-cli-expert/linear-cli-expert.zip -d ~/.claude/skills/
-   ```
-
-3. **Customize Preferences** (Optional):
-   ```bash
-   # Edit workflow preferences
-   vim ~/.claude/skills/linear-cli-expert/assets/config/preferences.json
-
-   # Customize label structure
-   vim ~/.claude/skills/linear-cli-expert/assets/config/label-structure.json
-   ```
-
-4. **Start Using**: The skill automatically triggers when you:
-   - Ask Claude to create issues, projects, or documents in Linear
-   - Request help organizing team labels or workflows
-   - Need to create PRDs, technical specs, or status updates
-   - Want to manage issue dependencies and relationships
-
-#### For Regular Claude Users
-
-Share the skill package with your team:
+### Quick Plugin Installation
 
 ```bash
-# The packaged skill is at:
-.claude-skills/linear-cli-expert/linear-cli-expert.zip
-
-# Share this file with Claude users who can install it
-# in their Claude environment
+# In Claude Code
+/plugin marketplace add https://github.com/juanbermudez/hyper-engineering-tools/marketplace
+/plugin install linear-cli-expert@hyper-engineering-tools
 ```
 
-### What the Skill Enables
+The plugin includes:
+- **This Linear CLI** - Auto-installed when you load the plugin
+- **3 Specialized Agents** - Research, planning, and engineering sub-agents
+- **Workflow Orchestration** - Coordinated research → planning → implementation
+- **Complete Linear Integration** - Full CRUD operations for all Linear resources
 
-Once installed, Claude can:
+## 📖 AI Agent Guides
 
-- **Create Issues with Full Metadata**: Automatically includes milestones, cycles, relationships, and hierarchical labels
-- **Set Up Team Workflows**: Initialize label hierarchies and project structures with one command
-- **Generate Documentation**: Create PRDs, technical specs, and status updates from templates
-- **Manage Dependencies**: Track and visualize complex issue relationships and blockers
-- **Automate Workflows**: Use templates for consistent issue/project creation across your team
-- **Adapt to Your Process**: Reads preferences to match your team's workflow (agile, kanban, custom)
+This repository includes example documentation for AI agents using the CLI:
 
-### Example Usage
+### For Claude/Claude Code
+See [`EXAMPLE_CLAUDE.md`](./EXAMPLE_CLAUDE.md) for comprehensive guidance on:
+- JSON output patterns
+- Command success checking
+- Non-interactive command examples
+- Best practices for automation
+- Full workflow examples
 
-```bash
-# Claude can now help with commands like:
-"Set up our team's label structure in Linear"
-→ Uses scripts/setup_labels.sh
+### For Other AI Coding Agents
+See [`EXAMPLE_AGENTS.md`](./EXAMPLE_AGENTS.md) for:
+- Quick start examples for ChatGPT, Copilot, Cursor, etc.
+- Command patterns and common workflows
+- JSON API reference
+- Error handling strategies
 
-"Create a bug report for the login issue"
-→ Uses assets/templates/issue-bug.json
-
-"Generate a PRD for the OAuth feature"
-→ Uses assets/templates/prd.md
-
-"Create a project with milestones for Q1"
-→ Uses assets/templates/project-template.json
-
-"Show me all issues blocking ENG-123"
-→ Uses references/relationship-patterns.md for guidance
-```
-
-See [`.claude-skills/README.md`](./.claude-skills/README.md) for complete skill documentation and customization guide.
+**Tip**: You can use these example files as a starting point for your own AI agent configurations. Copy them to your project and customize based on your workflow needs.
 
 ## ✨ Key Features
 
@@ -620,11 +574,19 @@ export LINEAR_CACHE_ENABLED="true"   # Enable caching (default)
 
 ## 📚 Documentation
 
+### For Users
 - [Installation Guide](./docs/INSTALLATION.md) - Detailed setup instructions
 - [Usage Guide](./docs/USAGE.md) - Comprehensive command reference
 - [AI Agent Guide](./docs/AI_AGENT_GUIDE.md) - AI integration patterns
-- [Claude Code Skill Guide](./.claude-skills/README.md) - Skill installation, customization, and templates
 - [Changelog](./CHANGELOG.md) - Version history
+
+### For AI Agents
+- [EXAMPLE_CLAUDE.md](./EXAMPLE_CLAUDE.md) - Guidance for Claude/Claude Code
+- [EXAMPLE_AGENTS.md](./EXAMPLE_AGENTS.md) - Guidance for ChatGPT, Copilot, etc.
+
+### For Developers
+- [CLAUDE.md](./CLAUDE.md) - Development guide for Claude Code working on source
+- [AGENTS.md](./AGENTS.md) - Development guide for other AI agents working on source
 
 ## 🤝 Contributing
 
