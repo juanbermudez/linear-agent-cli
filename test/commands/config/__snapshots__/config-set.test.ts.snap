@@ -1,0 +1,134 @@
+export const snapshot = {};
+
+snapshot[`Config Set Command - Help Text 1`] = `
+stdout:
+"
+Usage: set <key> <value>
+
+Description:
+
+  Set a configuration value
+
+Options:
+
+  -h, --help              - Show this help.                             
+  -g, --global            - Set in global config (not yet implemented)  
+  -j, --json              - Output result as JSON                       
+  --format      <format>  - Output format: text|json                    
+
+"
+stderr:
+""
+`;
+
+snapshot[`Config Set Command - Simple Value 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "set",
+  "key": "workspace",
+  "value": "new-workspace"
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Config Set Command - Nested Value (Dot Notation) 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "set",
+  "key": "defaults.project.status",
+  "value": "In Progress"
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Config Set Command - Boolean Value 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "set",
+  "key": "interactive.enabled",
+  "value": true
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Config Set Command - Number Value 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "set",
+  "key": "defaults.milestone.targetDateOffset",
+  "value": 30
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Config Set Command - Deeply Nested Value 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "set",
+  "key": "level1.level2.level3.value",
+  "value": "deep"
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Config Set Command - Text Output 1`] = `
+stdout:
+"✓ Set team_id = PLATFORM
+"
+stderr:
+""
+`;
+
+snapshot[`Config Set Command - String With Leading Zero 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "set",
+  "key": "code",
+  "value": 123
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Config Set Command - False Boolean 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "set",
+  "key": "output.color",
+  "value": false
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Config Set Command - Float Value 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "set",
+  "key": "version",
+  "value": 1.5
+}
+'
+stderr:
+""
+`;

@@ -1,0 +1,60 @@
+export const snapshot = {};
+
+snapshot[`Issue Create Command - Help Text 1`] = `
+stdout:
+"
+Usage: create
+
+Description:
+
+  Create a linear issue
+
+Options:
+
+  -h, --help                                - Show this help.                                              
+  --start                                   - Start the issue after creation                               
+  -a, --assignee             <assignee>     - Assign the issue to 'self' or someone (by username or name)  
+  --due-date                 <dueDate>      - Due date of the issue                                        
+  -p, --parent               <parent>       - Parent issue (if any) as a team_number code                  
+  --priority                 <priority>     - Priority of the issue (1-4, descending priority)             
+  --estimate                 <estimate>     - Points estimate of the issue                                 
+  -d, --description          <description>  - Description of the issue                                     
+  -l, --label                [label...]     - Issue label associated with the issue. May be repeated.      
+  --team                     <team>         - Team associated with the issue (if not your default team)    
+  --project                  <project>      - Name of the project with the issue                           
+  -s, --state                <state>        - Workflow state for the issue (by name or type)               
+  --cycle                    <cycle>        - Cycle name or ID to assign the issue to                      
+  --milestone                <milestone>    - Project milestone name or ID to assign the issue to          
+  --blocks                   [issues...]    - Issues that this issue blocks (can be repeated)              
+  --related-to               [issues...]    - Issues related to this issue (can be repeated)               
+  --duplicate-of             [issues...]    - Issues that this is a duplicate of (can be repeated)         
+  --similar-to               [issues...]    - Issues similar to this issue (can be repeated)               
+  --no-use-default-template                 - Do not use default template for the issue                    
+  --no-color                                - Disable colored output                                       
+  --no-interactive                          - Disable interactive prompts                                  
+  -t, --title                <title>        - Title of the issue                                           
+
+"
+stderr:
+""
+`;
+
+snapshot[`Issue Create Command - Happy Path 1`] = `
+stdout:
+"Creating issue in ENG
+
+https://linear.app/test-team/issue/ENG-123/fix-authentication-bug
+"
+stderr:
+""
+`;
+
+snapshot[`Issue Create Command - Case Insensitive Label Matching 1`] = `
+stdout:
+"Creating issue in ENG
+
+https://linear.app/test-team/issue/ENG-456/test-case-insensitive-labels
+"
+stderr:
+""
+`;

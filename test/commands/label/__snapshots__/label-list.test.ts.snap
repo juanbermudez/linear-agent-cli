@@ -1,0 +1,70 @@
+export const snapshot = {};
+
+snapshot[`Label List Command - Help Text 1`] = `
+stdout:
+"
+Usage: list
+
+Description:
+
+  List labels
+
+Options:
+
+  -h, --help            - Show this help.           
+  -t, --team  <team>    - Filter by team ID or key  
+  --plain               - Disable colored output    
+  -j, --json            - Output result as JSON     
+  --format    <format>  - Output format: text|json  
+
+"
+stderr:
+""
+`;
+
+snapshot[`Label List Command - All Labels 1`] = `
+stdout:
+"┌───────────────┬───────┬───────────────────────┬───────────────────┐
+│ Name          │ Color │ Description           │ Team              │
+├───────────────┼───────┼───────────────────────┼───────────────────┤
+│ bug           │       │ Bug reports and fixes │ Engineering (ENG) │
+├───────────────┼───────┼───────────────────────┼───────────────────┤
+│ feature       │       │ New features          │ Product (PROD)    │
+├───────────────┼───────┼───────────────────────┼───────────────────┤
+│ documentation │       │ -                     │ Organization      │
+└───────────────┴───────┴───────────────────────┴───────────────────┘
+"
+stderr:
+""
+`;
+
+snapshot[`Label List Command - JSON Output 1`] = `
+stdout:
+'{
+  "labels": [
+    {
+      "id": "label-1",
+      "name": "bug",
+      "description": "Bug reports",
+      "color": "#FF0000",
+      "team": {
+        "id": "team-eng",
+        "key": "ENG",
+        "name": "Engineering"
+      }
+    }
+  ],
+  "count": 1
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Label List Command - No Labels Found 1`] = `
+stdout:
+"No labels found
+"
+stderr:
+""
+`;

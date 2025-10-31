@@ -1,0 +1,147 @@
+export const snapshot = {};
+
+snapshot[`Initiative View Command - Help Text 1`] = `
+stdout:
+"
+Usage: view <initiativeId>
+
+Description:
+
+  View initiative details
+
+Options:
+
+  -h, --help            - Show this help.           
+  --no-color            - Disable colored output    
+  -j, --json            - Output result as JSON     
+  --format    <format>  - Output format: text|json  
+
+"
+stderr:
+""
+`;
+
+snapshot[`Initiative View Command - Full Details 1`] = `
+stdout:
+"Q1 2025 Platform Goals
+
+ID: q1-2025-platform-goals
+URL: https://linear.app/test/initiative/q1-2025-platform-goals
+
+Description
+Focus on platform stability and performance improvements
+
+Status: [object Object]
+Owner: Alice Smith
+Target Date: 3/31/2025
+
+Created: 1/1/2024
+Updated: 1/15/2024
+
+Projects (2)
+  • API Redesign (api-redesign)
+    undefined
+  • Database Migration (database-migration)
+    undefined
+"
+stderr:
+""
+`;
+
+snapshot[`Initiative View Command - JSON Output 1`] = `
+stdout:
+'{
+  "initiative": {
+    "id": "init-456",
+    "name": "API Modernization",
+    "slugId": "api-modernization",
+    "url": "https://linear.app/test/initiative/api-modernization",
+    "description": "Modernize our API infrastructure",
+    "status": {
+      "id": "status-planned",
+      "name": "Planned",
+      "type": "planned"
+    },
+    "owner": {
+      "name": "Bob Jones"
+    },
+    "targetDate": "2025-06-30",
+    "createdAt": "2024-01-05T09:00:00Z",
+    "updatedAt": "2024-01-10T11:20:00Z",
+    "projects": []
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Initiative View Command - Minimal Fields 1`] = `
+stdout:
+"Simple Initiative
+
+ID: simple-initiative
+URL: https://linear.app/test/initiative/simple-initiative
+
+Status: None
+Owner: Unassigned
+Target Date: None
+
+Created: 1/10/2024
+Updated: 1/10/2024
+"
+stderr:
+""
+`;
+
+snapshot[`Initiative View Command - With Multiple Projects 1`] = `
+stdout:
+"Platform Modernization
+
+ID: platform-modernization
+URL: https://linear.app/test/initiative/platform-modernization
+
+Description
+Comprehensive platform upgrade
+
+Status: [object Object]
+Owner: Alice Smith
+Target Date: 12/31/2025
+
+Created: 1/1/2024
+Updated: 1/15/2024
+
+Projects (4)
+  • API Redesign (api-redesign)
+    undefined
+  • Database Migration (database-migration)
+    undefined
+  • Frontend Upgrade (frontend-upgrade)
+    undefined
+  • Security Audit (security-audit)
+    undefined
+"
+stderr:
+""
+`;
+
+snapshot[`Initiative View Command - By Slug ID 1`] = `
+stdout:
+"Q1 2025 Goals
+
+ID: q1-2025-goals
+URL: https://linear.app/test/initiative/q1-2025-goals
+
+Description
+Quarterly goals for Q1
+
+Status: [object Object]
+Owner: Alice Smith
+Target Date: 3/31/2025
+
+Created: 1/1/2024
+Updated: 1/15/2024
+"
+stderr:
+""
+`;

@@ -1,0 +1,89 @@
+export const snapshot = {};
+
+snapshot[`Document Create Command - Help Text 1`] = `
+stdout:
+"
+Usage: create
+
+Description:
+
+  Create a new Linear document
+
+Options:
+
+  -h, --help                    - Show this help.                                     
+  -t, --title        <title>    - Document title                                      
+  -c, --content      <content>  - Document content (markdown)                         
+  -p, --project      <project>  - Project name or ID to associate with                
+  --current-project             - Link to current issue's project (from VCS context)  
+  -i, --icon         <icon>     - Icon emoji (e.g., 📄, 📋)                           
+  --color            <color>    - Icon color (hex format: #RRGGBB)                    
+  --no-interactive              - Disable interactive mode                            
+  --plain                       - Disable colored output                              
+  -j, --json                    - Output result as JSON (for AI agents)               
+  --format           <format>   - Output format: text|json                            
+
+"
+stderr:
+""
+`;
+
+snapshot[`Document Create Command - Happy Path 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "document": {
+    "id": "doc-123",
+    "title": "API Design Document",
+    "slugId": "api-design-document",
+    "url": "https://linear.app/test/document/api-design-document"
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Document Create Command - Minimal Flags 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "document": {
+    "id": "doc-456",
+    "title": "Quick Note",
+    "slugId": "quick-note",
+    "url": "https://linear.app/test/document/quick-note"
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Document Create Command - VCS Integration (Current Project) 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "document": {
+    "id": "doc-789",
+    "title": "Implementation Notes",
+    "slugId": "implementation-notes",
+    "url": "https://linear.app/test/document/implementation-notes"
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Document Create Command - Text Output 1`] = `
+stdout:
+"✓ Created document: Design Document
+https://linear.app/test/document/design-document
+"
+stderr:
+""
+`;

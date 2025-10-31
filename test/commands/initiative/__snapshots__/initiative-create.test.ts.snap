@@ -1,0 +1,103 @@
+export const snapshot = {};
+
+snapshot[`Initiative Create Command - Help Text 1`] = `
+stdout:
+"
+Usage: create
+
+Description:
+
+  Create a new initiative
+
+Options:
+
+  -h, --help                        - Show this help.                     
+  -n, --name         <name>         - Initiative name                     
+  -d, --description  <description>  - Initiative description              
+  -c, --content      <content>      - Initiative content/body (markdown)  
+  -s, --status       <status>       - Status ID or name                   
+  -o, --owner        <owner>        - Owner user ID or display name       
+  -t, --target-date  <date>         - Target date (YYYY-MM-DD)            
+  --no-interactive                  - Disable interactive mode            
+  --no-color                        - Disable colored output              
+  -j, --json                        - Output result as JSON               
+  --format           <format>       - Output format: text|json            
+
+"
+stderr:
+""
+`;
+
+snapshot[`Initiative Create Command - Happy Path 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "initiative": {
+    "id": "init-123",
+    "name": "Q1 2025 Platform Goals",
+    "slugId": "q1-2025-platform-goals",
+    "url": "https://linear.app/test/initiative/q1-2025-platform-goals",
+    "status": {
+      "id": "status-planned",
+      "name": "Planned",
+      "type": "planned"
+    },
+    "owner": {
+      "id": "user-alice-123",
+      "name": "Alice Smith"
+    }
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Initiative Create Command - Minimal Flags 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "initiative": {
+    "id": "init-456",
+    "name": "Q2 Goals",
+    "slugId": "q2-goals",
+    "url": "https://linear.app/test/initiative/q2-goals",
+    "status": null,
+    "owner": null
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Initiative Create Command - With Target Date 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "initiative": {
+    "id": "init-789",
+    "name": "Q1 Goals",
+    "slugId": "q1-goals",
+    "url": "https://linear.app/test/initiative/q1-goals",
+    "status": null,
+    "owner": null,
+    "targetDate": "2025-03-31"
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Initiative Create Command - Text Output 1`] = `
+stdout:
+"✓ Created initiative platform-initiative
+https://linear.app/test/initiative/platform-initiative
+"
+stderr:
+""
+`;

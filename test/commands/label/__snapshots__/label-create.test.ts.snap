@@ -1,0 +1,79 @@
+export const snapshot = {};
+
+snapshot[`Label Create Command - Help Text 1`] = `
+stdout:
+"
+Usage: create
+
+Description:
+
+  Create a new label
+
+Options:
+
+  -h, --help                        - Show this help.                                        
+  -n, --name         <name>         - Label name                                             
+  -d, --description  <description>  - Label description                                      
+  -c, --color        <color>        - Label color (hex code)                                 
+  -t, --team         <team>         - Team ID or key                                         
+  -p, --parent       <parent>       - Parent label name (for label groups/hierarchy)         
+  --is-group                        - Mark this label as a group (container for sub-labels)  
+  --no-interactive                  - Disable interactive mode                               
+  --plain                           - Disable colored output                                 
+  -j, --json                        - Output result as JSON                                  
+  --format           <format>       - Output format: text|json                               
+
+"
+stderr:
+""
+`;
+
+snapshot[`Label Create Command - Happy Path 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "label": {
+    "id": "label-123",
+    "name": "bug",
+    "description": "Bug reports and fixes",
+    "color": "#FF0000",
+    "team": {
+      "id": "team-eng-id",
+      "key": "ENG",
+      "name": "Engineering"
+    },
+    "parent": null
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Label Create Command - Minimal Flags 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "label": {
+    "id": "label-456",
+    "name": "feature",
+    "description": null,
+    "color": "#00FF00",
+    "team": null,
+    "parent": null
+  }
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Label Create Command - Text Output 1`] = `
+stdout:
+"✓ Created label 'enhancement'
+"
+stderr:
+""
+`;
