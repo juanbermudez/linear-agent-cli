@@ -64,7 +64,7 @@ linear issue create \
   --duplicate-of ENG-104                 # Mark as duplicate of issue
   --similar-to ENG-105                   # Similar to issue
   --start                                # Start working immediately (creates git branch)
-  --json                                 # Output as JSON
+                                   # Output as JSON
 ```
 
 **Common Examples:**
@@ -135,7 +135,7 @@ linear issue update ENG-123 \
   --related-to ENG-125                   # Add related relationships
   --duplicate-of ENG-126                 # Mark as duplicate
   --similar-to ENG-127                   # Mark as similar
-  --json                                 # Output as JSON
+                                   # Output as JSON
 ```
 
 **Common Examples:**
@@ -179,7 +179,7 @@ linear issue view ENG-123 --web
 linear issue view ENG-123 --app
 
 # JSON output (for AI agents)
-linear issue view ENG-123 --json
+linear issue view ENG-123
 ```
 
 ### Working with Issues
@@ -285,7 +285,7 @@ linear project create \
   --priority 2                           # 0=None, 1=Urgent, 2=High, 3=Normal, 4=Low
   --with-doc                             # Create a design document with the project
   --doc-title "Technical Spec"           # Document title (used with --with-doc)
-  --json                                 # Output as JSON
+                                   # Output as JSON
 ```
 
 **Common Examples:**
@@ -313,7 +313,7 @@ linear project create \
   --start-date 2025-11-01 \
   --target-date 2025-12-31 \
   --priority 1 \
-  --json
+  
 
 # Project with multiple teams
 linear project create \
@@ -376,7 +376,7 @@ linear project update PROJECT-123 \
   --start-date 2025-11-15                # Update start date
   --target-date 2026-01-31               # Update target date
   --priority 1                           # Change priority
-  --json                                 # Output as JSON
+                                   # Output as JSON
 ```
 
 **Common Examples:**
@@ -418,7 +418,7 @@ linear project view "API Redesign"
 linear project view PROJECT-123
 
 # View as JSON
-linear project view PROJECT-123 --json
+linear project view PROJECT-123 
 
 # Delete project
 linear project delete "API Redesign"
@@ -460,7 +460,7 @@ linear initiative create \
   --description "Key objectives for Q1"  # Short description
   --content "$(cat initiative-plan.md)"  # Full initiative body (rich markdown)
   --owner @me                            # Initiative owner (username or email)
-  --json                                 # Output as JSON
+                                   # Output as JSON
 ```
 
 **Common Examples:**
@@ -485,7 +485,6 @@ linear initiative create \
 linear initiative create \
   --name "Q1 Goals" \
   --content "$(cat q1-goals.md)" \
-  --json
 ```
 
 ### Working with Initiatives
@@ -531,7 +530,7 @@ linear document create \
   --content "$(cat notes.md)"
 
 # JSON output
-linear document create --title "Notes" --json
+linear document create --title "Notes"
 ```
 
 ### Working with Documents
@@ -574,7 +573,7 @@ linear label create \
   --team ENG                             # Team key
   --is-group                             # Mark as group (for hierarchical labels)
   --parent "Category"                    # Parent label name (for sub-labels)
-  --json                                 # Output as JSON
+                                   # Output as JSON
 ```
 
 **Common Examples:**
@@ -609,7 +608,6 @@ linear label create \
 linear label create \
   --name "feature" \
   --color "#00FF00" \
-  --json
 ```
 
 **Label Group Hierarchy:**
@@ -903,11 +901,11 @@ linear issue update ENG-123 --cycle "Sprint 6"
 - Labels (including label groups)
 - Timestamps
 
-**Workaround**: Use `--json` flag and parse with `jq`
+**Workaround**: Use `` flag and parse with `jq`
 
 ```bash
 # View all fields with jq
-linear issue view ENG-123 --json | jq '{
+linear issue view ENG-123  | jq '{
   title,
   priority,
   estimate,
@@ -935,15 +933,20 @@ linear label create --name "Bug: Critical" --parent "Bug"
 
 ## AI Agent Mode
 
-All commands support `--json` output for machine-readable responses.
+All commands output JSON by default for machine-readable responses. Use `--human` for readable output.
+
+> **Note:** JSON output is the default. No flags needed for programmatic use.
 
 ```bash
-# Get structured output
-linear issue list --json | jq '.issues[].title'
+# Get structured output (JSON is default)
+linear issue list | jq '.issues[].title'
 
 # Chain operations
-PROJECT_ID=$(linear project create --name "Test" --team ENG --json | jq -r '.project.id')
-linear document create --title "Design Doc" --project "$PROJECT_ID" --json
+PROJECT_ID=$(linear project create --name "Test" --team ENG | jq -r '.project.id')
+linear document create --title "Design Doc" --project "$PROJECT_ID"
+
+# Use --human for readable output
+linear issue list --human
 ```
 
 For complete documentation, see the [docs](./docs) directory.

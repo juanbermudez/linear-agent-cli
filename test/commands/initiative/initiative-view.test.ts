@@ -91,7 +91,7 @@ await snapshotTest({
   name: "Initiative View Command - JSON Output",
   meta: import.meta,
   colors: false,
-  args: ["init-456", "--json", "--no-color"],
+  args: ["init-456", "--no-color"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([

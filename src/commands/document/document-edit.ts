@@ -12,7 +12,7 @@ interface EditOptions {
   project?: string
   icon?: string
   color?: string
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -28,10 +28,10 @@ export const editCommand = new Command()
   .option("-p, --project <project:string>", "New project association")
   .option("-i, --icon <icon:string>", "New icon emoji")
   .option("--color <color:string>", "New icon color (hex format: #RRGGBB)")
-  .option("-j, --json", "Output result as JSON (for AI agents)")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: EditOptions, docId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     // Validate at least one field is provided
     if (

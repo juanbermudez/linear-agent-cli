@@ -15,10 +15,10 @@ export const relateCommand = new Command()
   .option("--related-to", "Mark as related (default)")
   .option("--duplicate-of", "Mark as duplicate of the related issue")
   .option("--similar-to", "Mark as similar to the related issue")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options, issueIdArg: string, relatedIssueIdArg: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     try {
       // Determine relationship type

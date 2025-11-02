@@ -22,7 +22,7 @@ await snapshotTest({
   name: "Document List Command - All Documents",
   meta: import.meta,
   colors: false,
-  args: ["--json", "--plain"],
+  args: ["--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -98,7 +98,7 @@ await snapshotTest({
   name: "Document List Command - JSON Output",
   meta: import.meta,
   colors: false,
-  args: ["--json", "--plain"],
+  args: ["--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -144,7 +144,7 @@ await snapshotTest({
   name: "Document List Command - Current Project (VCS)",
   meta: import.meta,
   colors: false,
-  args: ["--current-project", "--json", "--plain"],
+  args: ["--current-project", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -232,7 +232,7 @@ await snapshotTest({
   name: "Document List Command - Filter By Project",
   meta: import.meta,
   colors: false,
-  args: ["--project", "project-123", "--json", "--plain"],
+  args: ["--project", "project-123", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([

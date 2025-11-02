@@ -6,7 +6,7 @@ import {
 } from "../../utils/styling.ts"
 
 interface RestoreOptions {
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -14,10 +14,10 @@ export const restoreCommand = new Command()
   .name("restore")
   .description("Restore an archived initiative")
   .arguments("<initiativeId:string>")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: RestoreOptions, initiativeId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()

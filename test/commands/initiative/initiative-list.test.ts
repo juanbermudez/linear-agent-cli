@@ -22,7 +22,7 @@ await snapshotTest({
   name: "Initiative List Command - All Initiatives",
   meta: import.meta,
   colors: false,
-  args: ["--json", "--plain"],
+  args: ["--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -98,7 +98,7 @@ await snapshotTest({
   name: "Initiative List Command - JSON Output",
   meta: import.meta,
   colors: false,
-  args: ["--json", "--no-color"],
+  args: ["--no-color"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -145,7 +145,7 @@ await snapshotTest({
   name: "Initiative List Command - Filter By Status",
   meta: import.meta,
   colors: false,
-  args: ["--status", "started", "--json", "--no-color", "--plain"],
+  args: ["--status", "started", "--no-color", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([

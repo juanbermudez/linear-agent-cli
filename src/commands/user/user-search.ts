@@ -33,10 +33,11 @@ export const searchCommand = new Command()
   .name("search")
   .description("Search for users by name or email")
   .arguments("<query:string>")
-  .option("--json", "Output as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--refresh", "Bypass cache and fetch fresh data")
   .option("--active-only", "Show only active users")
-  .action(async ({ json, refresh, activeOnly }, query: string) => {
+  .action(async ({ human, refresh, activeOnly }, query: string) => {
+    const json = !human
     try {
       let users: User[]
 

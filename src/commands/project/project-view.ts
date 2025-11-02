@@ -76,11 +76,11 @@ export const viewCommand = new Command()
   .arguments("<projectId:string>")
   .option("-w, --web", "Open in web browser")
   .option("-a, --app", "Open in Linear.app")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options, projectId) => {
-    const { web, app, json, format } = options
-    const useJson = json || format === "json"
+    const { web, app, human, format } = options
+    const useJson = !human && format !== "text"
 
     if (web || app) {
       await openProjectPage(projectId, { app, web: !app })

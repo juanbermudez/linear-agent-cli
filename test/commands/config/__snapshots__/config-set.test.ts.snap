@@ -11,10 +11,10 @@ Description:
 
 Options:
 
-  -h, --help              - Show this help.                             
-  -g, --global            - Set in global config (not yet implemented)  
-  -j, --json              - Output result as JSON                       
-  --format      <format>  - Output format: text|json                    
+  -h, --help              - Show this help.                                  
+  -g, --global            - Set in global config (not yet implemented)       
+  --human                 - Output in human-readable format (default: JSON)  
+  --format      <format>  - Output format: text|json                         
 
 "
 stderr:
@@ -88,8 +88,13 @@ stderr:
 
 snapshot[`Config Set Command - Text Output 1`] = `
 stdout:
-"✓ Set team_id = PLATFORM
-"
+'{
+  "success": true,
+  "operation": "set",
+  "key": "team_id",
+  "value": "PLATFORM"
+}
+'
 stderr:
 ""
 `;

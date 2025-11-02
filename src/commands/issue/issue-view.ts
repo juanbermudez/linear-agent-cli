@@ -16,9 +16,10 @@ export const viewCommand = new Command()
   .option("-a, --app", "Open in Linear.app")
   .option("--no-comments", "Exclude comments from the output")
   .option("--no-pager", "Disable automatic paging for long output")
-  .option("-j, --json", "Output issue data as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .action(async (options, issueId) => {
-    const { web, app, comments, pager, json } = options
+    const { web, app, comments, pager, human } = options
+    const json = !human
     const showComments = comments !== false
     const usePager = pager !== false
 

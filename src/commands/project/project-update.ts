@@ -22,7 +22,7 @@ interface UpdateOptions {
   startDate?: string
   targetDate?: string
   priority?: number
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -46,10 +46,10 @@ export const updateCommand = new Command()
   .option("--start-date <date:string>", "New start date (YYYY-MM-DD)")
   .option("--target-date <date:string>", "New target date (YYYY-MM-DD)")
   .option("-p, --priority <priority:number>", "New priority (0-4)")
-  .option("-j, --json", "Output result as JSON (for AI agents)")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: UpdateOptions, projectId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     // Validate at least one field is provided
     if (

@@ -18,7 +18,7 @@ interface CreateOptions {
   currentProject?: boolean
   icon?: string
   color?: string | false
-  json?: boolean
+  human?: boolean
   format?: string
   noInteractive?: boolean
 }
@@ -156,7 +156,7 @@ async function interactiveCreate(_options: CreateOptions) {
 }
 
 async function flagBasedCreate(options: CreateOptions) {
-  const useJson = options.json || options.format === "json"
+  const useJson = !options.human && options.format !== "text"
 
   // Validate required field
   if (!options.title) {
@@ -367,10 +367,10 @@ export const createCommand = new Command()
   .option("--color <color:string>", "Icon color (hex format: #RRGGBB)")
   .option("--no-interactive", "Disable interactive mode")
   .option("--plain", "Disable colored output")
-  .option("-j, --json", "Output result as JSON (for AI agents)")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
     const interactive = !options.title && !useJson && !options.noInteractive &&
       Deno.stdout.isTerminal()
 

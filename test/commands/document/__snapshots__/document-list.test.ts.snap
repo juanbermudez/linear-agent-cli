@@ -20,7 +20,7 @@ Options:
   -l, --limit         <limit>       - Max number of documents (default: 50)                          
   -w, --web                         - Open documents view in browser                                 
   -a, --app                         - Open documents view in Linear.app                              
-  -j, --json                        - Output result as JSON (for AI agents)                          
+  --human                           - Output in human-readable format (default: JSON)                
   --format            <format>      - Output format: text|json                                       
   --plain                           - Disable colored output                                         
   --no-pager                        - Disable automatic paging                                       
@@ -191,8 +191,12 @@ stderr:
 
 snapshot[`Document List Command - No Documents Found 1`] = `
 stdout:
-"No documents found
-"
+'{
+  "documents": [],
+  "count": 0,
+  "filters": {}
+}
+'
 stderr:
 ""
 `;

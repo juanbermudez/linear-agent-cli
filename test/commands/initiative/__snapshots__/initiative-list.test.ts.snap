@@ -11,14 +11,14 @@ Description:
 
 Options:
 
-  -h, --help              - Show this help.                          
-  -s, --status  <status>  - Filter by status ID or name              
-  -o, --owner   <owner>   - Filter by owner ID or display name       
-  -l, --limit   <limit>   - Max number of initiatives (default: 50)  
-  --plain                 - Disable colored output                   
-  --no-color              - Disable colored output                   
-  -j, --json              - Output result as JSON                    
-  --format      <format>  - Output format: text|json                 
+  -h, --help              - Show this help.                                  
+  -s, --status  <status>  - Filter by status ID or name                      
+  -o, --owner   <owner>   - Filter by owner ID or display name               
+  -l, --limit   <limit>   - Max number of initiatives (default: 50)          
+  --plain                 - Disable colored output                           
+  --no-color              - Disable colored output                           
+  --human                 - Output in human-readable format (default: JSON)  
+  --format      <format>  - Output format: text|json                         
 
 "
 stderr:
@@ -130,8 +130,11 @@ stderr:
 
 snapshot[`Initiative List Command - No Initiatives Found 1`] = `
 stdout:
-"No initiatives found
-"
+'{
+  "initiatives": [],
+  "count": 0
+}
+'
 stderr:
 ""
 `;

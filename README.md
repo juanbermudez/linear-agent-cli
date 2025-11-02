@@ -43,7 +43,7 @@ linear document create --current-project --title "Notes"
 
 This CLI is **specifically designed** to be used by AI coding agents:
 
-- **Complete JSON output** for all commands (`--json` flag)
+- **JSON-first output** - JSON is the default, use `--human` for readable format
 - **Consistent error codes** for programmatic error handling
 - **Cross-entity operations** for complex workflows in single commands
 - **VCS-aware** to reduce context switching and manual parameter passing
@@ -240,16 +240,15 @@ linear config get defaults.project
 ### AI Agent Examples
 
 ```bash
-# JSON output for parsing
-linear issue list --json | jq '.issues[].title'
+# JSON output by default (pipe to jq for parsing)
+linear issue list | jq '.issues[].title'
 
 # Create project with document (cross-entity)
 linear project create \
   --name "Mobile App" \
   --team MOBILE \
   --with-doc \
-  --doc-title "Technical Spec" \
-  --json
+  --doc-title "Technical Spec"
 
 # Create project with rich markdown content
 linear project create \
@@ -258,8 +257,7 @@ linear project create \
   --content "$(cat project-overview.md)" \
   --team ENG \
   --priority 1 \
-  --lead @me \
-  --json
+  --lead @me
 
 # Update project content
 linear project update PROJECT-ID --content "$(cat updated-overview.md)"
@@ -268,8 +266,7 @@ linear project update PROJECT-ID --content "$(cat updated-overview.md)"
 linear initiative create \
   --name "Q1 2025 Goals" \
   --content "$(cat q1-initiatives.md)" \
-  --owner @me \
-  --json
+  --owner @me
 
 # Create issue with milestones, cycles, and relationships
 linear issue create \
@@ -282,35 +279,33 @@ linear issue create \
   --estimate 8 \
   --blocks ENG-100 ENG-101 \
   --related-to ENG-102 \
-  --label Backend New-Feature \
-  --json
+  --label Backend New-Feature
 
 # VCS-aware document creation
 linear document create \
   --current-project \
-  --title "Implementation Notes" \
-  --json
+  --title "Implementation Notes"
 
-# Chain operations
-PROJECT_ID=$(linear project create --name "API" --json | jq -r '.project.id')
-linear document create --project "$PROJECT_ID" --title "API Design" --json
+# Chain operations (JSON is default)
+PROJECT_ID=$(linear project create --name "API" | jq -r '.project.id')
+linear document create --project "$PROJECT_ID" --title "API Design"
 
 # Create label hierarchy and use on issues
 linear label create --name "Work-Type" --is-group --team ENG
 linear label create --name "Bugfix" --parent "Work-Type" --team ENG
-linear issue create --title "Fix bug" --label Bugfix --json
+linear issue create --title "Fix bug" --label Bugfix
 
-# Check current configuration
-linear whoami --json | jq '.configuration'
+# Check current configuration (JSON is default)
+linear whoami | jq '.configuration'
 
 # List users for assignment (cached)
-linear user list --json | jq '.users[].displayName'
+linear user list | jq '.users[].displayName'
 
 # Search for user by name
-linear user search "john" --json | jq '.users[0].id'
+linear user search "john" | jq '.users[0].id'
 
 # Find active admins
-linear user list --active-only --admins-only --json
+linear user list --active-only --admins-only
 ```
 
 See [Usage Guide](./docs/USAGE.md) for comprehensive examples.
@@ -417,26 +412,27 @@ Tagged: [backend](https://linear.app/workspace/issue-label/backend)
 
 This CLI was built from the ground up for AI coding agents. See the [AI Agent Guide](./docs/AI_AGENT_GUIDE.md) for:
 
-- JSON output patterns
+- JSON output patterns (JSON is default!)
 - Error handling
 - VCS context usage
 - Bulk operations
 - Full workflow automation examples
+
+> **Note:** JSON output is the default. Use `--human` for human-readable format.
 
 ### Quick Integration
 
 ```typescript
 import { execSync } from "child_process"
 
-// Get current issue from VCS
-const result = execSync("linear issue view --json").toString()
+// Get current issue from VCS (JSON is default)
+const result = execSync("linear issue view").toString()
 const issue = JSON.parse(result).issue
 
 // Create related document
 execSync(`linear document create \
   --current-project \
-  --title "Notes for ${issue.title}" \
-  --json`)
+  --title "Notes for ${issue.title}"`)
 ```
 
 ## 🔗 VCS Integration
@@ -532,7 +528,7 @@ enabled = true                # Enable caching (default: true)
 enabled = true
 
 [output]
-format = "json"              # Default to JSON for AI agents
+format = "json"              # JSON is the default (use --human for readable output)
 ```
 
 ### Environment Variables

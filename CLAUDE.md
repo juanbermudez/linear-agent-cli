@@ -6,7 +6,7 @@ This document provides guidance for Claude Code agents working on the **Linear C
 
 The Linear CLI is a Deno-based command-line tool that provides comprehensive Linear API access optimized for AI agents. It's designed to be:
 
-- **JSON-first**: All commands support `--json` output
+- **JSON-first**: JSON is the default output format (use `--human` for readable output)
 - **Non-interactive**: Fully automatable with no required prompts
 - **VCS-aware**: Detects Linear issues from git branch context
 - **Type-safe**: Built with TypeScript and auto-generated GraphQL types
@@ -60,8 +60,8 @@ import { formatOutput } from "../../utils/output.ts"
 export async function issueCreate(args: string[]) {
   const parsed = parseArgs(args, {
     string: ["title", "description", "team", "assignee"],
-    boolean: ["json"],
-    default: { json: false },
+    boolean: ["human"],
+    default: { human: false },
   })
 
   // Validation
@@ -76,11 +76,11 @@ export async function issueCreate(args: string[]) {
     // ... more fields
   })
 
-  // Output formatting
-  if (parsed.json) {
-    console.log(JSON.stringify({ success: true, issue: result }))
-  } else {
+  // Output formatting (JSON is default)
+  if (parsed.human) {
     formatOutput(result)
+  } else {
+    console.log(JSON.stringify({ success: true, issue: result }))
   }
 }
 ```
@@ -124,13 +124,14 @@ All commands support both human-readable and JSON output:
 
 ```typescript
 // src/utils/output.ts
-export function formatOutput(data: any, json: boolean) {
-  if (json) {
-    console.log(JSON.stringify({ success: true, data }))
-  } else {
+export function formatOutput(data: any, human: boolean) {
+  if (human) {
     // Pretty print for humans
     console.log(`✓ ${data.title}`)
     console.log(`  ${data.identifier} - ${data.state.name}`)
+  } else {
+    // JSON is default
+    console.log(JSON.stringify({ success: true, data }))
   }
 }
 ```
@@ -157,8 +158,8 @@ cd linear-agent-cli
 # Run locally (no install needed)
 deno run --allow-all src/main.ts --version
 
-# Run specific command
-deno run --allow-all src/main.ts issue list --json
+# Run specific command (JSON is default)
+deno run --allow-all src/main.ts issue list
 
 # Run tests
 deno test --allow-all
@@ -173,17 +174,16 @@ deno lint
 ### Testing Changes
 
 ```bash
-# Test a specific command locally
+# Test a specific command locally (JSON is default)
 deno run --allow-all src/main.ts issue create \
   --title "Test issue" \
-  --team ENG \
-  --json
+  --team ENG
 
 # Install locally for testing
 deno install --global --allow-all --name linear-dev src/main.ts
 
-# Test installed version
-linear-dev issue list --json
+# Test installed version (JSON is default)
+linear-dev issue list
 
 # Uninstall test version
 deno uninstall linear-dev
@@ -201,8 +201,8 @@ import { getClient } from "../../api/client.ts"
 export async function resourceAction(args: string[]) {
   const parsed = parseArgs(args, {
     string: ["required-field"],
-    boolean: ["json", "optional-flag"],
-    default: { json: false },
+    boolean: ["human", "optional-flag"],
+    default: { human: false },
   })
 
   // Validate required fields
@@ -219,11 +219,11 @@ export async function resourceAction(args: string[]) {
     // ... more fields
   })
 
-  // Output result
-  if (parsed.json) {
-    console.log(JSON.stringify({ success: true, resource: result }))
-  } else {
+  // Output result (JSON is default)
+  if (parsed.human) {
     console.log(`✓ ${result.name}`)
+  } else {
+    console.log(JSON.stringify({ success: true, resource: result }))
   }
 }
 ```
@@ -312,8 +312,8 @@ import { assertEquals, assertExists } from "@std/assert"
 import { issueCreate } from "../../../src/commands/issue/issue-create.ts"
 
 Deno.test("issue create - minimal options", async () => {
-  // Setup
-  const args = ["--title", "Test", "--team", "ENG", "--json"]
+  // Setup (JSON is default)
+  const args = ["--title", "Test", "--team", "ENG"]
 
   // Execute
   const result = await issueCreate(args)
@@ -324,7 +324,7 @@ Deno.test("issue create - minimal options", async () => {
 })
 
 Deno.test("issue create - missing required field", async () => {
-  const args = ["--team", "ENG", "--json"]
+  const args = ["--team", "ENG"]
 
   // Should throw error
   await assertRejects(
@@ -411,8 +411,8 @@ linear whoami
 **Issue**: `Error: Team not found`
 
 ```bash
-# Debug: List available teams
-linear whoami --json | jq '.teams'
+# Debug: List available teams (JSON is default)
+linear whoami | jq '.teams'
 ```
 
 **Issue**: Type errors from @linear/sdk
@@ -516,7 +516,7 @@ When adding features:
 ## 🚨 Important Reminders
 
 - **Never commit API keys or tokens**
-- **Always test with `--json` flag**
+- **JSON is the default output** (use `--human` for readable format)
 - **Run `deno fmt` before committing**
 - **Update docs when changing commands**
 - **Add tests for new functionality**

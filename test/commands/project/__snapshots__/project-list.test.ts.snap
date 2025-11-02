@@ -11,14 +11,14 @@ Description:
 
 Options:
 
-  -h, --help             - Show this help.               
-  --team       <team>    - Filter by team key            
-  --all-teams            - Show projects from all teams  
-  --status     <status>  - Filter by status name         
-  -w, --web              - Open in web browser           
-  -a, --app              - Open in Linear.app            
-  -j, --json             - Output result as JSON         
-  --format     <format>  - Output format: text|json      
+  -h, --help             - Show this help.                                  
+  --team       <team>    - Filter by team key                               
+  --all-teams            - Show projects from all teams                     
+  --status     <status>  - Filter by status name                            
+  -w, --web              - Open in web browser                              
+  -a, --app              - Open in Linear.app                               
+  --human                - Output in human-readable format (default: JSON)  
+  --format     <format>  - Output format: text|json                         
 
 "
 stderr:
@@ -27,8 +27,11 @@ stderr:
 
 snapshot[`Project List Command - No Projects Found 1`] = `
 stdout:
-"No projects found.
-"
+'{
+  "projects": [],
+  "count": 0
+}
+'
 stderr:
 ""
 `;

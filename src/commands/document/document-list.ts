@@ -18,7 +18,7 @@ interface ListOptions {
   limit?: number
   web?: boolean
   app?: boolean
-  json?: boolean
+  human?: boolean
   format?: string
   pager?: boolean
 }
@@ -43,12 +43,12 @@ export const listCommand = new Command()
   .option("-l, --limit <limit:number>", "Max number of documents (default: 50)")
   .option("-w, --web", "Open documents view in browser")
   .option("-a, --app", "Open documents view in Linear.app")
-  .option("-j, --json", "Output result as JSON (for AI agents)")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .option("--plain", "Disable colored output")
   .option("--no-pager", "Disable automatic paging")
   .action(async (options: ListOptions) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
     const usePager = options.pager !== false
 
     // TODO: Add web/app open support once we have the URL pattern

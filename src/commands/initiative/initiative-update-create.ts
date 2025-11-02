@@ -10,7 +10,7 @@ import {
 interface CreateOptions {
   body?: string
   health?: string
-  json?: boolean
+  human?: boolean
   format?: string
   noInteractive?: boolean
 }
@@ -25,10 +25,10 @@ export const updateCreateCommand = new Command()
     "Health status (onTrack, atRisk, offTrack)",
   )
   .option("--no-interactive", "Disable interactive mode")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions, initiativeId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
     const interactive = !options.body && !useJson && !options.noInteractive &&
       Deno.stdout.isTerminal()
 

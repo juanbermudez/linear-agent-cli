@@ -8,10 +8,10 @@ export const relationsCommand = new Command()
   .name("relations")
   .description("List all relationships for an issue")
   .arguments("<issueId:string>")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options, issueIdArg: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     try {
       // Resolve issue identifier

@@ -7,9 +7,10 @@ export const listCommand = new Command()
   .name("list")
   .description("List all workflow states for a team")
   .option("-t, --team <team:string>", "Team key (e.g., ENG)")
-  .option("--json", "Output as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--refresh", "Bypass cache and fetch fresh data")
-  .action(async ({ team, json, refresh }) => {
+  .action(async ({ team, human, refresh }) => {
+    const json = !human
     const teamKey = team || getTeamKey()
     if (!teamKey) {
       console.error(

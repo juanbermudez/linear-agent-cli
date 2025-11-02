@@ -29,7 +29,6 @@ await snapshotTest({
     "# API Design\n\nThis document describes the API design.",
     "--project",
     "project-123",
-    "--json",
     "--plain",
   ],
   denoArgs: commonDenoArgs,
@@ -94,7 +93,6 @@ await snapshotTest({
   args: [
     "--title",
     "Quick Note",
-    "--json",
     "--plain",
   ],
   denoArgs: commonDenoArgs,
@@ -139,7 +137,6 @@ await snapshotTest({
     "--title",
     "Implementation Notes",
     "--current-project",
-    "--json",
     "--plain",
   ],
   denoArgs: commonDenoArgs,

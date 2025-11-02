@@ -7,7 +7,7 @@ import {
 
 interface SetOptions {
   global?: boolean
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -16,10 +16,10 @@ export const setCommand = new Command()
   .description("Set a configuration value")
   .arguments("<key:string> <value:string>")
   .option("-g, --global", "Set in global config (not yet implemented)")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: SetOptions, key: string, value: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     try {
       const configManager = await getConfigManager()

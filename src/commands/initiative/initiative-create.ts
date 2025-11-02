@@ -17,7 +17,7 @@ interface CreateOptions {
   status?: string
   owner?: string
   targetDate?: string
-  json?: boolean
+  human?: boolean
   format?: string
   noInteractive?: boolean
 }
@@ -36,10 +36,10 @@ export const createCommand = new Command()
   .option("-t, --target-date <date:string>", "Target date (YYYY-MM-DD)")
   .option("--no-interactive", "Disable interactive mode")
   .option("--no-color", "Disable colored output")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
     const interactive = !options.name && !useJson && !options.noInteractive &&
       Deno.stdout.isTerminal()
 

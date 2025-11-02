@@ -5,7 +5,7 @@ import { bold } from "@std/fmt/colors"
 
 interface ListOptions {
   section?: string
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -44,10 +44,10 @@ export const listCommand = new Command()
   .name("list")
   .description("List all configuration values")
   .option("--section <section:string>", "Show only specific section")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: ListOptions) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     try {
       const configManager = await getConfigManager()

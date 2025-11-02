@@ -6,7 +6,7 @@ import { header, muted } from "../../utils/styling.ts"
 import { error as errorColor } from "../../utils/styling.ts"
 
 interface ViewOptions {
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -15,10 +15,10 @@ export const viewCommand = new Command()
   .description("View initiative details")
   .arguments("<initiativeId:string>")
   .option("--no-color", "Disable colored output")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: ViewOptions, initiativeId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()

@@ -410,7 +410,7 @@ linear document create \
 
 ```bash
 # Get current issue from branch
-CURRENT=$(linear issue view --json | jq -r '.issue.identifier')
+CURRENT=$(linear issue view  | jq -r '.issue.identifier')
 
 # Create related issue
 linear issue create \

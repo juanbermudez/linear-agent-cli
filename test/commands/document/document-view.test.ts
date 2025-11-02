@@ -80,7 +80,7 @@ await snapshotTest({
   name: "Document View Command - JSON Output",
   meta: import.meta,
   colors: false,
-  args: ["doc-456", "--json", "--plain"],
+  args: ["doc-456", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([

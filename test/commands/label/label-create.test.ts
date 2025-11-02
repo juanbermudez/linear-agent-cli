@@ -31,7 +31,6 @@ await snapshotTest({
     "ENG",
     "--color",
     "#FF0000",
-    "--json",
     "--plain",
   ],
   denoArgs: commonDenoArgs,
@@ -91,7 +90,6 @@ await snapshotTest({
   args: [
     "--name",
     "feature",
-    "--json",
     "--plain",
   ],
   denoArgs: commonDenoArgs,

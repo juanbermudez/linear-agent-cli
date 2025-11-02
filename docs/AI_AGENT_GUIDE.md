@@ -9,9 +9,11 @@ This CLI was specifically designed to be used by AI coding agents like Claude Co
 1. **Complete CRUD Operations**: Full create, read, update, delete support for all resources
 2. **Cross-Entity Operations**: Create related resources in one command (e.g., project + document)
 3. **VCS-Aware**: Automatic context detection from git/jj branches
-4. **Consistent JSON Output**: All commands return structured, parseable JSON
+4. **JSON by Default**: All commands return JSON without any flags needed
 5. **Error Codes**: Machine-readable error codes for better error handling
 6. **Composable**: Designed to be chained with other CLI tools (jq, grep, etc.)
+
+> **Note:** JSON output is the default. Use `--human` for human-readable format.
 
 ### Design Philosophy
 
@@ -64,14 +66,14 @@ This CLI follows the principles shared by [@dexhorthy](https://x.com/dexhorthy) 
 
 ```typescript
 // Get current issue from VCS context
-const result = execSync("linear issue view --json").toString()
+const result = execSync("linear issue view ").toString()
 const issue = JSON.parse(result).issue
 
 // Create document for current issue's project
 execSync(`linear document create \
   --current-project \
   --title "Implementation Notes for ${issue.title}" \
-  --json`)
+  `)
 ```
 
 ### 2. Project Kickoff Automation
@@ -83,7 +85,7 @@ const result = execSync(`linear project create \
   --team ENG \
   --with-doc \
   --doc-title "Technical Specification" \
-  --json`).toString()
+  `).toString()
 
 const { project, document } = JSON.parse(result)
 
@@ -96,7 +98,7 @@ const issues = [
   const res = execSync(`linear issue create \
     --title "${title}" \
     --project ${project.id} \
-    --json`).toString()
+    `).toString()
   return JSON.parse(res).issue
 })
 ```
@@ -105,7 +107,7 @@ const issues = [
 
 ```typescript
 // Get all issues for a project
-const result = execSync("linear issue list --project PROJ-123 --json")
+const result = execSync("linear issue list --project PROJ-123 ")
   .toString()
 const issues = JSON.parse(result).issues
 
@@ -113,7 +115,7 @@ const issues = JSON.parse(result).issues
 for (const issue of issues) {
   execSync(`linear issue update ${issue.identifier} \
     --status "In Review" \
-    --json`)
+    `)
 }
 ```
 
@@ -124,7 +126,7 @@ for (const issue of issues) {
 const initResult = execSync(`linear initiative create \
   --name "Q1 2024 Goals" \
   --status active \
-  --json`).toString()
+  `).toString()
 const initiative = JSON.parse(initResult).initiative
 
 // Create and link projects
@@ -132,7 +134,7 @@ const projects = ["Backend", "Frontend", "Mobile"]
 for (const name of projects) {
   const projResult = execSync(`linear project create \
     --name "Q1 - ${name}" \
-    --json`).toString()
+    `).toString()
   const project = JSON.parse(projResult).project
 
   execSync(`linear initiative link ${initiative.id} \
@@ -142,10 +144,16 @@ for (const name of projects) {
 
 ## Configuration for AI Agents
 
-### Default to JSON Output
+### JSON Output is Already Default
+
+No configuration needed - JSON is the default:
 
 ```bash
-linear config set output.format json
+# Already outputs JSON by default
+linear issue list
+
+# Use --human for readable output
+linear issue list --human
 ```
 
 ### Disable Interactive Prompts
@@ -174,17 +182,17 @@ The CLI pairs perfectly with `jq` for JSON processing:
 
 ```bash
 # Extract issue IDs
-linear issue list --json | jq -r '.issues[].id'
+linear issue list  | jq -r '.issues[].id'
 
 # Get project names
-linear project list --json | jq -r '.projects[].name'
+linear project list  | jq -r '.projects[].name'
 
 # Filter and transform
-linear issue list --json | \
+linear issue list  | \
   jq '.issues | map(select(.priority == "high")) | .[].title'
 
 # Build objects
-linear project view PROJ-123 --json | \
+linear project view PROJ-123  | \
   jq '{name: .project.name, url: .project.url, teamCount: (.project.teams | length)}'
 ```
 
@@ -193,7 +201,7 @@ linear project view PROJ-123 --json | \
 ### Checking Success
 
 ```bash
-if output=$(linear issue create --title "Test" --json 2>&1); then
+if output=$(linear issue create --title "Test"  2>&1); then
   id=$(echo "$output" | jq -r '.issue.id')
   echo "Created issue: $id"
 else
@@ -206,7 +214,7 @@ fi
 ### Handling Specific Errors
 
 ```bash
-output=$(linear document create --current-project --title "Notes" --json 2>&1)
+output=$(linear document create --current-project --title "Notes"  2>&1)
 code=$(echo "$output" | jq -r '.error.code')
 
 case $code in
@@ -224,15 +232,15 @@ esac
 
 ## Best Practices
 
-### 1. Always Use --json Flag
+### 1. JSON Output is Default
 
-This ensures consistent, parseable output regardless of terminal settings.
+JSON output is automatic - no flags needed:
 
 ```bash
-# Good
-linear issue create --title "Test" --json
+# Good - JSON by default
+linear issue create --title "Test"
 
-# Avoid (output may vary by terminal)
+# Also good - Use --human for readable output
 linear issue create --title "Test"
 ```
 
@@ -267,7 +275,7 @@ Chain with standard Unix tools for powerful workflows:
 
 ```bash
 # Find all high-priority issues and create a summary
-linear issue list --json | \
+linear issue list  | \
   jq -r '.issues[] | select(.priority == "high") | "- [\(.identifier)] \(.title)"' > high-priority.md
 ```
 
@@ -287,7 +295,7 @@ interface LinearResult {
 
 function runLinear(cmd: string): LinearResult {
   try {
-    const output = execSync(`linear ${cmd} --json`, { encoding: "utf-8" })
+    const output = execSync(`linear ${cmd} `, { encoding: "utf-8" })
     return JSON.parse(output)
   } catch (error) {
     const output = error.stdout || error.stderr

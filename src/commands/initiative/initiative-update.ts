@@ -11,7 +11,7 @@ interface UpdateOptions {
   status?: string
   owner?: string
   targetDate?: string
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -24,10 +24,10 @@ export const updateCommand = new Command()
   .option("-s, --status <status:string>", "Status ID or name")
   .option("-o, --owner <owner:string>", "Owner user ID or display name")
   .option("-t, --target-date <date:string>", "Target date (YYYY-MM-DD)")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: UpdateOptions, initiativeId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     if (
       !options.name && !options.description && !options.status &&

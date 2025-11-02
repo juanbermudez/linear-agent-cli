@@ -11,10 +11,10 @@ export const unrelateCommand = new Command()
   .name("unrelate")
   .description("Remove a relationship between two issues")
   .arguments("<issueId:string> <relatedIssueId:string>")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options, issueIdArg: string, relatedIssueIdArg: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     try {
       // Resolve issue identifiers

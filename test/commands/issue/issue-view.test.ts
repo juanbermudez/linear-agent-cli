@@ -293,7 +293,7 @@ await snapshotTest({
   name: "Issue View Command - JSON Output No Comments",
   meta: import.meta,
   colors: false,
-  args: ["TEST-123", "--json", "--no-comments"],
+  args: ["TEST-123", "--no-comments"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([
@@ -328,7 +328,7 @@ await snapshotTest({
   name: "Issue View Command - JSON Output With Comments",
   meta: import.meta,
   colors: false,
-  args: ["TEST-123", "--json"],
+  args: ["TEST-123"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([

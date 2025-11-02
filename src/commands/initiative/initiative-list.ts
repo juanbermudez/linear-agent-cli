@@ -9,7 +9,7 @@ interface ListOptions {
   status?: string
   owner?: string
   limit?: number
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -24,10 +24,10 @@ export const listCommand = new Command()
   )
   .option("--plain", "Disable colored output")
   .option("--no-color", "Disable colored output")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: ListOptions) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     let statusId: string | undefined
     let ownerId: string | undefined

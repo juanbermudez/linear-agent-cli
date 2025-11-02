@@ -28,20 +28,20 @@ This comprehensive guide helps AI agents effectively use the Linear CLI for issu
 linear --version
 
 # Check configuration
-linear whoami --json
+linear whoami
 ```
 
 ### First Commands
 
 ```bash
 # List issues
-linear issue list --json
+linear issue list 
 
 # Create issue
-linear issue create --title "Fix bug" --team ENG --json
+linear issue create --title "Fix bug" --team ENG 
 
 # View issue
-linear issue view ENG-123 --json
+linear issue view ENG-123
 ```
 
 ---
@@ -50,12 +50,12 @@ linear issue view ENG-123 --json
 
 ### 1. JSON-First Design
 
-**ALWAYS use `--json` flag for programmatic operations:**
+**JSON is the default output** - No flags needed:
 
 ```bash
-linear issue list --json
-linear project create --name "Project" --json
-linear issue view ENG-123 --json
+linear issue list
+linear project create --name "Project"
+linear issue view ENG-123
 ```
 
 ### 2. Non-Interactive Mode
@@ -63,15 +63,14 @@ linear issue view ENG-123 --json
 **Provide all required options to avoid prompts:**
 
 ```bash
-# ✓ Correct: Fully specified
+# ✓ Correct: Fully specified (JSON is default)
 linear issue create \
   --title "Task" \
   --team ENG \
-  --priority 1 \
-  --json
+  --priority 1
 
 # ✗ Incorrect: Will wait for user input
-linear issue create --json
+linear issue create
 ```
 
 ### 3. Response Structure
@@ -135,7 +134,6 @@ linear issue create \
   --related-to TEAM-NUM \
   --duplicate-of TEAM-NUM \
   --similar-to TEAM-NUM \
-  --json
 ```
 
 #### Update
@@ -143,19 +141,18 @@ linear issue create \
 ```bash
 linear issue update TEAM-NUM \
   [same options as create] \
-  --json
 ```
 
 #### View
 
 ```bash
-linear issue view TEAM-NUM --json
+linear issue view TEAM-NUM
 ```
 
 #### List
 
 ```bash
-linear issue list --team TEAM --json
+linear issue list --team TEAM
 ```
 
 #### Relationships
@@ -171,7 +168,7 @@ linear issue relate TEAM-NUM1 TEAM-NUM2 --similar-to
 linear issue unrelate TEAM-NUM1 TEAM-NUM2
 
 # List relationships
-linear issue relations TEAM-NUM --json
+linear issue relations TEAM-NUM
 ```
 
 ### Projects
@@ -190,7 +187,6 @@ linear project create \
   --target-date YYYY-MM-DD \
   --priority 0-4 \
   --status "Status Name" \
-  --json
 ```
 
 #### Update
@@ -202,21 +198,20 @@ linear project update PROJECT-SLUG \
   --lead username \
   --priority number \
   --status "Status Name" \
-  --json
 ```
 
 #### Milestones
 
 ```bash
 # Create (requires UUID)
-PROJECT_ID=$(linear project view SLUG --json | jq -r '.project.id')
+PROJECT_ID=$(linear project view SLUG  | jq -r '.project.id')
 linear project milestone create $PROJECT_ID \
   --name "Phase 1" \
   --target-date YYYY-MM-DD \
-  --json
+  
 
 # List
-linear project milestone list --project SLUG --json
+linear project milestone list --project SLUG
 ```
 
 #### Status Updates
@@ -225,7 +220,6 @@ linear project milestone list --project SLUG --json
 linear project update-create PROJECT-SLUG \
   --body "$(cat update.md)" \
   --health onTrack|atRisk|offTrack \
-  --json
 ```
 
 ### Labels
@@ -238,7 +232,7 @@ linear label create \
   --name "bug" \
   --color "#FF0000" \
   --team TEAM \
-  --json
+  
 
 # Label group (parent)
 linear label create \
@@ -246,7 +240,7 @@ linear label create \
   --color "#COLOR" \
   --team TEAM \
   --is-group \
-  --json
+  
 
 # Sub-label (child)
 linear label create \
@@ -254,7 +248,6 @@ linear label create \
   --color "#COLOR" \
   --team TEAM \
   --parent "Priority" \
-  --json
 ```
 
 **Note**: Label groups display as `parent/child` on issues.
@@ -267,7 +260,6 @@ linear initiative create \
   --description "string" \
   --content "$(cat initiative.md)" \
   --owner "@me|username" \
-  --json
 ```
 
 ### Documents
@@ -278,27 +270,26 @@ linear document create \
   --title "string" \
   --content "$(cat doc.md)" \
   --project "Project Name" \
-  --json
+  
 
 # VCS-aware (auto-detects current project)
 linear document create \
   --current-project \
   --title "Notes" \
   --content "$(cat notes.md)" \
-  --json
 ```
 
 ### Workflow & Users
 
 ```bash
 # List workflow states
-linear workflow list --team TEAM --json
+linear workflow list --team TEAM 
 
 # List users
-linear user list --json
+linear user list 
 
 # Search users
-linear user search "name" --json
+linear user search "name"
 ```
 
 ---
@@ -326,7 +317,7 @@ RESULT=$(linear issue create \
   --label backend security \
   --assignee @me \
   --blocks ENG-100 ENG-101 \
-  --json)
+  )
 
 # Check success
 if echo "$RESULT" | jq -e '.success' > /dev/null; then
@@ -353,7 +344,7 @@ PROJECT=$(linear project create \
   --priority 1 \
   --start-date 2026-01-01 \
   --target-date 2026-06-30 \
-  --json)
+  )
 
 PROJECT_ID=$(echo "$PROJECT" | jq -r '.project.id')
 PROJECT_SLUG=$(echo "$PROJECT" | jq -r '.project.slug')
@@ -362,7 +353,7 @@ PROJECT_SLUG=$(echo "$PROJECT" | jq -r '.project.slug')
 linear project milestone create $PROJECT_ID \
   --name "Phase 1" \
   --target-date 2026-03-31 \
-  --json
+  
 
 # 3. Create issues
 linear issue create \
@@ -372,13 +363,12 @@ linear issue create \
   --milestone "Phase 1" \
   --priority 1 \
   --assignee @me \
-  --json
+  
 
 # 4. Status update
 linear project update-create $PROJECT_SLUG \
   --body "Week 1: Kickoff complete" \
   --health onTrack \
-  --json
 ```
 
 ### Workflow 3: Label Hierarchy
@@ -389,21 +379,20 @@ linear project update-create $PROJECT_SLUG \
 TEAM="ENG"
 
 # 1. Create parent labels
-linear label create --name "Work-Type" --is-group --team $TEAM --json
-linear label create --name "Scope" --is-group --team $TEAM --json
+linear label create --name "Work-Type" --is-group --team $TEAM 
+linear label create --name "Scope" --is-group --team $TEAM 
 
 # 2. Create children
-linear label create --name "Bugfix" --parent "Work-Type" --team $TEAM --json
-linear label create --name "Feature" --parent "Work-Type" --team $TEAM --json
-linear label create --name "Backend" --parent "Scope" --team $TEAM --json
-linear label create --name "Frontend" --parent "Scope" --team $TEAM --json
+linear label create --name "Bugfix" --parent "Work-Type" --team $TEAM 
+linear label create --name "Feature" --parent "Work-Type" --team $TEAM 
+linear label create --name "Backend" --parent "Scope" --team $TEAM 
+linear label create --name "Frontend" --parent "Scope" --team $TEAM 
 
 # 3. Use on issue
 linear issue create \
   --title "Fix API bug" \
   --label Bugfix Backend \
   --team $TEAM \
-  --json
 ```
 
 ### Workflow 4: Issue Dependencies
@@ -416,7 +405,7 @@ PARENT=$(linear issue create \
   --title "Database migration" \
   --team ENG \
   --priority 1 \
-  --json | jq -r '.issue.identifier')
+   | jq -r '.issue.identifier')
 
 # Create dependents
 linear issue create \
@@ -424,10 +413,10 @@ linear issue create \
   --team ENG \
   --parent $PARENT \
   --blocks ENG-200 ENG-201 \
-  --json
+  
 
 # View relationships
-linear issue relations $PARENT --json
+linear issue relations $PARENT
 ```
 
 ---
@@ -445,7 +434,7 @@ def create_issue(title, team):
         ['linear', 'issue', 'create',
          '--title', title,
          '--team', team,
-         '--json'],
+         ''],
         capture_output=True,
         text=True
     )
@@ -469,7 +458,7 @@ const execAsync = util.promisify(exec)
 
 async function createIssue(title, team) {
   const { stdout } = await execAsync(
-    `linear issue create --title "${title}" --team ${team} --json`,
+    `linear issue create --title "${title}" --team ${team} `,
   )
 
   const result = JSON.parse(stdout)
@@ -565,7 +554,7 @@ def safe_create_issue(title, team):
             ['linear', 'issue', 'create',
              '--title', title,
              '--team', team,
-             '--json'],
+             ''],
             capture_output=True,
             text=True,
             check=True
@@ -604,7 +593,7 @@ def safe_create_issue(title, team):
 
 ```bash
 # ✓ Correct
-linear issue list --json | jq '.issues[].title'
+linear issue list  | jq '.issues[].title'
 
 # ✗ Incorrect
 linear issue list  # Human-readable, hard to parse
@@ -613,7 +602,7 @@ linear issue list  # Human-readable, hard to parse
 ### 2. Check Success Before Proceeding
 
 ```bash
-RESULT=$(linear issue create --title "Task" --team ENG --json)
+RESULT=$(linear issue create --title "Task" --team ENG )
 
 if echo "$RESULT" | jq -e '.success' > /dev/null; then
   # Success - continue
@@ -637,13 +626,12 @@ EOF
 linear issue create \
   --title "Task" \
   --description "$(cat spec.md)" \
-  --json
+  
 
 # ✗ Incorrect: Inline long content
 linear issue create \
   --title "Task" \
   --description "Very long text..." \
-  --json
 ```
 
 ### 4. Use Descriptive Titles
@@ -667,27 +655,25 @@ linear issue create \
 linear issue create \
   --title "Add tests" \
   --blocks ENG-123 \
-  --json
+  
 
 linear issue update ENG-124 \
   --related-to ENG-123 \
-  --json
 ```
 
 ### 6. Use Label Hierarchy
 
 ```bash
 # Create organized label structure
-linear label create --name "Type" --is-group --team ENG --json
-linear label create --name "Bug" --parent "Type" --team ENG --json
-linear label create --name "Feature" --parent "Type" --team ENG --json
+linear label create --name "Type" --is-group --team ENG 
+linear label create --name "Bug" --parent "Type" --team ENG 
+linear label create --name "Feature" --parent "Type" --team ENG 
 
 # Use on issues
 linear issue create \
   --title "Task" \
   --label Bug \
   --team ENG \
-  --json
 ```
 
 ---
@@ -709,7 +695,7 @@ class LinearCLI:
     def _exec(command: list[str]) -> Dict[str, Any]:
         """Execute Linear CLI command"""
         result = subprocess.run(
-            ['linear'] + command + ['--json'],
+            ['linear'] + command + [''],
             capture_output=True,
             text=True
         )
@@ -804,7 +790,7 @@ class LinearCLI {
    */
   static async exec(command) {
     const { stdout } = await execAsync(
-      `linear ${command.join(" ")} --json`,
+      `linear ${command.join(" ")} `,
     )
     return JSON.parse(stdout)
   }
@@ -892,47 +878,53 @@ main()
 
 ## Important Notes
 
-### 1. User References
+### 1. JSON Output
+
+- JSON is the default output format
+- Use `--human` for human-readable output
+- No flags needed for JSON
+
+### 2. User References
 
 - Use `@me` for yourself, not `self`
 - Use username or email for others
 
-### 2. Labels
+### 3. Labels
 
 - Space-separated: `--label A B C`
 - NOT repeated: `--label A --label B`
 
-### 3. Label Groups
+### 4. Label Groups
 
 - Parent must have `--is-group` flag
 - Children use `--parent "ParentName"`
 - Display as `parent/child`
 
-### 4. Milestones
+### 5. Milestones
 
 - Require project UUID (not slug)
-- Get UUID: `linear project view SLUG --json | jq -r '.project.id'`
+- Get UUID: `linear project view SLUG | jq -r '.project.id'`
 
-### 5. Cross-References
+### 6. Cross-References
 
 - Use markdown links with full URLs
 - Format: `[Text](https://linear.app/...)`
 - Plain text like `ENG-123` won't link
 
-### 6. Content Fields
+### 7. Content Fields
 
 - Project description: Max 255 chars
 - Project content: ~200KB
 - Issue description: ~200KB
 - Use files for long content: `--content "$(cat file.md)"`
 
-### 7. Relationships
+### 8. Relationships
 
 - All types are bidirectional
 - View both directions with `issue relations`
 - Types: blocks, related, duplicate, similar
 
-### 8. VCS Context
+### 9. VCS Context
 
 - CLI auto-detects issue from git branch
 - Format: `feature/ENG-123-description`
@@ -964,7 +956,7 @@ main()
 
 ### Common Flags
 
-- `--json` = JSON output (always use)
+- `--human` = Human-readable output (JSON is default)
 - `--team TEAM` = Team key
 - `--project "Name"` = Project name
 - `--assignee @me` = Self-assign

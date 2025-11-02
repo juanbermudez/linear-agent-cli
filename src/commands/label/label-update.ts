@@ -9,7 +9,7 @@ interface UpdateOptions {
   name?: string
   description?: string
   color?: string
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -20,10 +20,10 @@ export const updateCommand = new Command()
   .option("-n, --name <name:string>", "Label name")
   .option("-d, --description <description:string>", "Label description")
   .option("-c, --color <color:string>", "Label color (hex code)")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: UpdateOptions, labelId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     if (!options.name && !options.description && !options.color) {
       const errorMsg = "At least one field must be specified to update"

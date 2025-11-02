@@ -31,7 +31,6 @@ await snapshotTest({
     "alice@company.com",
     "--status",
     "planned",
-    "--json",
     "--no-color",
   ],
   denoArgs: commonDenoArgs,
@@ -122,7 +121,6 @@ await snapshotTest({
   args: [
     "--name",
     "Q2 Goals",
-    "--json",
     "--no-color",
   ],
   denoArgs: commonDenoArgs,
@@ -169,7 +167,6 @@ await snapshotTest({
     "Q1 Goals",
     "--target-date",
     "2025-03-31",
-    "--json",
     "--no-color",
   ],
   denoArgs: commonDenoArgs,

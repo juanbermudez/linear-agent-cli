@@ -60,10 +60,10 @@ export const listCommand = new Command()
   .option("--status <status:string>", "Filter by status name")
   .option("-w, --web", "Open in web browser")
   .option("-a, --app", "Open in Linear.app")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
-  .action(async ({ team, allTeams, status, web, app, json, format }) => {
-    const useJson = json || format === "json"
+  .action(async ({ team, allTeams, status, web, app, human, format }) => {
+    const useJson = !human && format !== "text"
     if (web || app) {
       let workspace = getOption("workspace")
       if (!workspace) {

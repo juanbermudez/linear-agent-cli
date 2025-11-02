@@ -18,7 +18,7 @@ interface CreateOptions {
   team?: string
   parent?: string
   isGroup?: boolean
-  json?: boolean
+  human?: boolean
   format?: string
   noInteractive?: boolean
 }
@@ -48,10 +48,10 @@ export const createCommand = new Command()
   .option("--is-group", "Mark this label as a group (container for sub-labels)")
   .option("--no-interactive", "Disable interactive mode")
   .option("--plain", "Disable colored output")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
     const interactive = !options.name && !useJson && !options.noInteractive &&
       Deno.stdout.isTerminal()
 

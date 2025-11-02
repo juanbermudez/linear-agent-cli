@@ -8,7 +8,7 @@ import {
 
 interface ArchiveOptions {
   force?: boolean
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -17,10 +17,10 @@ export const archiveCommand = new Command()
   .description("Archive an initiative")
   .arguments("<initiativeId:string>")
   .option("-f, --force", "Skip confirmation prompt")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: ArchiveOptions, initiativeId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     if (!options.force && !useJson && Deno.stdout.isTerminal()) {
       const confirmed = await Confirm.prompt({

@@ -6,7 +6,7 @@ import {
 } from "../../utils/styling.ts"
 
 interface RestoreOptions {
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -14,10 +14,10 @@ export const restoreCommand = new Command()
   .name("restore")
   .description("Restore a Linear document from trash")
   .arguments("<docId:string>")
-  .option("-j, --json", "Output result as JSON (for AI agents)")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: RestoreOptions, docId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     // Show spinner only in non-JSON mode
     const { Spinner } = await import("@std/cli/unstable-spinner")

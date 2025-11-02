@@ -32,11 +32,12 @@ interface User {
 export const listCommand = new Command()
   .name("list")
   .description("List all users in the workspace")
-  .option("--json", "Output as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--refresh", "Bypass cache and fetch fresh data")
   .option("--active-only", "Show only active users")
   .option("--admins-only", "Show only admin users")
-  .action(async ({ json, refresh, activeOnly, adminsOnly }) => {
+  .action(async ({ human, refresh, activeOnly, adminsOnly }) => {
+    const json = !human
     try {
       let users: User[]
 

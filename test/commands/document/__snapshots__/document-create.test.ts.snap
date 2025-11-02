@@ -20,7 +20,7 @@ Options:
   --color            <color>    - Icon color (hex format: #RRGGBB)                    
   --no-interactive              - Disable interactive mode                            
   --plain                       - Disable colored output                              
-  -j, --json                    - Output result as JSON (for AI agents)               
+  --human                       - Output in human-readable format (default: JSON)     
   --format           <format>   - Output format: text|json                            
 
 "
@@ -81,9 +81,17 @@ stderr:
 
 snapshot[`Document Create Command - Text Output 1`] = `
 stdout:
-"✓ Created document: Design Document
-https://linear.app/test/document/design-document
-"
+'{
+  "success": true,
+  "operation": "create",
+  "document": {
+    "id": "doc-text",
+    "title": "Design Document",
+    "slugId": "design-document",
+    "url": "https://linear.app/test/document/design-document"
+  }
+}
+'
 stderr:
 ""
 `;

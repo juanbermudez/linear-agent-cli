@@ -24,8 +24,9 @@ const viewerQuery = gql(/* GraphQL */ `
 export const whoamiCommand = new Command()
   .name("whoami")
   .description("Display current user and configuration information")
-  .option("--json", "Output as JSON")
-  .action(async ({ json }) => {
+  .option("--human", "Output in human-readable format (default: JSON)")
+  .action(async ({ human }) => {
+    const json = !human
     try {
       const client = getGraphQLClient()
       const data = await client.request(viewerQuery)

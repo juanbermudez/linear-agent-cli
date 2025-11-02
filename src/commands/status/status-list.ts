@@ -6,9 +6,10 @@ import { bold, dim } from "@std/fmt/colors"
 export const listCommand = new Command()
   .name("list")
   .description("List all project statuses")
-  .option("--json", "Output as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--refresh", "Bypass cache and fetch fresh data")
-  .action(async ({ json, refresh }) => {
+  .action(async ({ human, refresh }) => {
+    const json = !human
     try {
       const statuses = await getProjectStatuses({ refresh })
 

@@ -8,7 +8,7 @@ import {
 
 interface DeleteOptions {
   force?: boolean
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -17,10 +17,10 @@ export const deleteCommand = new Command()
   .description("Delete (trash) a Linear project")
   .arguments("<projectId:string>")
   .option("-f, --force", "Skip confirmation prompt")
-  .option("-j, --json", "Output result as JSON (for AI agents)")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: DeleteOptions, projectId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     // Prompt for confirmation unless --force
     if (!options.force && !useJson && Deno.stdout.isTerminal()) {

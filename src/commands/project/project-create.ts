@@ -27,7 +27,7 @@ interface CreateOptions {
   priority?: number
   withDoc?: boolean
   docTitle?: string
-  json?: boolean
+  human?: boolean
   format?: string
   noInteractive?: boolean
 }
@@ -243,7 +243,7 @@ async function interactiveCreate(options: CreateOptions) {
 }
 
 async function flagBasedCreate(options: CreateOptions) {
-  const useJson = options.json || options.format === "json"
+  const useJson = !options.human && options.format !== "text"
 
   // Validate required fields
   if (!options.name) {
@@ -706,10 +706,10 @@ export const createCommand = new Command()
   .option("--doc-title <title:string>", "Document title (used with --with-doc)")
   .option("--no-interactive", "Disable interactive mode")
   .option("--plain", "Disable colored output")
-  .option("-j, --json", "Output result as JSON (for AI agents)")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: CreateOptions) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
     const interactive = !options.name && !useJson && !options.noInteractive &&
       Deno.stdout.isTerminal()
 

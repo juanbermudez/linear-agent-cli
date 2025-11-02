@@ -11,11 +11,11 @@ Description:
 
 Options:
 
-  -h, --help            - Show this help.           
-  -w, --web             - Open in web browser       
-  -a, --app             - Open in Linear.app        
-  -j, --json            - Output result as JSON     
-  --format    <format>  - Output format: text|json  
+  -h, --help            - Show this help.                                  
+  -w, --web             - Open in web browser                              
+  -a, --app             - Open in Linear.app                               
+  --human               - Output in human-readable format (default: JSON)  
+  --format    <format>  - Output format: text|json                         
 
 "
 stderr:
@@ -24,81 +24,111 @@ stderr:
 
 snapshot[`Project View Command - With Project Details 1`] = `
 stdout:
-"# 🔐 Authentication System Redesign
-
-**Slug:** auth-redesign-2024
-**URL:** https://linear.app/acme/project/auth-redesign-2024
-**Status:** In Progress
-**Priority:** High
-**Health:** onTrack
-**Creator:** John Admin
-**Lead:** Jane Lead
-**Start Date:** 2024-01-15
-**Target Date:** 2024-04-30
-**Started At:** 1/16/2024
-**Teams:** Backend Team (BACKEND), Security Team (SECURITY)
-
-**Created:** 1/10/2024
-**Updated:** 1/25/2024
-
-## Description
-
-Complete overhaul of the authentication system to improve security and user experience.
-
-## Goals
-- Implement OAuth 2.0 / OpenID Connect
-- Add multi-factor authentication
-- Improve password reset flow
-- Add social login options
-
-## Technical Requirements
-- JWT tokens with proper rotation
-- Rate limiting on auth endpoints
-- Audit logging for security events
-- GDPR compliance for user data
-
-## Latest Update
-
-**By:** Jane Lead
-**When:** 1/22/2024
-**Health:** onTrack
-
-Great progress this week! The OAuth implementation is nearly complete and we're on track for our Q1 delivery. The team has been collaborating well across backend and security concerns.
-
-**This week's highlights:**
-- OAuth 2.0 flow implementation 80% complete
-- MFA design reviews completed
-- Security penetration testing scheduled
-
-**Next week:**
-- Complete OAuth testing
-- Begin MFA implementation
-- Finalize UI designs
-
-## Issues Summary
-
-**Total Issues:** 4
-**Completed:** 1
-**In Progress:** 1
-**To Do:** 1
-**Canceled:** 1
-"
+\`{
+  "project": {
+    "id": "project-123",
+    "name": "Authentication System Redesign",
+    "slugId": "auth-redesign-2024",
+    "description": "Complete overhaul of the authentication system to improve security and user experience.\\\\n\\\\n## Goals\\\\n- Implement OAuth 2.0 / OpenID Connect\\\\n- Add multi-factor authentication\\\\n- Improve password reset flow\\\\n- Add social login options\\\\n\\\\n## Technical Requirements\\\\n- JWT tokens with proper rotation\\\\n- Rate limiting on auth endpoints\\\\n- Audit logging for security events\\\\n- GDPR compliance for user data",
+    "url": "https://linear.app/acme/project/auth-redesign-2024",
+    "icon": "🔐",
+    "color": "#3b82f6",
+    "status": {
+      "id": "status-started",
+      "name": "In Progress",
+      "color": "#f59e0b"
+    },
+    "creator": {
+      "name": "john.admin",
+      "displayName": "John Admin"
+    },
+    "lead": {
+      "name": "jane.lead",
+      "displayName": "Jane Lead"
+    },
+    "priority": 2,
+    "health": "onTrack",
+    "startDate": "2024-01-15",
+    "targetDate": "2024-04-30",
+    "startedAt": "2024-01-16T09:00:00Z",
+    "completedAt": null,
+    "canceledAt": null,
+    "createdAt": "2024-01-10T10:00:00Z",
+    "updatedAt": "2024-01-25T14:30:00Z",
+    "teams": [
+      {
+        "id": "team-1",
+        "key": "BACKEND",
+        "name": "Backend Team"
+      },
+      {
+        "id": "team-2",
+        "key": "SECURITY",
+        "name": "Security Team"
+      }
+    ],
+    "issuesSummary": {
+      "total": 4,
+      "byState": {
+        "started": 1,
+        "unstarted": 1,
+        "completed": 1,
+        "canceled": 1
+      }
+    },
+    "lastUpdate": {
+      "id": "update-1",
+      "health": "onTrack",
+      "bodyPreview": "Great progress this week! The OAuth implementation is nearly complete and we're on track for our Q1 delivery. The team has been collaborating well across backend and security concerns.\\\\n\\\\n**This week's ",
+      "createdAt": "2024-01-22T16:00:00Z",
+      "author": {
+        "name": "jane.lead",
+        "displayName": "Jane Lead"
+      }
+    }
+  }
+}
+\`
 stderr:
 ""
 `;
 
 snapshot[`Project View Command - Minimal Project 1`] = `
 stdout:
-"# Simple Project
-
-**Slug:** simple
-**URL:** https://linear.app/acme/project/simple
-**Status:** Backlog
-**Priority:** None
-
-**Created:** 1/20/2024
-**Updated:** 1/20/2024
-"
+'{
+  "project": {
+    "id": "minimal-project",
+    "name": "Simple Project",
+    "slugId": "simple",
+    "description": "",
+    "url": "https://linear.app/acme/project/simple",
+    "icon": null,
+    "color": "#64748b",
+    "status": {
+      "id": "status-backlog",
+      "name": "Backlog",
+      "color": "#94a3b8"
+    },
+    "creator": null,
+    "lead": null,
+    "priority": 0,
+    "health": null,
+    "startDate": null,
+    "targetDate": null,
+    "startedAt": null,
+    "completedAt": null,
+    "canceledAt": null,
+    "createdAt": "2024-01-20T12:00:00Z",
+    "updatedAt": "2024-01-20T12:00:00Z",
+    "teams": [],
+    "issuesSummary": {
+      "total": 0,
+      "byState": {}
+    },
+    "lastUpdate": null
+  }
+}
+'
 stderr:
 ""
 `;

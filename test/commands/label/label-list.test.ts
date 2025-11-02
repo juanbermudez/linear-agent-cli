@@ -87,7 +87,7 @@ await snapshotTest({
   name: "Label List Command - JSON Output",
   meta: import.meta,
   colors: false,
-  args: ["--json", "--plain"],
+  args: ["--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([

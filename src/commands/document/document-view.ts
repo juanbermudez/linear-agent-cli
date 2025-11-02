@@ -11,7 +11,7 @@ interface ViewOptions {
   app?: boolean
   comments?: boolean
   pager?: boolean
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -24,10 +24,10 @@ export const viewCommand = new Command()
   .option("--no-comments", "Exclude comments from output")
   .option("--plain", "Disable colored output")
   .option("--no-pager", "Disable automatic paging")
-  .option("-j, --json", "Output result as JSON (for AI agents)")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: ViewOptions, docId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
     const showComments = options.comments !== false
     const usePager = options.pager !== false
 

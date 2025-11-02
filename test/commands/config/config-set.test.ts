@@ -46,7 +46,7 @@ await snapshotTest({
   name: "Config Set Command - Simple Value",
   meta: import.meta,
   colors: false,
-  args: ["workspace", "new-workspace", "--json"],
+  args: ["workspace", "new-workspace"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupTempConfig()
@@ -64,7 +64,7 @@ await snapshotTest({
   name: "Config Set Command - Nested Value (Dot Notation)",
   meta: import.meta,
   colors: false,
-  args: ["defaults.project.status", "In Progress", "--json"],
+  args: ["defaults.project.status", "In Progress"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupTempConfig()
@@ -82,7 +82,7 @@ await snapshotTest({
   name: "Config Set Command - Boolean Value",
   meta: import.meta,
   colors: false,
-  args: ["interactive.enabled", "true", "--json"],
+  args: ["interactive.enabled", "true"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupTempConfig()
@@ -100,7 +100,7 @@ await snapshotTest({
   name: "Config Set Command - Number Value",
   meta: import.meta,
   colors: false,
-  args: ["defaults.milestone.targetDateOffset", "30", "--json"],
+  args: ["defaults.milestone.targetDateOffset", "30"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupTempConfig()
@@ -118,7 +118,7 @@ await snapshotTest({
   name: "Config Set Command - Deeply Nested Value",
   meta: import.meta,
   colors: false,
-  args: ["level1.level2.level3.value", "deep", "--json"],
+  args: ["level1.level2.level3.value", "deep"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupTempConfig()
@@ -154,7 +154,7 @@ await snapshotTest({
   name: "Config Set Command - String With Leading Zero",
   meta: import.meta,
   colors: false,
-  args: ["code", "0123", "--json"],
+  args: ["code", "0123"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupTempConfig()
@@ -172,7 +172,7 @@ await snapshotTest({
   name: "Config Set Command - False Boolean",
   meta: import.meta,
   colors: false,
-  args: ["output.color", "false", "--json"],
+  args: ["output.color", "false"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupTempConfig()
@@ -190,7 +190,7 @@ await snapshotTest({
   name: "Config Set Command - Float Value",
   meta: import.meta,
   colors: false,
-  args: ["version", "1.5", "--json"],
+  args: ["version", "1.5"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupTempConfig()

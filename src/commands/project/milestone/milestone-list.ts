@@ -5,7 +5,7 @@ import { header, muted } from "../../../utils/styling.ts"
 import { error as errorColor } from "../../../utils/styling.ts"
 
 interface ListOptions {
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -13,10 +13,10 @@ export const listCommand = new Command()
   .name("list")
   .description("List project milestones")
   .arguments("<projectId:string>")
-  .option("-j, --json", "Output result as JSON (for AI agents)")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: ListOptions, projectId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     const { Spinner } = await import("@std/cli/unstable-spinner")
     const showSpinner = !useJson && Deno.stdout.isTerminal()

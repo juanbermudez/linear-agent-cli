@@ -3,7 +3,7 @@ import { getConfigManager } from "../../utils/config-manager.ts"
 import { error as errorColor } from "../../utils/styling.ts"
 
 interface GetOptions {
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -11,10 +11,10 @@ export const getCommand = new Command()
   .name("get")
   .description("Get a configuration value")
   .arguments("<key:string>")
-  .option("-j, --json", "Output result as JSON")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: GetOptions, key: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     try {
       const configManager = await getConfigManager()

@@ -10,7 +10,7 @@ interface UpdateOptions {
   description?: string
   targetDate?: string
   status?: string
-  json?: boolean
+  human?: boolean
   format?: string
 }
 
@@ -25,10 +25,10 @@ export const updateCommand = new Command()
     "-s, --status <status:string>",
     "New status (todo, in_progress, done, canceled)",
   )
-  .option("-j, --json", "Output result as JSON (for AI agents)")
+  .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: UpdateOptions, milestoneId: string) => {
-    const useJson = options.json || options.format === "json"
+    const useJson = !options.human && options.format !== "text"
 
     // Validate at least one field is provided
     if (

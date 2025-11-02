@@ -11,11 +11,11 @@ Description:
 
 Options:
 
-  -h, --help            - Show this help.           
-  -t, --team  <team>    - Filter by team ID or key  
-  --plain               - Disable colored output    
-  -j, --json            - Output result as JSON     
-  --format    <format>  - Output format: text|json  
+  -h, --help            - Show this help.                                  
+  -t, --team  <team>    - Filter by team ID or key                         
+  --plain               - Disable colored output                           
+  --human               - Output in human-readable format (default: JSON)  
+  --format    <format>  - Output format: text|json                         
 
 "
 stderr:
@@ -24,16 +24,41 @@ stderr:
 
 snapshot[`Label List Command - All Labels 1`] = `
 stdout:
-"┌───────────────┬───────┬───────────────────────┬───────────────────┐
-│ Name          │ Color │ Description           │ Team              │
-├───────────────┼───────┼───────────────────────┼───────────────────┤
-│ bug           │       │ Bug reports and fixes │ Engineering (ENG) │
-├───────────────┼───────┼───────────────────────┼───────────────────┤
-│ feature       │       │ New features          │ Product (PROD)    │
-├───────────────┼───────┼───────────────────────┼───────────────────┤
-│ documentation │       │ -                     │ Organization      │
-└───────────────┴───────┴───────────────────────┴───────────────────┘
-"
+'{
+  "labels": [
+    {
+      "id": "label-1",
+      "name": "bug",
+      "description": "Bug reports and fixes",
+      "color": "#FF0000",
+      "team": {
+        "id": "team-eng",
+        "key": "ENG",
+        "name": "Engineering"
+      }
+    },
+    {
+      "id": "label-2",
+      "name": "feature",
+      "description": "New features",
+      "color": "#00FF00",
+      "team": {
+        "id": "team-product",
+        "key": "PROD",
+        "name": "Product"
+      }
+    },
+    {
+      "id": "label-3",
+      "name": "documentation",
+      "description": null,
+      "color": "#0000FF",
+      "team": null
+    }
+  ],
+  "count": 3
+}
+'
 stderr:
 ""
 `;
@@ -63,8 +88,11 @@ stderr:
 
 snapshot[`Label List Command - No Labels Found 1`] = `
 stdout:
-"No labels found
-"
+'{
+  "labels": [],
+  "count": 0
+}
+'
 stderr:
 ""
 `;

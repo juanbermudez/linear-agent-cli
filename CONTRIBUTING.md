@@ -139,7 +139,7 @@ export async function createIssue(options: any) {
 Each command should:
 
 - Support both interactive and flag-based modes
-- Provide JSON output with `--json` flag
+- Provide JSON output by default (use `--human` for readable output)
 - Include helpful error messages
 - Follow existing command patterns
 
@@ -150,10 +150,10 @@ export const myCommand = new Command()
   .name("my-command")
   .description("Description of command")
   .option("-n, --name <name:string>", "Name option")
-  .option("--json", "Output as JSON")
+  .option("--human", "Output in human-readable format")
   .action(async (options) => {
     // Interactive mode
-    if (!options.name && !options.json) {
+    if (!options.name && options.human) {
       options.name = await Input.prompt({
         message: "Name:",
       })
@@ -168,11 +168,11 @@ export const myCommand = new Command()
     // Execute
     const result = await doSomething(options.name)
 
-    // Output
-    if (options.json) {
-      console.log(JSON.stringify({ success: true, result }))
-    } else {
+    // Output (JSON is default)
+    if (options.human) {
       console.log(`✓ Success: ${result}`)
+    } else {
+      console.log(JSON.stringify({ success: true, result }))
     }
   })
 ```

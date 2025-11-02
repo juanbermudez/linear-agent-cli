@@ -11,14 +11,14 @@ Description:
 
 Options:
 
-  -h, --help               - Show this help.                        
-  -w, --web                - Open in web browser                    
-  -a, --app                - Open in Linear.app                     
-  --no-comments            - Exclude comments from output           
-  --plain                  - Disable colored output                 
-  --no-pager               - Disable automatic paging               
-  -j, --json               - Output result as JSON (for AI agents)  
-  --format       <format>  - Output format: text|json               
+  -h, --help               - Show this help.                                  
+  -w, --web                - Open in web browser                              
+  -a, --app                - Open in Linear.app                               
+  --no-comments            - Exclude comments from output                     
+  --plain                  - Disable colored output                           
+  --no-pager               - Disable automatic paging                         
+  --human                  - Output in human-readable format (default: JSON)  
+  --format       <format>  - Output format: text|json                         
 
 "
 stderr:
@@ -27,22 +27,37 @@ stderr:
 
 snapshot[`Document View Command - Markdown Rendering 1`] = `
 stdout:
-"API Design Document
-
-Created by Alice Smith 1/10/2024
-Updated 1/15/2024
-Project: Backend Platform
-
-https://linear.app/test/document/api-design-document
-
-# API Design
-
-This document describes the API design for the new backend service.
-
-## Overview
-
-The API will use REST principles with JSON payloads.
-"
+'{
+  "success": true,
+  "operation": "view",
+  "document": {
+    "id": "doc-123",
+    "title": "API Design Document",
+    "slugId": "api-design-document",
+    "url": "https://linear.app/test/document/api-design-document",
+    "icon": null,
+    "color": null,
+    "content": "# API Design\\\\n\\\\nThis document describes the API design for the new backend service.\\\\n\\\\n## Overview\\\\n\\\\nThe API will use REST principles with JSON payloads.",
+    "creator": {
+      "id": "user-alice",
+      "name": "Alice Smith"
+    },
+    "updatedBy": {
+      "id": "user-alice",
+      "name": "Alice Smith"
+    },
+    "project": {
+      "id": "project-789",
+      "name": "Backend Platform",
+      "url": "https://linear.app/test/project/backend-platform"
+    },
+    "initiative": null,
+    "createdAt": "2024-01-10T10:00:00Z",
+    "updatedAt": "2024-01-15T14:30:00Z",
+    "comments": []
+  }
+}
+'
 stderr:
 ""
 `;
@@ -82,51 +97,107 @@ stderr:
 
 snapshot[`Document View Command - No Project Linked 1`] = `
 stdout:
-"Standalone Document
-
-Created by Charlie Brown 1/14/2024
-Updated 1/14/2024
-
-https://linear.app/test/document/standalone-document
-
-# Standalone
-
-This document is not linked to any project.
-"
+'{
+  "success": true,
+  "operation": "view",
+  "document": {
+    "id": "doc-solo",
+    "title": "Standalone Document",
+    "slugId": "standalone-document",
+    "url": "https://linear.app/test/document/standalone-document",
+    "icon": null,
+    "color": null,
+    "content": "# Standalone\\\\n\\\\nThis document is not linked to any project.",
+    "creator": {
+      "id": "user-charlie",
+      "name": "Charlie Brown"
+    },
+    "updatedBy": {
+      "id": "user-charlie",
+      "name": "Charlie Brown"
+    },
+    "project": null,
+    "initiative": null,
+    "createdAt": "2024-01-14T15:00:00Z",
+    "updatedAt": "2024-01-14T15:00:00Z",
+    "comments": []
+  }
+}
+'
 stderr:
 ""
 `;
 
 snapshot[`Document View Command - Empty Content 1`] = `
 stdout:
-"New Document
-
-Created by Alice Smith 1/16/2024
-Updated 1/16/2024
-Project: Mobile App
-
-https://linear.app/test/document/new-document
-
-(No content)
-"
+'{
+  "success": true,
+  "operation": "view",
+  "document": {
+    "id": "doc-empty",
+    "title": "New Document",
+    "slugId": "new-document",
+    "url": "https://linear.app/test/document/new-document",
+    "icon": null,
+    "color": null,
+    "content": null,
+    "creator": {
+      "id": "user-alice",
+      "name": "Alice Smith"
+    },
+    "updatedBy": {
+      "id": "user-alice",
+      "name": "Alice Smith"
+    },
+    "project": {
+      "id": "project-123",
+      "name": "Mobile App",
+      "url": "https://linear.app/test/project/mobile-app"
+    },
+    "initiative": null,
+    "createdAt": "2024-01-16T08:00:00Z",
+    "updatedAt": "2024-01-16T08:00:00Z",
+    "comments": []
+  }
+}
+'
 stderr:
 ""
 `;
 
 snapshot[`Document View Command - By Slug ID 1`] = `
 stdout:
-"API Design Document
-
-Created by Alice Smith 1/10/2024
-Updated 1/15/2024
-Project: Backend Services
-
-https://linear.app/test/document/api-design-document
-
-# API Design
-
-Detailed specifications for the new API.
-"
+'{
+  "success": true,
+  "operation": "view",
+  "document": {
+    "id": "doc-789",
+    "title": "API Design Document",
+    "slugId": "api-design-document",
+    "url": "https://linear.app/test/document/api-design-document",
+    "icon": null,
+    "color": null,
+    "content": "# API Design\\\\n\\\\nDetailed specifications for the new API.",
+    "creator": {
+      "id": "user-alice",
+      "name": "Alice Smith"
+    },
+    "updatedBy": {
+      "id": "user-alice",
+      "name": "Alice Smith"
+    },
+    "project": {
+      "id": "project-456",
+      "name": "Backend Services",
+      "url": "https://linear.app/test/project/backend-services"
+    },
+    "initiative": null,
+    "createdAt": "2024-01-10T10:00:00Z",
+    "updatedAt": "2024-01-15T14:30:00Z",
+    "comments": []
+  }
+}
+'
 stderr:
 ""
 `;

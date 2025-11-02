@@ -25,7 +25,7 @@
 
 A Deno-based CLI tool for Linear API that's optimized for AI agent automation:
 
-- JSON output for all commands
+- JSON output by default (use `--human` for readable format)
 - Non-interactive (no prompts required)
 - VCS-aware (detects issues from git branches)
 - Type-safe with TypeScript and Linear SDK
@@ -66,8 +66,8 @@ cd linear-agent-cli
 # Run without installing
 deno run --allow-all src/main.ts --version
 
-# Test a command
-deno run --allow-all src/main.ts issue list --json
+# Test a command (JSON is default)
+deno run --allow-all src/main.ts issue list
 ```
 
 ### Test Your Changes
@@ -104,8 +104,8 @@ export async function resourceAction(args: string[]) {
   // 1. Parse arguments
   const parsed = parseArgs(args, {
     string: ["required-field", "optional-field"],
-    boolean: ["json"],
-    default: { json: false },
+    boolean: ["human"],
+    default: { human: false },
   })
 
   // 2. Validate input
@@ -119,11 +119,11 @@ export async function resourceAction(args: string[]) {
     requiredField: parsed["required-field"],
   })
 
-  // 4. Format output
-  if (parsed.json) {
-    console.log(JSON.stringify({ success: true, data: result }))
-  } else {
+  // 4. Format output (JSON is default)
+  if (parsed.human) {
     console.log(`✓ Success: ${result.name}`)
+  } else {
+    console.log(JSON.stringify({ success: true, data: result }))
   }
 }
 ```
@@ -380,17 +380,17 @@ Deno.test("mocked API call", async () => {
 
 ## Common Tasks
 
-### Task: Add JSON Output to Command
+### Task: Add Human-Readable Output to Command
 
 ```typescript
-// Before: Human-readable only
-console.log(`Created issue ${result.identifier}`)
+// Before: JSON only (default)
+console.log(JSON.stringify({ success: true, issue: result }))
 
 // After: Support both modes
-if (parsed.json) {
-  console.log(JSON.stringify({ success: true, issue: result }))
-} else {
+if (parsed.human) {
   console.log(`✓ Created issue ${result.identifier}`)
+} else {
+  console.log(JSON.stringify({ success: true, issue: result }))
 }
 ```
 
@@ -584,7 +584,7 @@ deno run --allow-all src/main.ts your-command --json
 ### Development Principles
 
 1. **AI-Agent First**: Design for programmatic use
-2. **JSON Everything**: All commands must support `--json`
+2. **JSON by Default**: JSON is the default output (use `--human` for readable format)
 3. **No Prompts**: Never require interactive input
 4. **Type Safety**: Use Linear SDK types
 5. **Clear Errors**: Actionable error messages
@@ -626,8 +626,8 @@ import { getClient } from "../../api/client.ts"
 export async function myCommand(args: string[]) {
   const parsed = parseArgs(args, {
     string: ["field"],
-    boolean: ["json"],
-    default: { json: false },
+    boolean: ["human"],
+    default: { human: false },
   })
 
   if (!parsed.field) throw new Error("--field is required")
@@ -635,10 +635,11 @@ export async function myCommand(args: string[]) {
   const client = getClient()
   const result = await client.doSomething({ field: parsed.field })
 
-  if (parsed.json) {
-    console.log(JSON.stringify({ success: true, data: result }))
-  } else {
+  // JSON is default
+  if (parsed.human) {
     console.log(`✓ ${result.name}`)
+  } else {
+    console.log(JSON.stringify({ success: true, data: result }))
   }
 }
 ```
@@ -649,8 +650,8 @@ export async function myCommand(args: string[]) {
 import { assertEquals } from "@std/assert"
 
 Deno.test("my command - success case", async () => {
-  // Setup
-  const args = ["--field", "value", "--json"]
+  // Setup (JSON is default)
+  const args = ["--field", "value"]
 
   // Execute
   const result = await myCommand(args)
