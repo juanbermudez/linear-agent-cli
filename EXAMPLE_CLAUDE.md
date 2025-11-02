@@ -173,6 +173,111 @@ linear issue unrelate ENG-123 ENG-124
 linear issue relations ENG-123
 ```
 
+#### Issue Comments
+
+**List Comments:**
+
+```bash
+# List comments for specific issue (JSON by default)
+linear issue comment list ENG-123
+
+# List comments for current issue (from git context)
+linear issue comment list
+
+# Human-readable output
+linear issue comment list ENG-123 --human
+
+# Limit number of comments
+linear issue comment list ENG-123 --limit 10
+```
+
+**Create Comments:**
+
+```bash
+# Simple comment
+linear issue comment create ENG-123 --body "This looks good to merge"
+
+# Comment on current issue (from git context)
+linear issue comment create --body "Fixed in latest commit"
+
+# Multi-line comment from file
+linear issue comment create ENG-123 --body-from-file comment.md
+
+# Multi-line comment from stdin
+echo "Ready for review" | linear issue comment create ENG-123 --body-from-file -
+```
+
+**Common Use Cases:**
+
+```bash
+# Status update with context
+linear issue comment create ENG-123 --body "Completed initial implementation. Tests passing locally, ready for code review."
+
+# Request review with mention
+linear issue comment create ENG-123 --body "@alice Could you review the authentication changes when you get a chance?"
+
+# Document decision
+cat > decision.md << 'EOF'
+## Decision: Use PostgreSQL for User Data
+
+### Context
+We need a reliable database for user authentication and profiles.
+
+### Options Considered
+1. MongoDB - Document flexibility
+2. PostgreSQL - ACID compliance
+3. DynamoDB - Serverless scaling
+
+### Decision
+Going with PostgreSQL for strong consistency and relational data integrity.
+EOF
+
+linear issue comment create ENG-123 --body-from-file decision.md
+
+# Parse and analyze comments (JSON is default)
+RESULT=$(linear issue comment list ENG-123)
+MENTIONS=$(echo "$RESULT" | jq '.comments[] | select(.body | contains("@"))')
+ACTION_ITEMS=$(echo "$RESULT" | jq '.comments[] | select(.body | contains("TODO:"))')
+```
+
+#### Issue Attachments
+
+**List Attachments:**
+
+```bash
+# List attachments for specific issue (JSON by default)
+linear issue attachment list ENG-123
+
+# List attachments for current issue (from git context)
+linear issue attachment list
+
+# Human-readable output
+linear issue attachment list ENG-123 --human
+```
+
+**Common Use Cases:**
+
+```bash
+# Find screenshots in bug reports (JSON is default)
+RESULT=$(linear issue attachment list ENG-123)
+SCREENSHOTS=$(echo "$RESULT" | jq '.attachments[] | select(.title | test("screenshot|Screenshot") or .url | test("\\.png|\\.jpg"))')
+
+# Get GitHub PR links
+PR_LINKS=$(echo "$RESULT" | jq '.attachments[] | select(.sourceType == "github" and (.url | contains("/pull/")))')
+
+# Get Figma design links
+FIGMA_LINKS=$(echo "$RESULT" | jq '.attachments[] | select(.url | contains("figma.com"))')
+
+# Extract all uploaded images for analysis
+IMAGE_URLS=$(echo "$RESULT" | jq -r '.attachments[] | select(.sourceType == "upload") | .url')
+
+# Use with vision APIs to analyze screenshots
+for url in $IMAGE_URLS; do
+  echo "Analyzing: $url"
+  # Send to vision API for text extraction, UI element identification, etc.
+done
+```
+
 ### Project Management
 
 #### Creating Projects
@@ -582,6 +687,66 @@ try {
     "priority": 1,
     "estimate": 5
   }
+}
+```
+
+### Issue Comment Response
+
+```json
+{
+  "success": true,
+  "comments": [
+    {
+      "id": "uuid",
+      "body": "This looks good to merge",
+      "createdAt": "2025-11-02T10:00:00.000Z",
+      "updatedAt": "2025-11-02T10:00:00.000Z",
+      "author": {
+        "id": "uuid",
+        "name": "John Doe",
+        "displayName": "John",
+        "email": "john@example.com"
+      },
+      "issue": {
+        "id": "uuid",
+        "identifier": "ENG-123"
+      }
+    }
+  ]
+}
+```
+
+### Issue Attachment Response
+
+```json
+{
+  "success": true,
+  "attachments": [
+    {
+      "id": "uuid",
+      "title": "Screenshot 2025-11-02",
+      "subtitle": "Bug report screenshot",
+      "url": "https://linear.app/attachments/...",
+      "sourceType": "upload",
+      "metadata": {
+        "size": 123456,
+        "contentType": "image/png"
+      },
+      "createdAt": "2025-11-02T10:00:00.000Z",
+      "creator": {
+        "name": "John Doe",
+        "email": "john@example.com"
+      }
+    },
+    {
+      "id": "uuid",
+      "title": "Fix login bug",
+      "subtitle": "Pull Request #123",
+      "url": "https://github.com/org/repo/pull/123",
+      "sourceType": "github",
+      "createdAt": "2025-11-02T11:00:00.000Z"
+    }
+  ]
 }
 ```
 

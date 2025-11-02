@@ -259,6 +259,132 @@ linear issue relations ENG-123
 # - Blocked by: ENG-122 (inverse relationship)
 ```
 
+### Issue Comments
+
+**List Comments:**
+
+```bash
+# List comments on specific issue
+linear issue comment list ENG-123
+
+# List comments on current issue (from git branch)
+linear issue comment list
+
+# JSON output (default)
+linear issue comment list ENG-123
+
+# Human-readable table format
+linear issue comment list ENG-123 --human
+
+# Limit number of comments
+linear issue comment list ENG-123 --limit 10
+```
+
+**Create Comments:**
+
+```bash
+# Add a comment
+linear issue comment create ENG-123 --body "This looks good to merge"
+
+# Add comment to current issue (from git branch)
+linear issue comment create --body "Fixed in latest commit"
+
+# Add comment from file
+linear issue comment create ENG-123 --body-from-file comment.md
+
+# Add comment from stdin
+echo "Ready for review" | linear issue comment create ENG-123 --body-from-file -
+
+# Multi-line comment
+linear issue comment create ENG-123 --body "$(cat <<'EOF'
+## Testing Results
+- Unit tests: ✅
+- Integration tests: ✅
+- E2E tests: ✅
+EOF
+)"
+```
+
+**Common Examples:**
+
+```bash
+# Leave status update
+linear issue comment create --body "Blocked waiting for design review"
+
+# Request review
+linear issue comment create ENG-123 --body "@alice Please review when you get a chance"
+
+# Document decision
+linear issue comment create ENG-123 --body "$(cat decision-doc.md)"
+
+# Quick note
+linear issue comment create --body "Fixed typo in title"
+```
+
+### Issue Attachments
+
+**List Attachments:**
+
+```bash
+# List attachments on specific issue
+linear issue attachment list ENG-123
+
+# List attachments on current issue (from git branch)
+linear issue attachment list
+
+# JSON output (default)
+linear issue attachment list ENG-123
+
+# Human-readable table format
+linear issue attachment list ENG-123 --human
+```
+
+**JSON Response Example:**
+
+```json
+{
+  "success": true,
+  "issue": {
+    "id": "abc-123",
+    "identifier": "ENG-123",
+    "title": "Fix login bug"
+  },
+  "attachments": [
+    {
+      "id": "att-456",
+      "title": "Screenshot of error",
+      "subtitle": null,
+      "url": "https://linear.app/attachments/...",
+      "createdAt": "2025-01-15T10:30:00Z",
+      "creator": {
+        "id": "user-789",
+        "name": "alice",
+        "displayName": "Alice Smith"
+      },
+      "sourceType": "upload",
+      "metadata": {}
+    }
+  ],
+  "count": 1
+}
+```
+
+**Common Use Cases:**
+
+```bash
+# Check for screenshots on bug reports
+linear issue attachment list ENG-123 | jq '.attachments[] | select(.title | contains("screenshot"))'
+
+# List all attachment URLs
+linear issue attachment list ENG-123 | jq '.attachments[].url'
+
+# Count attachments
+linear issue attachment list ENG-123 | jq '.count'
+
+# Find specific attachment types
+linear issue attachment list ENG-123 | jq '.attachments[] | select(.sourceType == "github")'
+```
+
 ## Project Management
 
 ### Creating Projects

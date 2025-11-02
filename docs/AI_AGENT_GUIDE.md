@@ -142,6 +142,92 @@ for (const name of projects) {
 }
 ```
 
+### 5. Issue Collaboration with Comments
+
+```typescript
+// Add status update comment
+execSync(`linear issue comment create ENG-123 \
+  --body "Completed initial implementation, ready for review" \
+  `)
+
+// Request review with mention
+execSync(`linear issue comment create ENG-123 \
+  --body "@alice Please review the API changes when you get a chance" \
+  `)
+
+// Add multi-line decision document
+const decisionDoc = `
+## Decision: Use PostgreSQL for User Data
+
+### Context
+We need a reliable database for user authentication and profiles.
+
+### Options Considered
+1. MongoDB - Document flexibility
+2. PostgreSQL - ACID compliance
+3. DynamoDB - Serverless scaling
+
+### Decision
+PostgreSQL for strong consistency and relational data.
+`
+execSync(`linear issue comment create ENG-123 \
+  --body "${decisionDoc.trim()}" \
+  `)
+
+// List and analyze comments
+const result = execSync("linear issue comment list ENG-123 ").toString()
+const { comments } = JSON.parse(result)
+
+// Find comments with mentions
+const mentions = comments.filter((c) => c.body.includes("@"))
+
+// Extract action items from comments
+const actionItems = comments.flatMap((c) => {
+  const matches = c.body.match(/TODO: (.*)/g) || []
+  return matches.map((m) => ({
+    author: c.author.displayName,
+    item: m,
+    createdAt: c.createdAt,
+  }))
+})
+```
+
+### 6. Discovering Issue Context with Attachments
+
+```typescript
+// List attachments to find screenshots and related resources
+const result = execSync("linear issue attachment list ENG-123 ").toString()
+const { attachments } = JSON.parse(result)
+
+// Find screenshots for bug reports
+const screenshots = attachments.filter((a) =>
+  a.title.toLowerCase().includes("screenshot") ||
+  a.url.includes(".png") ||
+  a.url.includes(".jpg")
+)
+
+// Get GitHub PR links
+const githubPRs = attachments.filter((a) =>
+  a.sourceType === "github" &&
+  a.url.includes("/pull/")
+)
+
+// Get Figma design links
+const figmaLinks = attachments.filter((a) => a.url.includes("figma.com"))
+
+// Download attachment URLs for analysis
+const imageUrls = attachments
+  .filter((a) => a.sourceType === "upload")
+  .map((a) => a.url)
+
+// Use with vision APIs to analyze screenshots
+for (const url of imageUrls) {
+  // Send to vision API to extract text, identify UI elements, etc.
+  const analysis = await analyzeImage(url)
+  console.log(`Screenshot analysis: ${analysis}`)
+}
+```
+
 ## Configuration for AI Agents
 
 ### JSON Output is Already Default
