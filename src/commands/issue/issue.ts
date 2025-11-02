@@ -39,9 +39,7 @@ export const issueCommand = commandWithSubcommands
   .command("update", updateCommand)
   .command("relate", relateCommand)
   .command("unrelate", unrelateCommand)
-  // deno-lint-ignore no-explicit-any
   .command("relations", relationsCommand)
-  // deno-lint-ignore no-explicit-any
   .command("comment", commentCommand)
   // deno-lint-ignore no-explicit-any
   .command("attachment", attachmentCommand) as any
