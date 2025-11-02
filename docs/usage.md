@@ -182,6 +182,61 @@ linear issue view ENG-123 --app
 linear issue view ENG-123
 ```
 
+### Searching Issues
+
+Search issues by keyword across titles and descriptions:
+
+```bash
+# Basic search
+linear issue search "authentication bug"
+
+# Search with limit
+linear issue search "API" --limit 100
+
+# Search including archived issues
+linear issue search "deprecated" --include-archived
+
+# Search in comments too
+linear issue search "review needed" --include-comments
+
+# Boost results from specific team
+linear issue search "mobile" --team "MOBILE-TEAM-ID"
+
+# Human-readable table output
+linear issue search "login" --human
+
+# JSON output (default)
+linear issue search "payment"
+```
+
+**JSON Response:**
+
+```json
+{
+  "issues": [
+    {
+      "id": "uuid",
+      "identifier": "ENG-123",
+      "title": "Fix authentication bug",
+      "description": "Users unable to login...",
+      "priority": 1,
+      "estimate": 5,
+      "state": { "name": "In Progress", "type": "started" },
+      "team": { "key": "ENG", "name": "Engineering" },
+      "assignee": { "name": "John Doe", "displayName": "John" }
+    }
+  ],
+  "totalCount": 42,
+  "hasMore": true,
+  "query": "authentication",
+  "filters": {
+    "includeArchived": false,
+    "includeComments": false,
+    "team": null
+  }
+}
+```
+
 ### Working with Issues
 
 ```bash
@@ -485,6 +540,27 @@ See [Phase 1](https://linear.app/workspace/project/api-redesign/overview#milesto
 - [ENG-102](https://linear.app/workspace/issue/ENG-102) - Migration plan
 ```
 
+### Searching Projects
+
+Search projects by keyword across names and descriptions:
+
+```bash
+# Basic search
+linear project search "mobile app"
+
+# Search with limit
+linear project search "API" --limit 50
+
+# Search including archived projects
+linear project search "deprecated" --include-archived
+
+# Search in comments too
+linear project search "review" --include-comments
+
+# Human-readable output
+linear project search "infrastructure" --human
+```
+
 ### Updating Projects
 
 **All Available Options:**
@@ -657,6 +733,27 @@ linear document create \
 
 # JSON output
 linear document create --title "Notes"
+```
+
+### Searching Documents
+
+Search documents by keyword across titles and content:
+
+```bash
+# Basic search
+linear document search "technical spec"
+
+# Search with limit
+linear document search "API" --limit 50
+
+# Search including archived documents
+linear document search "old design" --include-archived
+
+# Search in comments too
+linear document search "feedback" --include-comments
+
+# Human-readable output
+linear document search "implementation" --human
 ```
 
 ### Working with Documents

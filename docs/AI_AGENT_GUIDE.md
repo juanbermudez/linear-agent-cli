@@ -228,6 +228,63 @@ for (const url of imageUrls) {
 }
 ```
 
+### 7. Finding Resources with Search
+
+```typescript
+// Search for issues across the workspace
+const issueResult = execSync("linear issue search 'authentication bug' ")
+  .toString()
+const { issues, totalCount } = JSON.parse(issueResult)
+
+// Filter by team-specific results
+const teamResult = execSync("linear issue search 'API' --team TEAM-UUID ")
+  .toString()
+
+// Search including archived items for historical context
+const archivedResult = execSync(
+  "linear issue search 'deprecated feature' --include-archived ",
+).toString()
+
+// Search in comments for discussions and decisions
+const commentSearch = execSync(
+  "linear issue search 'migration plan' --include-comments ",
+).toString()
+
+// Search projects for related work
+const projectResult = execSync("linear project search 'mobile app' ").toString()
+const { projects } = JSON.parse(projectResult)
+
+// Find relevant documentation
+const docResult = execSync("linear document search 'technical specification' ")
+  .toString()
+const { documents } = JSON.parse(docResult)
+
+// Combine search across resources
+const allResults = {
+  issues:
+    JSON.parse(execSync("linear issue search 'authentication' ").toString())
+      .issues,
+  projects:
+    JSON.parse(execSync("linear project search 'authentication' ").toString())
+      .projects,
+  documents:
+    JSON.parse(execSync("linear document search 'authentication' ").toString())
+      .documents,
+}
+
+// Build context from search results
+const context = `
+Found ${allResults.issues.length} issues, ${allResults.projects.length} projects,
+and ${allResults.documents.length} documents related to authentication.
+
+Key issues:
+${
+  allResults.issues.slice(0, 3).map((i) => `- ${i.identifier}: ${i.title}`)
+    .join("\n")
+}
+`
+```
+
 ## Configuration for AI Agents
 
 ### JSON Output is Already Default

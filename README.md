@@ -1,5 +1,7 @@
 # Linear CLI for AI Agents
 
+![Linear CLI Hero](./assets/linear-agent-cli.png)
+
 A command-line interface for Linear designed to enable **spec-driven software engineering** with AI coding agents.
 
 > **Originally created by [@schpet](https://github.com/schpet)**, this fork extends the CLI with enhanced AI agent capabilities for full-lifecycle development collaboration.
@@ -193,18 +195,21 @@ linear usage                         # Display quick usage guide and content for
 
 # Issues
 linear issue list                    # List your issues
+linear issue search "authentication" # Search issues by keyword
 linear issue create --title "Bug"    # Create issue
 linear issue start ENG-123           # Start working (creates git branch)
 linear issue view                    # View current issue
 
 # Projects
 linear project list                  # List projects
+linear project search "mobile app"   # Search projects by keyword
 linear project create --name "API"   # Create project
 linear project view PROJ-123         # View details
 
 # Documents (VCS-aware!)
 linear document create --current-project --title "Notes"
 linear document list --current-project
+linear document search "spec"        # Search documents by keyword
 
 # Initiatives
 linear initiative create --name "Q1 Goals"

@@ -148,14 +148,32 @@ linear issue update ENG-123 \
 
 ```bash
 # View specific issue
-linear issue view ENG-123 
+linear issue view ENG-123
 
 # View current issue (from git context)
-linear issue view 
+linear issue view
 
 # List issues
-linear issue list 
+linear issue list
 linear issue list --team ENG
+```
+
+#### Searching Issues
+
+```bash
+# Search issues by keyword (JSON is default)
+linear issue search "authentication bug"
+
+# Search with filters
+linear issue search "API" --limit 100
+linear issue search "deprecated" --include-archived
+linear issue search "review needed" --include-comments
+
+# Boost results from specific team
+linear issue search "mobile" --team TEAM-UUID
+
+# Human-readable output
+linear issue search "login" --human
 ```
 
 #### Issue Relationships
@@ -303,6 +321,21 @@ linear project create \
 - `--lead`: Use `@me` for yourself or username/email
 - `--color`: Hex format `#RRGGBB`
 
+#### Searching Projects
+
+```bash
+# Search projects by keyword
+linear project search "mobile app"
+
+# Search with filters
+linear project search "API" --limit 50
+linear project search "deprecated" --include-archived
+linear project search "review" --include-comments
+
+# Human-readable output
+linear project search "infrastructure" --human
+```
+
 #### Updating Projects
 
 ```bash
@@ -423,11 +456,17 @@ linear document create \
 
 # Update document
 linear document update "Tech Spec" \
-  --content "$(cat updated.md)" \
-  
+  --content "$(cat updated.md)"
+
 
 # List documents
 linear document list --project "API Redesign"
+
+# Search documents
+linear document search "technical spec"
+linear document search "API" --limit 50
+linear document search "old design" --include-archived
+linear document search "feedback" --include-comments
 ```
 
 ### Workflow & Status Management
