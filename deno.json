@@ -35,6 +35,7 @@
     "@std/encoding": "jsr:@std/encoding@^1.0.5",
     "@std/path": "jsr:@std/path@^1.0.8",
     "@std/toml": "jsr:@std/toml@^1.0.2",
+    "date-fns": "npm:date-fns@^4.1.0",
     "graphql": "npm:graphql@^16.8.1",
     "./__generated__/graphql": "./src/__codegen__/graphql.ts",
     "graphql-request": "npm:graphql-request@^7.2.0",

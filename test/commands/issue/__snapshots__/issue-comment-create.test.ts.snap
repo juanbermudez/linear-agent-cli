@@ -1,0 +1,49 @@
+export const snapshot = {};
+
+snapshot[`Issue Comment Create Command - Help Text 1`] = `
+stdout:
+"
+Usage: create [issueId]
+
+Description:
+
+  Add a comment to an issue
+
+Options:
+
+  -h, --help                      - Show this help.                                  
+  -b, --body            <body>    - Comment body text                                
+  -f, --body-from-file  <file>    - Read comment body from file (use '-' for stdin)  
+  --human                         - Output in human-readable format (default: JSON)  
+  --format              <format>  - Output format: text|json                         
+
+"
+stderr:
+""
+`;
+
+snapshot[`Issue Comment Create Command - Success 1`] = `
+stdout:
+'{
+  "success": true,
+  "operation": "create",
+  "comment": {
+    "id": "comment-new-789",
+    "body": "This looks good to me",
+    "createdAt": "2025-01-01T15:00:00Z",
+    "author": {
+      "id": "user-self",
+      "name": "currentuser",
+      "displayName": "Current User"
+    },
+    "issue": {
+      "id": "issue-123-uuid",
+      "identifier": "ENG-123",
+      "title": "Fix authentication bug"
+    }
+  }
+}
+'
+stderr:
+""
+`;

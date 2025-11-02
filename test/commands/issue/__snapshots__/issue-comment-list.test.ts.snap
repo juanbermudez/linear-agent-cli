@@ -1,0 +1,96 @@
+export const snapshot = {};
+
+snapshot[`Issue Comment List Command - Help Text 1`] = `
+stdout:
+"
+Usage: list [issueId]
+
+Description:
+
+  List comments on an issue
+
+Options:
+
+  -h, --help             - Show this help.                                               
+  --human                - Output in human-readable format (default: JSON)               
+  --format     <format>  - Output format: text|json                                      
+  -l, --limit  <limit>   - Maximum number of comments to fetch              (Default: \\x1b[33m50\\x1b[39m)
+
+"
+stderr:
+""
+`;
+
+snapshot[`Issue Comment List Command - With Comments 1`] = `
+stdout:
+'{
+  "success": true,
+  "issue": {
+    "id": "issue-123-uuid",
+    "identifier": "ENG-123",
+    "title": "Fix authentication bug"
+  },
+  "comments": [
+    {
+      "id": "comment-1",
+      "body": "I can reproduce this issue",
+      "createdAt": "2025-01-01T12:00:00Z",
+      "editedAt": null,
+      "author": {
+        "id": "user-1",
+        "name": "alice",
+        "displayName": "Alice Smith"
+      },
+      "isReply": false,
+      "parentId": null
+    },
+    {
+      "id": "comment-2",
+      "body": "Working on a fix now",
+      "createdAt": "2025-01-01T13:00:00Z",
+      "editedAt": null,
+      "author": {
+        "id": "user-2",
+        "name": "bob",
+        "displayName": "Bob Johnson"
+      },
+      "isReply": false,
+      "parentId": null
+    },
+    {
+      "id": "comment-3",
+      "body": "Thanks for looking into this!",
+      "createdAt": "2025-01-01T14:00:00Z",
+      "editedAt": null,
+      "author": {
+        "id": "user-1",
+        "name": "alice",
+        "displayName": "Alice Smith"
+      },
+      "isReply": true,
+      "parentId": "comment-2"
+    }
+  ],
+  "count": 3
+}
+'
+stderr:
+""
+`;
+
+snapshot[`Issue Comment List Command - No Comments 1`] = `
+stdout:
+'{
+  "success": true,
+  "issue": {
+    "id": "issue-456-uuid",
+    "identifier": "ENG-456",
+    "title": "Implement feature X"
+  },
+  "comments": [],
+  "count": 0
+}
+'
+stderr:
+""
+`;
