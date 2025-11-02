@@ -43,7 +43,8 @@ yarn-error.log*
 
 # Test artifacts and summaries
 test-*.md
-test-*.ts
+test-results-*.ts
+test-output-*.ts
 test-*.txt
 final-test-*.md
 *_TEST*.md
