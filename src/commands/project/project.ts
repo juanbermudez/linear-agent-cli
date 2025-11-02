@@ -5,6 +5,7 @@ import { createCommand } from "./project-create.ts"
 import { updateCommand } from "./project-update.ts"
 import { deleteCommand } from "./project-delete.ts"
 import { restoreCommand } from "./project-restore.ts"
+import { searchCommand } from "./project-search.ts"
 import { milestoneCommand } from "./milestone/milestone.ts"
 import { updateCreateCommand } from "./project-update-create.ts"
 import { updatesListCommand } from "./project-updates-list.ts"
@@ -15,6 +16,7 @@ export const projectCommand = new Command()
     this.showHelp()
   })
   .command("list", listCommand)
+  .command("search", searchCommand)
   .command("view", viewCommand)
   .command("create", createCommand)
   .command("update", updateCommand)

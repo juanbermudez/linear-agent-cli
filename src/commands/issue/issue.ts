@@ -9,6 +9,7 @@ import { listCommand } from "./issue-list.ts"
 import { pullRequestCommand } from "./issue-pull-request.ts"
 import { relateCommand } from "./issue-relate.ts"
 import { relationsCommand } from "./issue-relations.ts"
+import { searchCommand } from "./issue-search.ts"
 import { startCommand } from "./issue-start.ts"
 import { titleCommand } from "./issue-title.ts"
 import { unrelateCommand } from "./issue-unrelate.ts"
@@ -25,6 +26,7 @@ const baseCommand = new Command()
 const commandWithSubcommands = baseCommand
   .command("id", idCommand)
   .command("list", listCommand)
+  .command("search", searchCommand)
   .command("title", titleCommand)
   .command("start", startCommand)
   .command("view", viewCommand)

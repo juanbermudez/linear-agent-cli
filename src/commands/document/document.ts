@@ -4,6 +4,7 @@ import { editCommand } from "./document-edit.ts"
 import { deleteCommand } from "./document-delete.ts"
 import { restoreCommand } from "./document-restore.ts"
 import { listCommand } from "./document-list.ts"
+import { searchCommand } from "./document-search.ts"
 import { viewCommand } from "./document-view.ts"
 
 export const documentCommand = new Command()
@@ -14,6 +15,7 @@ export const documentCommand = new Command()
     this.showHelp()
   })
   .command("list", listCommand)
+  .command("search", searchCommand)
   .command("view", viewCommand)
   .command("create", createCommand)
   .command("edit", editCommand)
