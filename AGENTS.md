@@ -24,6 +24,7 @@
 ### What is This?
 
 A Deno-based CLI tool for Linear API that's optimized for AI agent automation:
+
 - JSON output for all commands
 - Non-interactive (no prompts required)
 - VCS-aware (detects issues from git branches)
@@ -161,6 +162,7 @@ export function getClient(): LinearClient {
 ```
 
 Use this in commands:
+
 ```typescript
 const client = getClient()
 const issue = await client.issue("ENG-123")
@@ -185,6 +187,7 @@ cat src/commands/issue/issue-create.ts
 Follow the command pattern shown in [Architecture](#architecture).
 
 Key points:
+
 - Use `parseArgs` from `@std/cli/parse-args`
 - Always support `--json` flag
 - Validate required fields
@@ -207,6 +210,7 @@ deno fmt
 ### 4. Document
 
 Update `docs/USAGE.md` with:
+
 - Command syntax
 - Available options
 - Example usage
@@ -276,15 +280,14 @@ Deno.test("comment create - success", async () => {
 **Step 4: Update docs**
 
 Add to `docs/USAGE.md`:
+
 ```markdown
 ### Create Comment
 
-\`\`\`bash
-linear comment create \
-  --issue ENG-123 \
-  --body "Great work!" \
-  --json
-\`\`\`
+\`\`\`bash linear comment create\
+--issue ENG-123\
+--body "Great work!"\
+--json \`\`\`
 ```
 
 ### Adding an Option to Existing Command
@@ -523,7 +526,9 @@ function issueCreate(args)
 const issue: Issue = await client.issue("ENG-123")
 
 // ❌ Avoid: Custom types for SDK data
-interface MyIssue { id: string }
+interface MyIssue {
+  id: string
+}
 ```
 
 ### Error Handling
@@ -531,7 +536,7 @@ interface MyIssue { id: string }
 ```typescript
 // ✅ Good: Clear error messages
 if (!parsed.title) {
-  throw new Error("--title is required. Example: --title \"Fix bug\"")
+  throw new Error('--title is required. Example: --title "Fix bug"')
 }
 
 // ❌ Avoid: Vague errors

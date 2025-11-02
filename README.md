@@ -53,34 +53,18 @@ This CLI is **specifically designed** to be used by AI coding agents:
 
 A comprehensive **Linear CLI Expert plugin** for Claude Code is available that includes this CLI, specialized AI agents (research, planning, engineering), and a complete spec-driven development workflow.
 
-### Plugin Repository
+Visit the [Hyper-Engineering Tools](https://github.com/juanbermudez/hyper-engineering-tools) repository for more information.
 
-Visit the [Hyper-Engineering Tools](https://github.com/juanbermudez/hyper-engineering-tools) repository to:
-- Install the complete Claude Code plugin with sub-agents
-- Access the plugin marketplace
-- Get documentation on spec-driven workflows
-- Learn about AI agent orchestration patterns
-
-### Quick Plugin Installation
-
-```bash
-# In Claude Code
-/plugin marketplace add https://github.com/juanbermudez/hyper-engineering-tools/marketplace
-/plugin install linear-cli-expert@hyper-engineering-tools
-```
-
-The plugin includes:
-- **This Linear CLI** - Auto-installed when you load the plugin
-- **3 Specialized Agents** - Research, planning, and engineering sub-agents
-- **Workflow Orchestration** - Coordinated research → planning → implementation
-- **Complete Linear Integration** - Full CRUD operations for all Linear resources
+> **Note:** This plugin is currently a work in progress.
 
 ## 📖 AI Agent Guides
 
 This repository includes example documentation for AI agents using the CLI:
 
 ### For Claude/Claude Code
+
 See [`EXAMPLE_CLAUDE.md`](./EXAMPLE_CLAUDE.md) for comprehensive guidance on:
+
 - JSON output patterns
 - Command success checking
 - Non-interactive command examples
@@ -88,7 +72,9 @@ See [`EXAMPLE_CLAUDE.md`](./EXAMPLE_CLAUDE.md) for comprehensive guidance on:
 - Full workflow examples
 
 ### For Other AI Coding Agents
+
 See [`EXAMPLE_AGENTS.md`](./EXAMPLE_AGENTS.md) for:
+
 - Quick start examples for ChatGPT, Copilot, Cursor, etc.
 - Command patterns and common workflows
 - JSON API reference
@@ -564,16 +550,19 @@ export LINEAR_CACHE_ENABLED="true"   # Enable caching (default)
 ## 📚 Documentation
 
 ### For Users
+
 - [Installation Guide](./docs/INSTALLATION.md) - Detailed setup instructions
 - [Usage Guide](./docs/USAGE.md) - Comprehensive command reference
 - [AI Agent Guide](./docs/AI_AGENT_GUIDE.md) - AI integration patterns
 - [Changelog](./CHANGELOG.md) - Version history
 
 ### For AI Agents
+
 - [EXAMPLE_CLAUDE.md](./EXAMPLE_CLAUDE.md) - Guidance for Claude/Claude Code
 - [EXAMPLE_AGENTS.md](./EXAMPLE_AGENTS.md) - Guidance for ChatGPT, Copilot, etc.
 
 ### For Developers
+
 - [CLAUDE.md](./CLAUDE.md) - Development guide for Claude Code working on source
 - [AGENTS.md](./AGENTS.md) - Development guide for other AI agents working on source
 

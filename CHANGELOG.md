@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-11-02 (Alpha Release)
+
 ### Added
 
 - add document create, edit, delete, and restore commands with JSON output support for AI agents
@@ -18,6 +20,10 @@
 - add initiative status update commands (update-create and updates-list)
 - add label create, update, list, and delete commands with team filtering and color support
 - add configuration management commands (config set/get/list) with dot notation support
+
+### Changed
+
+- marked as alpha release (0.2.x series) to reflect early development status
 
 ## [1.2.0] - 2025-10-21
 
@@ -260,7 +266,8 @@
 - adds a -t, --title flag to the `issue pr` command, allowing you to provide a PR title that is different than linear's issue title
 - allows linear issue identifiers to be passed in as arguments to the issue commands as an alternative to parsing the branch name, e.g. `linear issue show ABC-123`
 
-[Unreleased]: https://github.com/schpet/linear-cli/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/juanbermudez/linear-agent-cli/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/juanbermudez/linear-agent-cli/releases/tag/v0.2.0
 [1.2.0]: https://github.com/schpet/linear-cli/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/schpet/linear-cli/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/schpet/linear-cli/compare/v1.0.1...v1.1.0

@@ -259,6 +259,7 @@ Deno.test("resource action creates resource", async () => {
 ### 4. Document Command
 
 Update `docs/USAGE.md` with:
+
 - Command syntax
 - Available options
 - Example usage
@@ -269,6 +270,7 @@ Update `docs/USAGE.md` with:
 ### Using the Linear SDK
 
 The CLI uses `@linear/sdk` which provides:
+
 - Type-safe API access
 - Auto-complete for fields
 - Relationship traversal
@@ -399,6 +401,7 @@ console.error("DEBUG:", JSON.stringify(variables, null, 2))
 ### Common Issues
 
 **Issue**: `Error: No API key configured`
+
 ```bash
 # Solution: Run auth flow
 linear whoami
@@ -406,12 +409,14 @@ linear whoami
 ```
 
 **Issue**: `Error: Team not found`
+
 ```bash
 # Debug: List available teams
 linear whoami --json | jq '.teams'
 ```
 
 **Issue**: Type errors from @linear/sdk
+
 ```bash
 # Solution: Update SDK version in deno.json
 ```
@@ -423,30 +428,26 @@ linear whoami --json | jq '.teams'
 1. Update version in `deno.json`:
    ```json
    {
-     "version": "1.1.0"
+     "version": "0.2.1"
    }
    ```
 
-2. Update `src/main.ts` version constant:
-   ```typescript
-   const VERSION = "1.1.0"
-   ```
-
-3. Update `CHANGELOG.md` with changes
+2. Update `CHANGELOG.md` with changes
 
 ### Publishing
 
 ```bash
 # Commit version bump
-git add deno.json src/main.ts CHANGELOG.md
-git commit -m "chore: bump version to 1.1.0"
+git add deno.json CHANGELOG.md
+git commit -m "chore: bump version to 0.2.1"
 
 # Tag release
-git tag v1.1.0
+git tag v0.2.1
 git push origin main --tags
 ```
 
 Users install directly from GitHub:
+
 ```bash
 deno install --global --allow-all --name linear \
   https://raw.githubusercontent.com/juanbermudez/linear-agent-cli/main/src/main.ts
@@ -475,16 +476,19 @@ const sanitized = parsed.input.replace(/[;&|]/g, "")
 ## 📚 Resources
 
 ### Deno Documentation
+
 - [Deno Manual](https://docs.deno.com/runtime/manual)
 - [Deno Standard Library](https://deno.land/std)
 - [Testing in Deno](https://docs.deno.com/runtime/manual/basics/testing)
 
 ### Linear API
+
 - [Linear SDK Documentation](https://developers.linear.app/docs/sdk/getting-started)
 - [Linear GraphQL API](https://developers.linear.app/docs/graphql/working-with-the-graphql-api)
 - [Linear API Schema](https://studio.apollographql.com/public/Linear-API/home)
 
 ### Related Projects
+
 - [Original linear-cli by @schpet](https://github.com/schpet/linear-cli)
 - [Claude Code Plugin](https://github.com/juanbermudez/hyper-engineering-tools)
 
@@ -502,6 +506,7 @@ const sanitized = parsed.input.replace(/[;&|]/g, "")
 ### Decision Framework
 
 When adding features:
+
 1. **Does it serve AI agents?** JSON output, non-interactive
 2. **Is it type-safe?** Use Linear SDK types
 3. **Is it testable?** Can we write automated tests?
@@ -521,5 +526,4 @@ When adding features:
 
 ---
 
-**For usage examples, see `EXAMPLE_CLAUDE.md`**
-**For agent integration patterns, see `EXAMPLE_AGENTS.md`**
+**For usage examples, see `EXAMPLE_CLAUDE.md`** **For agent integration patterns, see `EXAMPLE_AGENTS.md`**
