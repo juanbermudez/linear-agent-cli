@@ -6,10 +6,6 @@ A command-line interface for Linear designed to enable **spec-driven software en
 
 > **Originally created by [@schpet](https://github.com/schpet)**, this fork extends the CLI with enhanced AI agent capabilities for full-lifecycle development collaboration.
 
-**Inspired by** [@dexhorthy](https://x.com/dexhorthy)'s "Advanced Context Engineering" approach: the specification of what we want from our software is more valuable than the code itself. When AI writes the implementation, well-documented specs become the source of truth—just like source code was for compiled artifacts. This CLI makes Linear the platform for that spec-driven workflow.
-
-[![Advanced Context Engineering - Dex Horthy](https://img.youtube.com/vi/IS_y40zY-hc/maxresdefault.jpg)](https://www.youtube.com/watch?v=IS_y40zY-hc)
-
 ## ⚡ Quick Start
 
 **One-command installation** (automatically installs Deno if needed):
@@ -613,6 +609,12 @@ MIT License - see [LICENSE](./LICENSE) for details.
 - **Original Author**: [@schpet](https://github.com/schpet) - Created the foundational Linear CLI that this project builds upon
 - **Inspiration**: [@dexhorthy](https://x.com/dexhorthy) and [@vaibcode](https://x.com/vaibcode) - Their insights on using Linear as a collaboration platform for AI-human teams and spec-driven software engineering have been invaluable. Thank you for sharing your learnings and pioneering this approach to AI-human collaboration.
 - **AI Enhancements**: Extended for AI agent use cases with cross-entity operations, comprehensive JSON output, VCS integration, and the Linear CLI Expert skill for Claude Code
+
+### Advanced Context Engineering
+
+**Inspired by** [@dexhorthy](https://x.com/dexhorthy)'s "Advanced Context Engineering" approach: the specification of what we want from our software is more valuable than the code itself. When AI writes the implementation, well-documented specs become the source of truth—just like source code was for compiled artifacts. This CLI makes Linear the platform for that spec-driven workflow.
+
+[![Advanced Context Engineering - Dex Horthy](https://img.youtube.com/vi/IS_y40zY-hc/maxresdefault.jpg)](https://www.youtube.com/watch?v=IS_y40zY-hc)
 
 ## 🔗 Links
 
