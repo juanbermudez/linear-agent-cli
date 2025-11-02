@@ -353,6 +353,44 @@ deno coverage coverage --lcov > coverage.lcov
 
 ## 🎨 Code Style
 
+### Pre-Commit Verification (CRITICAL)
+
+**ALWAYS run these commands BEFORE every commit:**
+
+```bash
+# 1. Format code
+deno fmt
+
+# 2. Lint code (catches unused ignores, type errors, etc.)
+deno lint
+
+# 3. Run all tests
+deno test --allow-all
+
+# 4. Verify git status
+git status
+```
+
+**Why this matters:**
+
+- `deno fmt` only fixes formatting - it does NOT catch code issues
+- `deno lint` catches actual errors like unused lint-ignore directives, type issues
+- Tests ensure functionality still works
+- CI will fail if any of these fail, wasting time
+
+**Example of what goes wrong without linting:**
+
+```typescript
+// This will pass fmt but FAIL lint:
+// deno-lint-ignore no-explicit-any
+.command("comment", commentCommand)  // ❌ No 'as any' cast - ignore is unused!
+
+// Correct:
+.command("comment", commentCommand)
+// deno-lint-ignore no-explicit-any
+.command("attachment", attachmentCommand) as any  // ✅ Cast present - ignore is used
+```
+
 ### Formatting
 
 ```bash
@@ -515,9 +553,21 @@ When adding features:
 
 ## 🚨 Important Reminders
 
+### Pre-Commit Checklist (MANDATORY)
+
+Before EVERY commit, run these in order:
+
+1. ✅ `deno fmt` - Format code
+2. ✅ `deno lint` - **CRITICAL**: Catches code issues that fmt misses
+3. ✅ `deno test --allow-all` - Ensure tests pass
+4. ✅ `git status` - Verify what's being committed
+
+**If you skip `deno lint`, CI WILL fail.** Formatting alone is NOT enough.
+
+### General Reminders
+
 - **Never commit API keys or tokens**
 - **JSON is the default output** (use `--human` for readable format)
-- **Run `deno fmt` before committing**
 - **Update docs when changing commands**
 - **Add tests for new functionality**
 - **Use Linear SDK types, don't create custom types**
