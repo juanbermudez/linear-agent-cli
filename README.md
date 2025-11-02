@@ -86,15 +86,15 @@ See [`EXAMPLE_AGENTS.md`](./EXAMPLE_AGENTS.md) for:
 
 ### Comprehensive Resource Management
 
-| Resource        | Create | Update | Delete | Restore | List | View | Search | Relationships | Comments |
-| --------------- | ------ | ------ | ------ | ------- | ---- | ---- | ------ | ------------- | -------- |
-| **Issues**      | ✅     | ✅     | ✅     | ❌      | ✅   | ✅   | ❌     | ✅            | ✅       |
-| **Projects**    | ✅     | ✅     | ✅     | ✅      | ✅   | ✅   | ❌     | N/A           | ❌       |
-| **Initiatives** | ✅     | ✅     | ❌     | ✅      | ✅   | ✅   | ❌     | N/A           | ❌       |
-| **Documents**   | ✅     | ✅     | ✅     | ✅      | ✅   | ✅   | ❌     | N/A           | ❌       |
-| **Labels**      | ✅     | ✅     | ✅     | ❌      | ✅   | ❌   | ❌     | ✅ (Groups)   | N/A      |
-| **Teams**       | ✅     | ❌     | ❌     | ❌      | ✅   | ❌   | ❌     | N/A           | N/A      |
-| **Users**       | ❌     | ❌     | ❌     | ❌      | ✅   | ❌   | ✅     | N/A           | N/A      |
+| Resource        | Create | Update | Delete | Restore | List | View | Search | Relationships | Comments | Attachments |
+| --------------- | ------ | ------ | ------ | ------- | ---- | ---- | ------ | ------------- | -------- | ----------- |
+| **Issues**      | ✅     | ✅     | ✅     | ❌      | ✅   | ✅   | ❌     | ✅            | ✅       | ✅          |
+| **Projects**    | ✅     | ✅     | ✅     | ✅      | ✅   | ✅   | ❌     | N/A           | ❌       | ❌          |
+| **Initiatives** | ✅     | ✅     | ❌     | ✅      | ✅   | ✅   | ❌     | N/A           | ❌       | ❌          |
+| **Documents**   | ✅     | ✅     | ✅     | ✅      | ✅   | ✅   | ❌     | N/A           | ❌       | ❌          |
+| **Labels**      | ✅     | ✅     | ✅     | ❌      | ✅   | ❌   | ❌     | ✅ (Groups)   | N/A      | N/A         |
+| **Teams**       | ✅     | ❌     | ❌     | ❌      | ✅   | ❌   | ❌     | N/A           | N/A      | N/A         |
+| **Users**       | ❌     | ❌     | ❌     | ❌      | ✅   | ❌   | ✅     | N/A           | N/A      | N/A         |
 
 ### Special Capabilities
 

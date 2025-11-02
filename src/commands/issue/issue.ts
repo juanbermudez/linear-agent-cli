@@ -1,4 +1,5 @@
 import { Command } from "@cliffy/command"
+import { attachmentCommand } from "./issue-attachment.ts"
 import { commentCommand } from "./issue-comment.ts"
 import { createCommand } from "./issue-create.ts"
 import { deleteCommand } from "./issue-delete.ts"
@@ -41,4 +42,6 @@ export const issueCommand = commandWithSubcommands
   // deno-lint-ignore no-explicit-any
   .command("relations", relationsCommand)
   // deno-lint-ignore no-explicit-any
-  .command("comment", commentCommand) as any
+  .command("comment", commentCommand)
+  // deno-lint-ignore no-explicit-any
+  .command("attachment", attachmentCommand) as any
