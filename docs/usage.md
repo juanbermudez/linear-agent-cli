@@ -877,13 +877,13 @@ Tagged: #backend Tagged: @backend
 #### User Mentions
 
 ```markdown
-# ✅ Works - @ format (exception to URL rule)
+# ✅ Works - @username format (exception to URL rule)
 
-Assigned to @john CC: @John Doe
+Assigned to @john CC: @alice
 
-# ❌ Doesn't work
+# ❌ Doesn't work - Display names or plain text
 
-Assigned to john
+Assigned to john Assigned to @John Doe
 ```
 
 ### Complete Example with Cross-References

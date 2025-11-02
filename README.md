@@ -350,14 +350,14 @@ graph TB
 
 Linear requires **markdown link format with full URLs** for all resource cross-references:
 
-| Resource Type  | Format                         | Example                                                                       |
-| -------------- | ------------------------------ | ----------------------------------------------------------------------------- |
-| **Issues**     | `[TEAM-NUM](url)`              | `[ENG-123](https://linear.app/workspace/issue/ENG-123/slug)`                  |
-| **Documents**  | `[Title](url)`                 | `[Spec](https://linear.app/workspace/document/slug-id)`                       |
-| **Projects**   | `[Name](url)`                  | `[Project](https://linear.app/workspace/project/slug-id)`                     |
-| **Milestones** | `[Name](url#milestone-id)`     | `[Phase 1](https://linear.app/workspace/project/slug/overview#milestone-abc)` |
-| **Labels**     | `[name](url)`                  | `[bug](https://linear.app/workspace/issue-label/bug)`                         |
-| **Users**      | `@username` or `@Display Name` | `@john` or `@John Doe`                                                        |
+| Resource Type  | Format                     | Example                                                                       |
+| -------------- | -------------------------- | ----------------------------------------------------------------------------- |
+| **Issues**     | `[TEAM-NUM](url)`          | `[ENG-123](https://linear.app/workspace/issue/ENG-123/slug)`                  |
+| **Documents**  | `[Title](url)`             | `[Spec](https://linear.app/workspace/document/slug-id)`                       |
+| **Projects**   | `[Name](url)`              | `[Project](https://linear.app/workspace/project/slug-id)`                     |
+| **Milestones** | `[Name](url#milestone-id)` | `[Phase 1](https://linear.app/workspace/project/slug/overview#milestone-abc)` |
+| **Labels**     | `[name](url)`              | `[bug](https://linear.app/workspace/issue-label/bug)`                         |
+| **Users**      | `@username`                | `@john` or `@alice` (username only, not display name)                         |
 
 **What doesn't work:**
 

@@ -497,7 +497,7 @@ This feature implements OAuth 2.0 authentication.
 | Issues    | `[ID](url)`    | `[ENG-123](https://linear.app/workspace/issue/ENG-123)` |
 | Projects  | `[Name](url)`  | `[Project](https://linear.app/workspace/project/slug)`  |
 | Documents | `[Title](url)` | `[Spec](https://linear.app/workspace/document/id)`      |
-| Users     | `@username`    | `@john` or `@John Doe`                                  |
+| Users     | `@username`    | `@john` or `@alice` (username only, not display name)   |
 
 **What doesn't work:**
 
