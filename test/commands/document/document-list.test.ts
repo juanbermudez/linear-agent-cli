@@ -17,12 +17,12 @@ await snapshotTest({
   },
 })
 
-// Test listing all documents
+// Test listing all documents (JSON output to avoid time-dependent formatting)
 await snapshotTest({
   name: "Document List Command - All Documents",
   meta: import.meta,
   colors: false,
-  args: ["--plain"],
+  args: ["--json", "--plain"],
   denoArgs: commonDenoArgs,
   async fn() {
     const { cleanup } = await setupMockLinearServer([

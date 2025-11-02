@@ -2,7 +2,7 @@ import { MockLinearServer } from "./mock_linear_server.ts"
 
 // Common Deno args for permissions used across all tests
 export const commonDenoArgs = [
-  "--allow-env=GITHUB_*,GH_*,LINEAR_*,NODE_ENV,EDITOR,SNAPSHOT_TEST_NAME,MOCK_GIT_BRANCH_COMMAND,TEST_CURRENT_TIME,CLIFFY_SNAPSHOT_FAKE_TIME,GIT_BRANCH",
+  "--allow-env=GITHUB_*,GH_*,LINEAR_*,NODE_ENV,EDITOR,PAGER,SNAPSHOT_TEST_NAME,MOCK_GIT_BRANCH_COMMAND,TEST_CURRENT_TIME,CLIFFY_SNAPSHOT_FAKE_TIME,CLIFFY_SNAPSHOT_DELAY,GIT_BRANCH,NO_COLOR",
   "--allow-read",
   "--allow-write",
   "--allow-run",
