@@ -4,8 +4,8 @@ import { bold, dim, yellow } from "@std/fmt/colors"
 import { gql } from "../../__codegen__/gql.ts"
 import { getGraphQLClient } from "../../utils/graphql.ts"
 
-const documentSearchQuery = gql(/* GraphQL */ `
-  query SearchDocuments(
+const documentSearchQuery = gql(`
+  query SearchDocumentsCommand(
     $term: String!
     $first: Int
     $includeArchived: Boolean
