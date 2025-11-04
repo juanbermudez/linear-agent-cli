@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-11-04
+
+### Added
+
+- add `update` command to easily update CLI to latest version from GitHub
+- add `help` command that displays main help information without errors
+- add `--parent` flag to `label update` command to assign labels to parent groups
+- add GraphQL schema documentation in CLAUDE.md pointing to local `graphql/schema.graphql` as source of truth
+
+### Fixed
+
+- fix `linear help` command showing "Unknown command" error after displaying help
+- fix publish workflow to properly commit generated GraphQL files instead of using --allow-dirty
+- remove unnecessary PATH export instructions from documentation (Deno installer handles this automatically)
+
+### Changed
+
+- improved CI/CD workflow to commit generated code files during publish process
+
 ## [0.2.0] - 2025-11-02 (Alpha Release)
 
 ### Added
@@ -266,7 +285,8 @@
 - adds a -t, --title flag to the `issue pr` command, allowing you to provide a PR title that is different than linear's issue title
 - allows linear issue identifiers to be passed in as arguments to the issue commands as an alternative to parsing the branch name, e.g. `linear issue show ABC-123`
 
-[Unreleased]: https://github.com/juanbermudez/linear-agent-cli/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/juanbermudez/linear-agent-cli/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/juanbermudez/linear-agent-cli/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/juanbermudez/linear-agent-cli/releases/tag/v0.2.0
 [1.2.0]: https://github.com/schpet/linear-cli/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/schpet/linear-cli/compare/v1.1.0...v1.1.1
