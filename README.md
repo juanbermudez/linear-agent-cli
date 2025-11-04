@@ -180,6 +180,16 @@ Get your API key at: https://linear.app/settings/api
 
 See [Installation Guide](./docs/INSTALLATION.md) for detailed instructions and troubleshooting.
 
+### Updating
+
+To update to the latest version:
+
+```bash
+linear update
+```
+
+This will reinstall the CLI from the main branch on GitHub.
+
 ## 🚀 Usage
 
 ### Basic Commands

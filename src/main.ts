@@ -13,6 +13,7 @@ import { configCommand } from "./commands/config.ts"
 import { whoamiCommand } from "./commands/whoami.ts"
 import { userCommand } from "./commands/user/user.ts"
 import { usageCommand } from "./commands/usage.ts"
+import { updateCommand } from "./commands/update.ts"
 
 // Import config setup
 import "./config.ts"
@@ -43,6 +44,7 @@ await mainCommand
   .alias("u")
   .command("whoami", whoamiCommand)
   .command("usage", usageCommand)
+  .command("update", updateCommand)
   .command("completions", new CompletionsCommand())
   .command("config", configCommand)
   .command(
