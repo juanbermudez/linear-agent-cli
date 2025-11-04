@@ -11,7 +11,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # Need write access to commit generated files
       id-token: write # The OIDC ID token is used for authentication with JSR.
     steps:
       - uses: actions/checkout@v4
@@ -20,4 +20,11 @@ jobs:
           deno-version: v2.x
       - name: Generate GraphQL code
         run: deno task codegen
-      - run: npx jsr publish --allow-dirty
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/__codegen__/
+          git diff --staged --quiet || git commit -m "chore: update generated GraphQL code"
+          git push
+      - run: npx jsr publish
