@@ -86,10 +86,10 @@ See [`EXAMPLE_AGENTS.md`](./EXAMPLE_AGENTS.md) for:
 
 | Resource        | Create | Update | Delete | Restore | List | View | Search | Relationships | Comments | Attachments |
 | --------------- | ------ | ------ | ------ | ------- | ---- | ---- | ------ | ------------- | -------- | ----------- |
-| **Issues**      | ✅     | ✅     | ✅     | ❌      | ✅   | ✅   | ❌     | ✅            | ✅       | ✅          |
-| **Projects**    | ✅     | ✅     | ✅     | ✅      | ✅   | ✅   | ❌     | N/A           | ❌       | ❌          |
+| **Issues**      | ✅     | ✅     | ✅     | ❌      | ✅   | ✅   | ✅     | ✅            | ✅       | ✅          |
+| **Projects**    | ✅     | ✅     | ✅     | ✅      | ✅   | ✅   | ✅     | N/A           | ❌       | ❌          |
 | **Initiatives** | ✅     | ✅     | ❌     | ✅      | ✅   | ✅   | ❌     | N/A           | ❌       | ❌          |
-| **Documents**   | ✅     | ✅     | ✅     | ✅      | ✅   | ✅   | ❌     | N/A           | ❌       | ❌          |
+| **Documents**   | ✅     | ✅     | ✅     | ✅      | ✅   | ✅   | ✅     | N/A           | ❌       | ❌          |
 | **Labels**      | ✅     | ✅     | ✅     | ❌      | ✅   | ❌   | ❌     | ✅ (Groups)   | N/A      | N/A         |
 | **Teams**       | ✅     | ❌     | ❌     | ❌      | ✅   | ❌   | ❌     | N/A           | N/A      | N/A         |
 | **Users**       | ❌     | ❌     | ❌     | ❌      | ✅   | ❌   | ✅     | N/A           | N/A      | N/A         |

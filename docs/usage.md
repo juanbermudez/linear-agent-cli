@@ -378,6 +378,48 @@ linear issue comment create --body "Fixed typo in title"
 
 ### Issue Attachments
 
+Attachments in Linear are created using URLs (not direct file uploads). Upload files to a hosting service (GitHub, S3, Imgur, etc.) first, then attach the URL.
+
+**Create Attachment:**
+
+```bash
+# Create attachment with URL (required: --title and --url)
+linear issue attachment create ENG-123 \
+  --title "Screenshot of error" \
+  --url "https://example.com/screenshot.png"
+
+# With optional subtitle and icon
+linear issue attachment create ENG-123 \
+  --title "Design mockup" \
+  --url "https://figma.com/file/abc" \
+  --subtitle "Final approved design" \
+  --icon-url "https://example.com/icon.png"
+
+# Create on current issue (from git branch)
+linear issue attachment create \
+  --title "Hero Image" \
+  --url "https://raw.githubusercontent.com/user/repo/main/assets/hero.png"
+
+# Human-readable output
+linear issue attachment create ENG-123 \
+  --title "PR Link" \
+  --url "https://github.com/org/repo/pull/123" \
+  --human
+```
+
+**Delete Attachment:**
+
+```bash
+# Delete attachment by ID
+linear issue attachment delete att-456
+
+# Skip confirmation prompt
+linear issue attachment delete att-456 --confirm
+
+# Human-readable output
+linear issue attachment delete att-456 --human
+```
+
 **List Attachments:**
 
 ```bash
@@ -394,7 +436,30 @@ linear issue attachment list ENG-123
 linear issue attachment list ENG-123 --human
 ```
 
-**JSON Response Example:**
+**JSON Response Example (Create):**
+
+```json
+{
+  "success": true,
+  "operation": "create",
+  "attachment": {
+    "id": "att-456",
+    "title": "Screenshot of error",
+    "subtitle": null,
+    "url": "https://example.com/screenshot.png",
+    "source": null,
+    "sourceType": "unknown",
+    "createdAt": "2025-01-15T10:30:00Z",
+    "issue": {
+      "id": "abc-123",
+      "identifier": "ENG-123",
+      "title": "Fix login bug"
+    }
+  }
+}
+```
+
+**JSON Response Example (List):**
 
 ```json
 {
@@ -427,17 +492,35 @@ linear issue attachment list ENG-123 --human
 **Common Use Cases:**
 
 ```bash
+# Add GitHub PR as attachment
+linear issue attachment create ENG-123 \
+  --title "Pull Request #456" \
+  --url "https://github.com/org/repo/pull/456"
+
+# Add Figma design
+linear issue attachment create ENG-123 \
+  --title "UI Design" \
+  --url "https://figma.com/file/abc123" \
+  --subtitle "Approved by design team"
+
+# Embed images in issue description
+linear issue update ENG-123 --description "Bug report
+
+## Screenshot
+![Error screenshot](https://example.com/screenshot.png)
+
+The error occurs when clicking the login button."
+
 # Check for screenshots on bug reports
 linear issue attachment list ENG-123 | jq '.attachments[] | select(.title | contains("screenshot"))'
 
 # List all attachment URLs
 linear issue attachment list ENG-123 | jq '.attachments[].url'
 
-# Count attachments
-linear issue attachment list ENG-123 | jq '.count'
-
-# Find specific attachment types
-linear issue attachment list ENG-123 | jq '.attachments[] | select(.sourceType == "github")'
+# Delete old attachments
+linear issue attachment list ENG-123 | \
+  jq -r '.attachments[] | select(.createdAt < "2024-01-01") | .id' | \
+  xargs -I {} linear issue attachment delete {} --confirm
 ```
 
 ## Project Management

@@ -192,10 +192,31 @@ const actionItems = comments.flatMap((c) => {
 })
 ```
 
-### 6. Discovering Issue Context with Attachments
+### 6. Managing Issue Attachments
 
 ```typescript
-// List attachments to find screenshots and related resources
+// Create attachment from uploaded file URL
+const createResult = execSync(`linear issue attachment create ENG-123 \
+  --title "Bug Screenshot" \
+  --url "https://example.com/uploads/error-screenshot.png" \
+  --subtitle "Error on production" \
+  `).toString()
+const { attachment } = JSON.parse(createResult)
+
+// Add GitHub PR as attachment
+execSync(`linear issue attachment create ENG-123 \
+  --title "Pull Request #456" \
+  --url "https://github.com/org/repo/pull/456" \
+  `)
+
+// Add Figma design link
+execSync(`linear issue attachment create ENG-123 \
+  --title "Final Design" \
+  --url "https://figma.com/file/abc123" \
+  --subtitle "Approved by design team" \
+  `)
+
+// List attachments to discover context
 const result = execSync("linear issue attachment list ENG-123 ").toString()
 const { attachments } = JSON.parse(result)
 
@@ -226,6 +247,23 @@ for (const url of imageUrls) {
   const analysis = await analyzeImage(url)
   console.log(`Screenshot analysis: ${analysis}`)
 }
+
+// Clean up old attachments
+const oldAttachments = attachments.filter((a) =>
+  new Date(a.createdAt) < new Date("2024-01-01")
+)
+for (const att of oldAttachments) {
+  execSync(`linear issue attachment delete ${att.id} --confirm `)
+}
+
+// Embed images directly in issue description
+execSync(`linear issue update ENG-123 \
+  --description "## Bug Report
+
+![Screenshot](${screenshots[0].url})
+
+The error appears when clicking the login button." \
+  `)
 ```
 
 ### 7. Finding Resources with Search

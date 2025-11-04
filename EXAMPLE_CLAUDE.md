@@ -260,6 +260,53 @@ ACTION_ITEMS=$(echo "$RESULT" | jq '.comments[] | select(.body | contains("TODO:
 
 #### Issue Attachments
 
+> **Note:** Attachments require URLs (not direct file uploads). Upload files to a hosting service first (GitHub, S3, Imgur, etc.).
+
+**Create Attachments:**
+
+```bash
+# Add attachment with URL (JSON by default)
+linear issue attachment create ENG-123 \
+  --title "Bug Screenshot" \
+  --url "https://example.com/screenshot.png"
+
+# With subtitle and icon
+linear issue attachment create ENG-123 \
+  --title "Design Mockup" \
+  --url "https://figma.com/file/abc" \
+  --subtitle "Approved by design team" \
+  --icon-url "https://example.com/icon.png"
+
+# Add GitHub PR
+linear issue attachment create ENG-123 \
+  --title "Pull Request #456" \
+  --url "https://github.com/org/repo/pull/456"
+
+# Create on current issue (from git context)
+linear issue attachment create \
+  --title "Hero Image" \
+  --url "https://raw.githubusercontent.com/user/repo/main/hero.png"
+
+# Human-readable output
+linear issue attachment create ENG-123 \
+  --title "Screenshot" \
+  --url "https://example.com/img.png" \
+  --human
+```
+
+**Delete Attachments:**
+
+```bash
+# Delete by attachment ID (JSON by default)
+linear issue attachment delete att-123
+
+# Skip confirmation prompt
+linear issue attachment delete att-123 --confirm
+
+# Human-readable output
+linear issue attachment delete att-123 --human
+```
+
 **List Attachments:**
 
 ```bash
@@ -276,6 +323,17 @@ linear issue attachment list ENG-123 --human
 **Common Use Cases:**
 
 ```bash
+# Add screenshot and embed in description
+linear issue attachment create ENG-123 \
+  --title "Error Screenshot" \
+  --url "https://example.com/error.png"
+
+linear issue update ENG-123 --description "## Bug Report
+
+![Error](https://example.com/error.png)
+
+The error occurs when clicking login."
+
 # Find screenshots in bug reports (JSON is default)
 RESULT=$(linear issue attachment list ENG-123)
 SCREENSHOTS=$(echo "$RESULT" | jq '.attachments[] | select(.title | test("screenshot|Screenshot") or .url | test("\\.png|\\.jpg"))')
@@ -285,6 +343,11 @@ PR_LINKS=$(echo "$RESULT" | jq '.attachments[] | select(.sourceType == "github" 
 
 # Get Figma design links
 FIGMA_LINKS=$(echo "$RESULT" | jq '.attachments[] | select(.url | contains("figma.com"))')
+
+# Clean up old attachments
+linear issue attachment list ENG-123 | \
+  jq -r '.attachments[] | select(.createdAt < "2024-01-01") | .id' | \
+  xargs -I {} linear issue attachment delete {} --confirm
 
 # Extract all uploaded images for analysis
 IMAGE_URLS=$(echo "$RESULT" | jq -r '.attachments[] | select(.sourceType == "upload") | .url')
