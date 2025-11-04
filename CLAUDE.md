@@ -149,6 +149,7 @@ graphql/schema.graphql
 ```
 
 **This is the source of truth** for:
+
 - All available input types (e.g., `IssueLabelUpdateInput`, `IssueCreateInput`)
 - All query and mutation signatures
 - Available fields on response types
@@ -195,6 +196,7 @@ input IssueLabelUpdateInput {
 ```
 
 **Key Insights:**
+
 - ✅ `parentId` is supported (can move labels under groups)
 - ❌ `teamId` is NOT supported (team is set at creation only)
 - ✅ `isGroup` can be toggled to convert labels to/from groups
@@ -215,6 +217,7 @@ grep -B 2 -A 1 "parentId" graphql/schema.graphql
 ### External Resources
 
 If the local schema is outdated or you need additional context:
+
 - [Linear GraphQL Playground](https://studio.apollographql.com/public/Linear-API/schema/reference)
 - [Linear SDK Source](https://github.com/linear/linear/blob/master/packages/sdk/src/schema.graphql)
 - [Linear API Documentation](https://developers.linear.app/docs/graphql/working-with-the-graphql-api)
