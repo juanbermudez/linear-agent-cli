@@ -1,0 +1,25 @@
+export const snapshot = {};
+
+snapshot[`Label Update Command - Help Text 1`] = `
+stdout:
+"
+Usage: update <labelId>
+
+Description:
+
+  Update an existing label
+
+Options:
+
+  -h, --help                        - Show this help.                                  
+  -n, --name         <name>         - Label name                                       
+  -d, --description  <description>  - Label description                                
+  -c, --color        <color>        - Label color (hex code)                           
+  -p, --parent       <parentId>     - Parent label ID (to nest under a group)          
+  --human                           - Output in human-readable format (default: JSON)  
+  --format           <format>       - Output format: text|json                         
+
+"
+stderr:
+""
+`;

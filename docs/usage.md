@@ -950,8 +950,14 @@ linear label list
 # List labels for specific team
 linear label list --team ENG
 
-# Update label
-linear label update "bug" --color "#CC0000"
+# Update label properties
+linear label update "bug-label-id" --color "#CC0000"
+linear label update "bug-label-id" --name "critical-bug" --description "Critical bugs"
+
+# Assign label to parent group (nest under group)
+linear label update "frontend-label-id" --parent "scope-group-id"
+
+# Note: Team assignment cannot be changed after creation (Linear API limitation)
 
 # Delete label
 linear label delete "old-label"

@@ -39,6 +39,8 @@ linear-agent-cli/
 │   │   └── prompts.ts       # Interactive prompts (fallback)
 │   └── types/
 │       └── generated.ts     # Auto-generated GraphQL types
+├── graphql/
+│   └── schema.graphql       # 🔍 LINEAR API SCHEMA (SOURCE OF TRUTH)
 ├── docs/                    # User documentation
 ├── test/                    # Test suites
 ├── deno.json                # Deno configuration
@@ -135,6 +137,89 @@ export function formatOutput(data: any, human: boolean) {
   }
 }
 ```
+
+## 🔍 GraphQL Schema Reference
+
+### Local Schema File
+
+**IMPORTANT**: The complete Linear GraphQL API schema is available locally at:
+
+```
+graphql/schema.graphql
+```
+
+**This is the source of truth** for:
+- All available input types (e.g., `IssueLabelUpdateInput`, `IssueCreateInput`)
+- All query and mutation signatures
+- Available fields on response types
+- GraphQL type definitions
+
+### How to Research API Capabilities
+
+**Before adding or modifying commands:**
+
+1. **Search the local schema** for the input type:
+   ```bash
+   grep -n "IssueLabelUpdateInput" graphql/schema.graphql
+   ```
+
+2. **Read the type definition** to see available fields:
+   ```bash
+   # Example: View IssueLabelUpdateInput (line 9694)
+   sed -n '9694,9710p' graphql/schema.graphql
+   ```
+
+3. **Check field descriptions** for usage notes and constraints
+
+**Example: Checking what fields can be updated on a label:**
+
+```bash
+$ grep -A 15 "input IssueLabelUpdateInput" graphql/schema.graphql
+
+input IssueLabelUpdateInput {
+  """The name of the label."""
+  name: String
+
+  """The description of the label."""
+  description: String
+
+  """The identifier of the parent label."""
+  parentId: String
+
+  """The color of the label."""
+  color: String
+
+  """Whether the label is a group."""
+  isGroup: Boolean
+}
+```
+
+**Key Insights:**
+- ✅ `parentId` is supported (can move labels under groups)
+- ❌ `teamId` is NOT supported (team is set at creation only)
+- ✅ `isGroup` can be toggled to convert labels to/from groups
+
+### Common Schema Lookups
+
+```bash
+# Find all input types
+grep "^input" graphql/schema.graphql
+
+# Find specific mutation
+grep -A 10 "mutation.*IssueLabel" graphql/schema.graphql
+
+# Search for field documentation
+grep -B 2 -A 1 "parentId" graphql/schema.graphql
+```
+
+### External Resources
+
+If the local schema is outdated or you need additional context:
+- [Linear GraphQL Playground](https://studio.apollographql.com/public/Linear-API/schema/reference)
+- [Linear SDK Source](https://github.com/linear/linear/blob/master/packages/sdk/src/schema.graphql)
+- [Linear API Documentation](https://developers.linear.app/docs/graphql/working-with-the-graphql-api)
+
+**Always check the local schema first** before searching online.
 
 ## 🔧 Development Setup
 
@@ -566,6 +651,7 @@ Before EVERY commit, run these in order:
 
 ### General Reminders
 
+- **Check `graphql/schema.graphql` FIRST** before adding/modifying API commands
 - **Never commit API keys or tokens**
 - **JSON is the default output** (use `--human` for readable format)
 - **Update docs when changing commands**
@@ -573,6 +659,16 @@ Before EVERY commit, run these in order:
 - **Use Linear SDK types, don't create custom types**
 - **Validate user input before API calls**
 - **Handle errors gracefully with clear messages**
+
+### API Development Workflow
+
+When adding or modifying commands that interact with Linear's API:
+
+1. **Check the schema**: `grep -A 20 "InputTypeName" graphql/schema.graphql`
+2. **Identify available fields** and their types
+3. **Implement command** with validated fields
+4. **Add tests** for the new functionality
+5. **Update documentation** with examples
 
 ---
 

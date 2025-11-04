@@ -451,13 +451,13 @@ Types update automatically from npm package.
 
 ### Error: `command not found: deno`
 
-```bash
-# Install Deno
-curl -fsSL https://deno.land/install.sh | sh
+Install Deno:
 
-# Add to PATH
-export PATH="$HOME/.deno/bin:$PATH"
+```bash
+curl -fsSL https://deno.land/install.sh | sh
 ```
+
+The installer automatically adds Deno to your PATH. Restart your shell or run `source ~/.bashrc` (or `~/.zshrc`) to load it.
 
 ### Error: `No API key configured`
 

@@ -146,17 +146,16 @@ If you prefer to install manually:
 # 1. Install Deno (if not installed)
 curl -fsSL https://deno.land/install.sh | sh
 
-# 2. Add Deno to PATH
-export PATH="$HOME/.deno/bin:$PATH"
-
-# 3. Clone and install Linear CLI
+# 2. Clone and install Linear CLI
 git clone https://github.com/juanbermudez/linear-agent-cli.git
 cd linear-agent-cli
 deno task install
 
-# 4. Verify
+# 3. Verify
 linear --version
 ```
+
+> **Note**: The Deno installer automatically adds `~/.deno/bin` to your PATH. If `linear --version` doesn't work, restart your shell or manually source your shell config (`source ~/.bashrc` or `source ~/.zshrc`).
 
 ### Uninstalling
 

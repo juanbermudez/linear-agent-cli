@@ -148,13 +148,20 @@ deno uninstall -g linear
 
 ### "Command not found: linear"
 
-Make sure Deno's bin directory is in your PATH:
+The Deno installer automatically adds `~/.deno/bin` to your shell profile. If the `linear` command isn't found:
+
+1. **Restart your shell** to reload your shell profile
+2. Or manually source your profile: `source ~/.bashrc` (or `~/.zshrc`)
+3. Verify Deno's bin is in PATH: `echo $PATH | grep deno`
+
+If it's still not working, manually add to your shell profile:
 
 ```bash
+# Add to ~/.bashrc or ~/.zshrc
 export PATH="$HOME/.deno/bin:$PATH"
 ```
 
-Add this to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.) to make it permanent.
+Then reload: `source ~/.bashrc` (or `source ~/.zshrc`)
 
 ### "Permission denied" errors
 

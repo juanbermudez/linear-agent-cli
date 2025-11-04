@@ -2116,6 +2116,7 @@ export async function updateLabel(
     name?: string
     description?: string
     color?: string
+    parentId?: string
   },
 ) {
   const mutation = gql(/* GraphQL */ `
@@ -2128,13 +2129,15 @@ export async function updateLabel(
           description
           color
           team { id key name }
+          parent { id name }
         }
       }
     }
   `)
 
   const client = getGraphQLClient()
-  const data = await client.request(mutation, { id: labelId, input })
+  // deno-lint-ignore no-explicit-any
+  const data = await client.request(mutation, { id: labelId, input }) as any
 
   if (!data.issueLabelUpdate.success || !data.issueLabelUpdate.issueLabel) {
     throw new Error("Failed to update label")

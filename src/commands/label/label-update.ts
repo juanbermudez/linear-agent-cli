@@ -9,6 +9,7 @@ interface UpdateOptions {
   name?: string
   description?: string
   color?: string
+  parent?: string
   human?: boolean
   format?: string
 }
@@ -20,12 +21,18 @@ export const updateCommand = new Command()
   .option("-n, --name <name:string>", "Label name")
   .option("-d, --description <description:string>", "Label description")
   .option("-c, --color <color:string>", "Label color (hex code)")
+  .option(
+    "-p, --parent <parentId:string>",
+    "Parent label ID (to nest under a group)",
+  )
   .option("--human", "Output in human-readable format (default: JSON)")
   .option("--format <format:string>", "Output format: text|json")
   .action(async (options: UpdateOptions, labelId: string) => {
     const useJson = !options.human && options.format !== "text"
 
-    if (!options.name && !options.description && !options.color) {
+    if (
+      !options.name && !options.description && !options.color && !options.parent
+    ) {
       const errorMsg = "At least one field must be specified to update"
       if (useJson) {
         console.error(
@@ -79,6 +86,7 @@ export const updateCommand = new Command()
         name: options.name,
         description: options.description,
         color: options.color,
+        parentId: options.parent,
       })
 
       spinner?.stop()
@@ -99,6 +107,12 @@ export const updateCommand = new Command()
                     id: label.team.id,
                     key: label.team.key,
                     name: label.team.name,
+                  }
+                  : null,
+                parent: label.parent
+                  ? {
+                    id: label.parent.id,
+                    name: label.parent.name,
                   }
                   : null,
               },
