@@ -20,4 +20,4 @@ jobs:
           deno-version: v2.x
       - name: Generate GraphQL code
         run: deno task codegen
-      - run: npx jsr publish
+      - run: npx jsr publish --allow-dirty
