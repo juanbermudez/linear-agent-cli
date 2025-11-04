@@ -17,13 +17,15 @@ import { usageCommand } from "./commands/usage.ts"
 // Import config setup
 import "./config.ts"
 
-await new Command()
+const mainCommand = new Command()
   .name("linear")
   .version(denoConfig.version)
   .description("Handy linear commands from the command line")
   .action(() => {
     console.log("Use --help to see available commands")
   })
+
+await mainCommand
   .command("issue", issueCommand)
   .alias("i")
   .command("team", teamCommand)
@@ -43,4 +45,10 @@ await new Command()
   .command("usage", usageCommand)
   .command("completions", new CompletionsCommand())
   .command("config", configCommand)
+  .command(
+    "help",
+    new Command().description("Show help information").action(() => {
+      mainCommand.showHelp()
+    }),
+  )
   .parse(Deno.args)
